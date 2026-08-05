@@ -1,0 +1,27 @@
+name: CI
+
+# Upstream's twelve workflows went with the fork's history and came out again here: Bazel matrices, Docker
+# images, docs deploys, CocoaPods publishing, and a release job that fires on `release: published` and pushes
+# commits back to main. None of it is ours to run, and one of them would have hijacked our first release.
+# What is left is what we actually ship: a binary that builds, and rules whose tests pass.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-test:
+    # macOS because the binary we publish is a macOS one, so the thing tested is the thing shipped.
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      - name: Build
+        run: swift build --product swiftlint
+      - name: Test the rules
+        run: swift test --filter "GeneratedTests"

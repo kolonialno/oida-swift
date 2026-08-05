@@ -1,356 +1,54 @@
 name: Release
 
+# Publishes the binary the consuming repositories download. A tag is the trigger, so the version in
+# Source/SwiftLintFramework/Models/Version.swift and the tag cannot drift: the job asserts they match before
+# it builds anything.
+
 on:
+  push:
+    tags: ["*-oda.*"]
   workflow_dispatch:
     inputs:
-      version:
-        description: "Release version"
+      tag:
+        description: "Tag to build, e.g. 0.65.0-oda.14"
         required: true
-        type: string
-      title:
-        description: "Release title"
-        required: true
-        type: string
 
-env:
-  DEVELOPER_DIR: /Applications/Xcode_26.5.app
-  RELEASE_BRANCH: release/${{ inputs.version }}
-  MIMALLOC_VERSION: 3.0.10
+permissions:
+  contents: write
 
 jobs:
-  setup-credentials:
-    name: Setup Actor Credentials
-    uses: ./.github/workflows/actor-credentials.yml
-    with:
-      actor: ${{ github.actor }}
-    permissions:
-      contents: write
-    secrets: inherit
-
-  prepare-release:
-    name: Prepare Release
-    runs-on: ubuntu-slim
-    needs: setup-credentials
-    permissions:
-      contents: write
+  publish:
+    runs-on: macos-15
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          ref: ${{ github.ref_name }}
-          persist-credentials: true
-      - name: Checkout or create release branch
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      - name: Check the tag matches the version the binary reports
         run: |
-          if git ls-remote --exit-code --heads origin ${{ env.RELEASE_BRANCH }}; then
-            git fetch origin ${{ env.RELEASE_BRANCH }}:${{ env.RELEASE_BRANCH }}
-            git checkout ${{ env.RELEASE_BRANCH }}
-          else
-            git checkout -b ${{ env.RELEASE_BRANCH }}
-          fi
-      - name: Update changelog
-        run: "sed -i 's/## Main/## ${{ inputs.version }}: ${{ inputs.title }}/g' CHANGELOG.md"
-      - name: Update built-in versions
-        run: |
-          sed 's/__VERSION__/${{ inputs.version }}/g' tools/Version.swift.template > Source/SwiftLintFramework/Models/Version.swift
-          sed -i -e '3s/.*/    version = "${{ inputs.version }}",/' MODULE.bazel
-          sed -i -e "s/^\(\s*s\.version\s*=\s*'\)[^']*'/\1${{ inputs.version }}'/" SwiftLint.podspec
-      - name: Configure Git author
-        uses: Homebrew/actions/git-user-config@main
-        with:
-          token: ${{ secrets[format('PERSONAL_GITHUB_TOKEN_{0}', needs.setup-credentials.outputs.author_uppercase)] }}
-      - name: Commit changes
-        id: pre_release
-        run: |
-          git commit -a -m "Prepare ${{ inputs.version }} release"
-          git push origin HEAD
-
-  verify-podspec:
-    name: Verify Podspec
-    runs-on: macOS-14
-    permissions:
-      contents: read
-    env:
-      DEVELOPER_DIR: /Applications/Xcode_15.0.1.app # Supports iOS 17.0 simulator selected by CocoaPods.
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          ref: ${{ github.ref_name }}
-          persist-credentials: false
-      - name: Set up Ruby and Bundler
-        uses: ruby/setup-ruby@95ef2b042f9d7a56d8268cba8559e2842e2ad01b # v1.321.0
-        with:
-          bundler-cache: true
-      - name: Lint Podspec # Make sure Podspec still builds okay on CI with old release.
-        run: |
-          if ! grep -q 'DEVELOPER_DIR: ${{ env.DEVELOPER_DIR }}' .github/workflows/post-release.yml; then
-            echo "ERROR: Xcode version not in sync with post-release workflow"
+          TAG="${{ inputs.tag || github.ref_name }}"
+          DECLARED=$(sed -n 's/.*Self(value: "\(.*\)").*/\1/p' Source/SwiftLintFramework/Models/Version.swift)
+          if [ "$TAG" != "$DECLARED" ]; then
+            echo "::error::Tag $TAG but Version.swift says $DECLARED. A release nobody can identify is worse than no release."
             exit 1
           fi
-          make pod_lint
-
-  build-linux:
-    name: Build Linux ${{ matrix.arch }} Binary
-    needs: prepare-release
-    runs-on: ${{ matrix.runner }}
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - arch: AMD64
-            runner: ubuntu-24.04
-            artifact_name: swiftlint-linux-amd64
-          - arch: ARM64
-            runner: ubuntu-24.04-arm
-            artifact_name: swiftlint-linux-arm64
-    permissions:
-      contents: read
-    steps:
-      - &checkout-release-branch
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          ref: ${{ env.RELEASE_BRANCH }}
-          persist-credentials: false
-      - name: Install dependencies
-        run: sudo apt update && sudo apt install -y libcurl4-openssl-dev
-      - name: Build binary
-        run: make --debug spm_linux_build
-      - name: Upload binary
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        with:
-          name: ${{ matrix.artifact_name }}
-          path: .build/release/swiftlint
-
-  build-static-linux:
-    name: Build Static Linux ${{ matrix.arch }} Binary
-    needs: prepare-release
-    runs-on: ${{ matrix.runner }}
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - arch: ARM64
-            runner: ubuntu-24.04-arm
-            swift_version: 6.3.2
-            swift_sdk: aarch64-swift-linux-musl
-            swift_sdk_version: 0.1.0
-            swift_sdk_checksum: 3fd798bef6f4408f1ea5a6f94ce4d4052830c4326ab85ebc04f983f01b3da407
-            artifact_name: swiftlint-linux-static-arm64
-          - arch: AMD64
-            runner: ubuntu-24.04
-            swift_version: 6.3.2
-            swift_sdk: x86_64-swift-linux-musl
-            swift_sdk_version: 0.1.0
-            swift_sdk_checksum: 3fd798bef6f4408f1ea5a6f94ce4d4052830c4326ab85ebc04f983f01b3da407
-            artifact_name: swiftlint-linux-static-amd64
-    permissions:
-      contents: read
-    env:
-      BINARY_PATH: .build/${{ matrix.swift_sdk }}/release/swiftlint
-    steps:
-      - *checkout-release-branch
-      - name: Install SDK
-        run: swift sdk install https://download.swift.org/swift-${{ matrix.swift_version }}-release/static-sdk/swift-${{ matrix.swift_version }}-RELEASE/swift-${{ matrix.swift_version }}-RELEASE_static-linux-${{ matrix.swift_sdk_version }}.artifactbundle.tar.gz --checksum ${{ matrix.swift_sdk_checksum }}
-      - name: Build mimalloc object
+          echo "VERSION=$TAG" >> "$GITHUB_ENV"
+      # arm64 only: the package builds a macro plugin, and SwiftPM cannot build one for two
+      # architectures in a single invocation. Every Mac here is Apple Silicon, and bin/lint says so
+      # plainly if it ever runs somewhere else.
+      - name: Build
         run: |
-          set -euxo pipefail
-          curl -sSfL "https://github.com/microsoft/mimalloc/archive/refs/tags/v${{ env.MIMALLOC_VERSION }}.tar.gz" | tar xz
-          export CC=clang
-          cmake -S "mimalloc-${{ env.MIMALLOC_VERSION }}" -B mimalloc-build \
-            -DMI_BUILD_SHARED=OFF \
-            -DMI_BUILD_STATIC=ON \
-            -DMI_BUILD_OBJECT=OFF \
-            -DCMAKE_BUILD_TYPE=Release
-          cmake --build mimalloc-build --target mimalloc-static
-          cp mimalloc-${{ env.MIMALLOC_VERSION }}/LICENSE LICENSE.mimalloc
-      - name: Build static binary
+          swift build -c release --product swiftlint
+          strip -rSTx .build/release/swiftlint
+      - name: Package with the checksum a consumer verifies
         run: |
-          # To improve performance with musl, increase the stack size to 512KiB and
-          # replace musl's default allocator with mimalloc.
-          swift build \
-            -c release \
-            --product swiftlint \
-            --swift-sdk ${{ matrix.swift_sdk }} \
-            -Xswiftc -DSWIFTLINT_DISABLE_SOURCEKIT \
-            -Xlinker -z -Xlinker stack-size=0x80000 \
-            -Xlinker --whole-archive \
-            -Xlinker ./mimalloc-build/libmimalloc.a \
-            -Xlinker --no-whole-archive
-          cp "${{ env.BINARY_PATH }}" .
-      - name: Strip binary
-        run: strip -s swiftlint
-      - name: Upload artifact
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        with:
-          name: ${{ matrix.artifact_name }}
-          path: |
-            swiftlint
-            LICENSE.mimalloc
-
-  build-macos:
-    name: Build macOS Binaries
-    needs: prepare-release
-    runs-on: macOS-26
-    permissions:
-      contents: read
-    steps:
-      - *checkout-release-branch
-      - name: Build SwiftLint for macOS
-        run: make --debug bazel_release
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        with:
-          name: swiftlint-macos
-          path: |
-            swiftlint
-            bazel.tar.gz
-            bazel.tar.gz.sha256
-          retention-days: 2
-          if-no-files-found: error
-
-  build-windows:
-    name: Build Windows ${{ matrix.arch-display-name }} Installer
-    needs: prepare-release
-    runs-on: windows-${{ matrix.windows-version }}
-    env:
-      SWIFT_VERSION: swift-6.3.2-release
-      SWIFT_BUILD: 6.3.2-RELEASE
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - windows-version: 2025
-            arch-display-name: AMD64
-            arch: amd64
-            wix-platform: x64
-            target-triple: x86_64-unknown-windows-msvc
-          - windows-version: "11-arm"
-            arch-display-name: ARM64
-            arch: arm64
-            wix-platform: arm64
-            target-triple: aarch64-unknown-windows-msvc
-    permissions:
-      contents: read
-    steps:
-      - *checkout-release-branch
-      - name: Set up Swift
-        uses: compnerd/gha-setup-swift@main
-        with:
-          swift-version: ${{ env.SWIFT_VERSION }}
-          swift-build: ${{ env.SWIFT_BUILD }}
-          build_arch: ${{ matrix.arch }}
-      - name: Build static executable
-        shell: pwsh
-        run: |
-          $sdk = Join-Path (Split-Path -Path $env:SDKROOT -Parent) 'WindowsExperimental.sdk'
-          swift build `
-            -c release `
-            --product swiftlint `
-            --triple ${{ matrix.target-triple }} `
-            -debug-info-format none `
-            -Xswiftc -static-stdlib `
-            -Xswiftc -sdk `
-            -Xswiftc $sdk `
-            -Xlinker /NODEFAULTLIB:curl -Xlinker libcurl.lib `
-            -Xlinker /NODEFAULTLIB:xml2 -Xlinker libxml2s.lib `
-            -Xlinker zlibstatic.lib `
-            -Xlinker brotlidec.lib `
-            -Xlinker brotlicommon.lib
-      - name: Prepare artifacts directory
-        shell: pwsh
-        run: |
-          New-Item -ItemType Directory -Path artifacts -Force | Out-Null
-      - name: Create portable zip
-        shell: pwsh
-        run: |
-          Compress-Archive `
-            -Path ".build/${{ matrix.target-triple }}/release/swiftlint.exe" `
-            -DestinationPath "artifacts/SwiftLint.${{ matrix.arch }}.zip" -Force
-      - name: Setup MSBuild
-        uses: microsoft/setup-msbuild@30375c66a4eea26614e0d39710365f22f8b0af57 # v3.0.0
-      - name: Build WiX MSI
-        shell: pwsh
-        run: |
-          $productVersion = "${{ inputs.version }}" -replace '-rc\.', '.'
-          & msbuild -nologo -restore `
-            Platforms\Windows\SwiftLint.wixproj `
-            -p:Configuration=Release `
-            -p:InstallerPlatform=${{ matrix.wix-platform }} `
-            -p:ProductVersion=$productVersion `
-            -p:SwiftLintBuildDir=${{ github.workspace }}\.build\${{ matrix.target-triple }}\release `
-            -p:OutputPath=${{ github.workspace }}\artifacts `
-            -p:RunWixToolsOutOfProc=true
-          Move-Item -Path "artifacts\SwiftLint.msi" -Destination "artifacts\SwiftLint.${{ matrix.arch }}.msi" -Force
-      - name: Upload artifacts
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        with:
-          name: swiftlint-windows-${{ matrix.arch }}
-          path: artifacts
-          retention-days: 2
-          if-no-files-found: error
-
-  create-release:
-    name: Create Release
-    needs:
-      - setup-credentials
-      - prepare-release
-      - build-linux
-      - build-static-linux
-      - build-macos
-      - build-windows
-    runs-on: macOS-26
-    permissions:
-      actions: read
-      contents: write
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          ref: ${{ env.RELEASE_BRANCH }}
-          persist-credentials: true
-      - name: Configure author
-        uses: Homebrew/actions/git-user-config@main
-        with:
-          token: ${{ secrets[format('PERSONAL_GITHUB_TOKEN_{0}', needs.setup-credentials.outputs.author_uppercase)] }}
-      - name: Download binary artifacts
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
-      - name: Move artifacts
-        run: |
-          # Move macOS artifacts.
-          mv -f swiftlint-macos/* .
-
-          # Move Linux artifacts.
-          mv -f swiftlint-linux-amd64/swiftlint swiftlint_linux_amd64
-          mv -f swiftlint-linux-arm64/swiftlint swiftlint_linux_arm64
-          mv -f swiftlint-linux-static-amd64/swiftlint swiftlint_static_amd64
-          mv -f swiftlint-linux-static-arm64/swiftlint swiftlint_static_arm64
-
-          # Just pick one of the licenses.
-          mv -f swiftlint-linux-static-amd64/LICENSE.mimalloc .
-
-          # Move Windows artifacts.
-          mv -f swiftlint-windows-{arm,amd}64/*.{msi,zip} .
-      - name: Make binaries executable
-        run: chmod +x swiftlint*
-      - name: Package artifacts
-        run: |
-          make --debug spm_artifactbundle
-          make --debug package
-          make --debug portable_zip
-          make --debug zip_linux_release
-      - name: Update binary target in Swift package
-        run: ./tools/update-artifact-bundle.sh "${{ inputs.version }}"
-      - name: Create tag and release commit
-        run: |
-          git commit -a -m "Release ${{ inputs.version }}"
-          git tag -a "${{ inputs.version }}" \
-            -m "Title: ${{ inputs.title }}" \
-            -m "Base: ${{ github.ref_name }}"
-          git push origin HEAD
-          git push origin "${{ inputs.version }}"
-      - name: Create release
-        run: ./tools/create-github-release.sh "${{ inputs.version }}"
+          cd .build/release
+          zip -q "swiftlint-macos-arm64.zip" swiftlint
+          shasum -a 256 swiftlint-macos-arm64.zip | cut -d' ' -f1 > swiftlint-macos-arm64.zip.sha256
+          echo "Built $VERSION: $(cat swiftlint-macos-arm64.zip.sha256)"
+      - name: Publish
         env:
-          GITHUB_TOKEN: ${{ secrets[format('PERSONAL_GITHUB_TOKEN_{0}', needs.setup-credentials.outputs.author_uppercase)] }}
-      - name: Add new changelog section
+          GH_TOKEN: ${{ github.token }}
         run: |
-          ./tools/add-new-changelog-section.sh
-          git commit -a -m "Add new changelog section"
-          git push origin HEAD
+          cd .build/release
+          gh release create "$VERSION" \
+            --title "$VERSION" \
+            --notes "Our SwiftLint, macOS arm64. A consuming repository downloads this and verifies the checksum." \
+            swiftlint-macos-arm64.zip swiftlint-macos-arm64.zip.sha256
