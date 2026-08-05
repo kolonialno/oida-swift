@@ -40,8 +40,10 @@ shape they describe.
 
 ## Layout is swift-format's, and this tool runs it
 
-`--format` hands the corrected files to the `swift-format` inside Xcode, found through `xcrun`, and refuses to
-run one other than the version a `.swift-format-version` file pins. That is deliberate: Xcode's Format File
+`--format` hands the corrected files to the `swift-format` inside Xcode, and to the one a
+`.swift-format-version` file pins: the selected Xcode is asked first, and if its formatter is the wrong version
+every installed Xcode is searched for the right one. So nothing has to run `xcode-select` before linting, and no
+machine can quietly format by a version the project did not choose. That is deliberate: Xcode's Format File
 (⇧⌃I) runs the same binary, so the tree and the keystroke cannot disagree. This tool decides what swift-format
 has no opinion about — which lists split, which join, how imports are grouped — and never indentation.
 
