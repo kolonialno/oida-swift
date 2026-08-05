@@ -40,16 +40,19 @@ shape they describe.
 
 ## Layout is swift-format's, and this tool runs it
 
-`--format` hands the corrected files to the `swift-format` inside Xcode, and to the one a
-`.swift-format-version` file pins: the selected Xcode is asked first, and if its formatter is the wrong version
-every installed Xcode is searched for the right one. So nothing has to run `xcode-select` before linting, and no
-machine can quietly format by a version the project did not choose. That is deliberate: Xcode's Format File
+`--format` hands the corrected files to the `swift-format` inside Xcode — whichever Xcode is selected, which is
+the one Format File runs. That is deliberate: Xcode's Format File
 (⇧⌃I) runs the same binary, so the tree and the keystroke cannot disagree. This tool decides what swift-format
 has no opinion about — which lists split, which join, how imports are grouped — and never indentation.
 
 Replacing swift-format with our own indentation rule was tried and dropped: while ⇧⌃I has to keep working,
 reproducing it exactly is the best possible outcome, which makes the reimplementation redundant and starts a
 chase after every Xcode release.
+
+Pinning the formatter's version was tried and dropped too. It never changed how anything was formatted — with
+one Xcode installed there is one formatter to use — it only refused to run when the version differed, and the
+premise under it, that two swift-format versions format the same code differently, was never measured. Churn
+after an Xcode update would be that measurement, and the answer then is a floor, not an exact match.
 
 ## Imports come in three groups
 

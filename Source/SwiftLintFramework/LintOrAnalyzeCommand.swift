@@ -396,7 +396,7 @@ enum SwiftFormat {
         guard paths.isNotEmpty else {
             return
         }
-        let binary = try pinnedFormatter()
+        let binary = try formatter()
         let process = Process()
         process.executableURL = binary
         process.arguments = arguments + paths
@@ -409,60 +409,6 @@ enum SwiftFormat {
         if !quiet {
             queuedPrintError("\(verb) \(paths.count) file(s) with \(binary.path).")
         }
-    }
-
-    /// The swift-format the project is formatted with.
-    ///
-    /// Xcode bundles the formatter, so its version decides the layout: a colleague on a newer Xcode would
-    /// otherwise reformat the whole project and nobody could tell why. A project states which one it expects in
-    /// `.swift-format-version`, beside its `.swift-format`.
-    ///
-    /// The selected Xcode is asked first, since it is usually right and answering costs one process. When its
-    /// formatter is the wrong version, every installed Xcode is searched for the pinned one — so a machine, or a
-    /// CI runner, needs no `xcode-select` to lint. Without a pin, whatever Xcode offers is used.
-    private static func pinnedFormatter() throws -> URL {
-        let pin = URL.cwd.appending(component: ".swift-format-version")
-        let expected = try? String(contentsOf: pin, encoding: .utf8)
-            .trimmingCharacters(in: .whitespacesAndNewlines)
-
-        let selected = try selectedFormatter()
-        guard let expected, expected.isNotEmpty else {
-            return selected
-        }
-        if try output(of: selected, arguments: ["--version"]) == expected {
-            return selected
-        }
-        var offered: [String] = []
-        for candidate in installedFormatters() {
-            let version = (try? output(of: candidate, arguments: ["--version"])) ?? ""
-            if version == expected {
-                return candidate
-            }
-            offered.append("  \(candidate.path) -> \(version.isEmpty ? "unreadable" : version)")
-        }
-        throw SwiftLintError.usageError(
-            description: """
-                No installed Xcode bundles swift-format \(expected), which is what \
-                .swift-format-version pins. Xcode bundles the formatter, so its version decides the \
-                formatting. Offered:
-                \(offered.joined(separator: "\n"))
-                Either install an Xcode carrying \(expected), or reformat with one of the above and \
-                update .swift-format-version in the same commit.
-                """)
-    }
-
-    private static func installedFormatters() -> [URL] {
-        let applications = URL(fileURLWithPath: "/Applications")
-        let contents = (try? FileManager.default.contentsOfDirectory(atPath: applications.path)) ?? []
-        return contents
-            .filter { $0.hasPrefix("Xcode") && $0.hasSuffix(".app") }
-            .sorted(by: >)
-            .map {
-                applications
-                    .appending(path: $0)
-                    .appending(path: "Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift-format")
-            }
-            .filter { FileManager.default.isExecutableFile(atPath: $0.path) }
     }
 
     private static func output(of binary: URL, arguments: [String]) throws -> String {
@@ -479,7 +425,14 @@ enum SwiftFormat {
             .trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
     }
 
-    private static func selectedFormatter() throws -> URL {
+    /// The swift-format Xcode offers, which is the one Format File runs.
+    ///
+    /// No version is pinned. Pinning was tried and killed: it never changed how anything was formatted, only
+    /// refused to run when the selected Xcode carried a different version, and the premise underneath —
+    /// that two swift-format versions format this code differently — was never measured. If churn ever shows
+    /// up after an Xcode update, that is the measurement, and the answer would be a floor rather than an
+    /// exact match.
+    private static func formatter() throws -> URL {
         let found = try output(
             of: URL(fileURLWithPath: "/usr/bin/xcrun"), arguments: ["--find", "swift-format"])
         guard found.isNotEmpty else {
