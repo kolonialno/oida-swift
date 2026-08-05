@@ -4,7 +4,7 @@ import Testing
 @Suite
 struct SwiftVersionTests {
     @Test
-    func detectSwiftVersion() { // swiftlint:disable:this function_body_length
+    func detectSwiftVersion() { // oida:disable:this function_body_length
 #if compiler(>=6.4)
         let version = "6.4.0"
 #elseif compiler(>=6.3.3)

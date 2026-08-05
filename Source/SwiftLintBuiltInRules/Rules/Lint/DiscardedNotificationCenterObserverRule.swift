@@ -157,7 +157,7 @@ private extension DiscardedNotificationCenterObserverRule {
             scopes.pop()
         }
 
-        // swiftlint:disable:next cyclomatic_complexity
+        // oida:disable:next cyclomatic_complexity
         override func visitPost(_ node: FunctionCallExprSyntax) {
             guard let calledExpression = node.calledExpression.as(MemberAccessExprSyntax.self),
                   case .identifier("addObserver") = calledExpression.declName.baseName.tokenKind,

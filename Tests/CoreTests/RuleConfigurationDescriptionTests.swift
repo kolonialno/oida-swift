@@ -2,10 +2,10 @@
 import TestHelpers
 import Testing
 
-// swiftlint:disable file_length
+// oida:disable file_length
 
 @Suite
-struct RuleConfigurationDescriptionTests {  // swiftlint:disable:this type_body_length
+struct RuleConfigurationDescriptionTests {  // oida:disable:this type_body_length
     @AutoConfigParser
     private struct MockConfiguration: RuleConfiguration {
         @ConfigurationElement(key: "flag")
@@ -13,7 +13,7 @@ struct RuleConfigurationDescriptionTests {  // swiftlint:disable:this type_body_
         @ConfigurationElement(key: "string")
         var string = "value"
         @ConfigurationElement(key: "symbol")
-        var symbol = try! Symbol(fromAny: "value", context: "rule")  // swiftlint:disable:this force_try
+        var symbol = try! Symbol(fromAny: "value", context: "rule")  // oida:disable:this force_try
         @ConfigurationElement(key: "integer")
         var integer = 2
         @ConfigurationElement(key: "null")
@@ -49,7 +49,7 @@ struct RuleConfigurationDescriptionTests {  // swiftlint:disable:this type_body_
     }
 
     @Test
-    func descriptionFromConfiguration() throws { // swiftlint:disable:this function_body_length
+    func descriptionFromConfiguration() throws { // oida:disable:this function_body_length
         var configuration = MockConfiguration()
         try configuration.apply(configuration: Void())  // Configure to set keys.
         let description = RuleConfigurationDescription.from(configuration: configuration)
@@ -231,7 +231,7 @@ struct RuleConfigurationDescriptionTests {  // swiftlint:disable:this type_body_
     @Test
     func prefersParameterDescription() {
         struct Config: RuleConfiguration {
-            typealias Parent = MockRule  // swiftlint:disable:this nesting
+            typealias Parent = MockRule  // oida:disable:this nesting
 
             var parameterDescription: RuleConfigurationDescription? {
                 "visible" => .flag(true)
@@ -323,7 +323,7 @@ struct RuleConfigurationDescriptionTests {  // swiftlint:disable:this type_body_
     }
 
     @Test
-    func basicTypes() { // swiftlint:disable:this function_body_length
+    func basicTypes() { // oida:disable:this function_body_length
         let description = description {
             "flag" => .flag(true)
             "string" => .string("value")
@@ -420,7 +420,7 @@ struct RuleConfigurationDescriptionTests {  // swiftlint:disable:this type_body_
     }
 
     @Test
-    func nestedDescription() { // swiftlint:disable:this function_body_length
+    func nestedDescription() { // oida:disable:this function_body_length
         let description = description {
             "flag" => .flag(true)
             "nested 1"

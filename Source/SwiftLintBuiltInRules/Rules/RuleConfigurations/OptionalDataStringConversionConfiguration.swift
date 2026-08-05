@@ -1,7 +1,7 @@
 import SwiftLintCore
 
 @AutoConfigParser
-struct OptionalDataStringConversionConfiguration: SeverityBasedRuleConfiguration { // swiftlint:disable:this type_name
+struct OptionalDataStringConversionConfiguration: SeverityBasedRuleConfiguration { // oida:disable:this type_name
     @ConfigurationElement(key: "severity")
     private(set) var severityConfiguration = SeverityConfiguration<Parent>.warning
 

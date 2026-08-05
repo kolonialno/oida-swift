@@ -4,10 +4,10 @@ import Testing
 
 @testable import SwiftLintBuiltInRules
 
-// swiftlint:disable file_length
+// oida:disable file_length
 
 @Suite(.rulesRegistered)
-struct ModifierOrderTests { // swiftlint:disable:this type_body_length
+struct ModifierOrderTests { // oida:disable:this type_body_length
     @Test
     func attributeTypeMethod() {
         let descriptionOverride = ModifierOrderRule.description
@@ -81,7 +81,7 @@ struct ModifierOrderTests { // swiftlint:disable:this type_body_length
     }
 
     @Test
-    func atPrefixedGroup() { // swiftlint:disable:this function_body_length
+    func atPrefixedGroup() { // oida:disable:this function_body_length
         let descriptionOverride = ModifierOrderRule.description
             .with(nonTriggeringExamples: #examples([
                 #"""
@@ -232,7 +232,7 @@ struct ModifierOrderTests { // swiftlint:disable:this type_body_length
     }
 
     @Test
-    func correctionsAreAppliedCorrectly() { // swiftlint:disable:this function_body_length
+    func correctionsAreAppliedCorrectly() { // oida:disable:this function_body_length
         let descriptionOverride = ModifierOrderRule.description
             .with(nonTriggeringExamples: [], triggeringExamples: [])
             .with(corrections: #corrections([
@@ -401,7 +401,7 @@ struct ModifierOrderTests { // swiftlint:disable:this type_body_length
     }
 
     @Test
-    func isolationModifierOrder() { // swiftlint:disable:this function_body_length
+    func isolationModifierOrder() { // oida:disable:this function_body_length
         let descriptionOverride = ModifierOrderRule.description
             .with(nonTriggeringExamples: #examples([
                 """

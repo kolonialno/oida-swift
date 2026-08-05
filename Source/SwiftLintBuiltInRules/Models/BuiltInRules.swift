@@ -99,7 +99,7 @@ public let builtInRules: [any Rule.Type] = [
     InclusiveLanguageRule.self,
     IncompatibleConcurrencyAnnotationRule.self,
     IndentationWidthRule.self,
-    InvalidSwiftLintCommandRule.self,
+    InvalidOidaCommandRule.self,
     InvisibleCharacterRule.self,
     IsDisjointRule.self,
     JoinedDefaultParameterRule.self,

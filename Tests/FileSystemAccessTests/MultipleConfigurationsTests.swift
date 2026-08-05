@@ -5,7 +5,7 @@ import Testing
 @testable import SwiftLintBuiltInRules
 @testable import SwiftLintFramework
 
-// swiftlint:disable file_length
+// oida:disable file_length
 
 private extension Configuration {
     func contains<T: Rule>(rule _: T.Type) -> Bool {
@@ -14,7 +14,7 @@ private extension Configuration {
 }
 
 @Suite(.rulesRegistered)
-struct MultipleConfigurationsTests { // swiftlint:disable:this type_body_length
+struct MultipleConfigurationsTests { // oida:disable:this type_body_length
     // MARK: - Rules Merging
     @Test(.workingDirectory(Constants.Dir.level0))
     func merge() {
@@ -338,7 +338,7 @@ struct MultipleConfigurationsTests { // swiftlint:disable:this type_body_length
             }
         }
         let testCases: [TestCase] = [
-            // swiftlint:disable line_length
+            // oida:disable line_length
             TestCase(optedInInParent: false, disabledInParent: false, optedInInChild: false, disabledInChild: false, isEnabled: false),
             TestCase(optedInInParent: true, disabledInParent: false, optedInInChild: false, disabledInChild: false, isEnabled: true),
             TestCase(optedInInParent: false, disabledInParent: true, optedInInChild: false, disabledInChild: false, isEnabled: false),
@@ -355,7 +355,7 @@ struct MultipleConfigurationsTests { // swiftlint:disable:this type_body_length
             TestCase(optedInInParent: true, disabledInParent: false, optedInInChild: true, disabledInChild: true, isEnabled: false),
             TestCase(optedInInParent: false, disabledInParent: true, optedInInChild: true, disabledInChild: true, isEnabled: false),
             TestCase(optedInInParent: true, disabledInParent: true, optedInInChild: true, disabledInChild: true, isEnabled: false),
-            // swiftlint:enable line_length
+            // oida:enable line_length
         ]
         #expect(testCases.unique.count == 4 * 4)
         let ruleType = ImplicitReturnRule.self

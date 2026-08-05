@@ -72,7 +72,7 @@ extension Configuration {
         let result = NSMutableOrderedSet(capacity: paths.count)
         result.addObjects(from: paths)
         #endif
-        return result.array as! [URL] // swiftlint:disable:this force_cast
+        return result.array as! [URL] // oida:disable:this force_cast
     }
 
     func filteredPaths(in paths: [URL], excludeByPrefix: Bool) -> [URL] {

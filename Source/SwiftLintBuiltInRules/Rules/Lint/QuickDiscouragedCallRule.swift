@@ -119,7 +119,7 @@ private enum QuickCallKind: String {
     case beforeSuite
     case afterEach
     case afterSuite
-    case it // swiftlint:disable:this identifier_name
+    case it // oida:disable:this identifier_name
     case pending
     case xdescribe
     case xcontext

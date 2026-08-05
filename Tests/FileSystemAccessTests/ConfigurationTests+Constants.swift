@@ -2,8 +2,8 @@ import Foundation
 import SwiftLintFramework
 import TestHelpers
 
-// swiftlint:disable:next blanket_disable_command
-// swiftlint:disable identifier_name
+// oida:disable:next blanket_disable_command
+// oida:disable identifier_name
 
 enum Constants {
     // MARK: Test Resources Path

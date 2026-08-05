@@ -26,7 +26,7 @@ struct ConfigPathResolutionTests {
                 excludeByPrefix: false
             )
 
-            // swiftlint:disable:next force_try
+            // oida:disable:next force_try
             return files.map { $0.path!.path.replacing(try! Regex(".+/\(scenario)/"), with: "") }.sorted()
         }
     }

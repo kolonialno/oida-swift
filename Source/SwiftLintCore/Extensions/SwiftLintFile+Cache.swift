@@ -7,8 +7,8 @@ import SwiftParser
 import SwiftParserDiagnostics
 import SwiftSyntax
 
-// swiftlint:disable:next blanket_disable_command
-// swiftlint:disable closure_end_indentation opening_brace
+// oida:disable:next blanket_disable_command
+// oida:disable closure_end_indentation opening_brace
 
 package typealias AssertHandler = () -> Void
 
@@ -63,7 +63,7 @@ final class FileCache: @unchecked Sendable {
     /// TODO: [06/05/2028] We can convert the explicit getters and setters to a keypath-based subscript once the Swift
     /// compiler bug https://github.com/swiftlang/swift/issues/69386 is resolved.
     fileprivate func getOrCompute<T>(factory: () -> T, get: () -> Cached<T>, set: (Cached<T>) -> Void) -> T {
-        // swiftlint:disable:previous cyclomatic_complexity
+        // oida:disable:previous cyclomatic_complexity
 
         let initialState = queue.sync { () -> CacheLookup<T> in
             switch get() {
@@ -295,7 +295,7 @@ extension SwiftLintFile {
     private var cachedCommands: [Command] {
         fileCache.getOrCompute
             {
-                contents.contains("swiftlint:")
+                contents.contains(Command.prefix)
                     ? CommandVisitor(locationConverter: locationConverter).walk(file: self, handler: \.commands)
                     : []
             }

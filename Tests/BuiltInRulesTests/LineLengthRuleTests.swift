@@ -120,7 +120,7 @@ struct LineLengthRuleTests {
         """)
 
     // Regex literal examples
-    // swiftlint:disable line_length
+    // oida:disable line_length
     private let regexLiteral = Example(code: """
         let emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$|^\(Self.longString)$/
 
@@ -133,7 +133,7 @@ struct LineLengthRuleTests {
         let complexRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$|^very\\.long\\.regex\\.pattern\\.here\\.with\\.many\\.dots\\.and\\.extra\\.text$/
 
         """)
-    // swiftlint:enable line_length
+    // oida:enable line_length
     private let regexLiteralFail = Example(code: """
         let longRegexString = "\(Self.longString)"
 

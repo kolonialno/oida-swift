@@ -96,11 +96,11 @@ struct PreferKeyPathRule: Rule {
 
             """
             myList
-                .map { $0.a } // swiftlint:disable:this prefer_key_path
+                .map { $0.a } // oida:disable:this prefer_key_path
             """:
                 """
                 myList
-                    .map { $0.a } // swiftlint:disable:this prefer_key_path
+                    .map { $0.a } // oida:disable:this prefer_key_path
                 """,
         ])
     )

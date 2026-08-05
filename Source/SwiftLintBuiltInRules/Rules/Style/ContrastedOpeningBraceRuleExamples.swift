@@ -1,8 +1,8 @@
 import SwiftLintCore
 
-// swiftlint:disable file_length
+// oida:disable file_length
 
-// swiftlint:disable:next type_body_length
+// oida:disable:next type_body_length
 struct ContrastedOpeningBraceRuleExamples {
     static let nonTriggeringExamples = #examples([
         """
@@ -421,14 +421,14 @@ struct ContrastedOpeningBraceRuleExamples {
         """
             if
                 "test".isEmpty
-            // swiftlint:disable:next contrasted_opening_brace
+            // oida:disable:next contrasted_opening_brace
               {
                 // code here
             }
             """: """
                 if
                     "test".isEmpty
-                // swiftlint:disable:next contrasted_opening_brace
+                // oida:disable:next contrasted_opening_brace
                   {
                     // code here
                 }

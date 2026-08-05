@@ -5,7 +5,7 @@ import SwiftSyntax
 struct InvisibleCharacterRule: Rule {
     var configuration = InvisibleCharacterConfiguration()
 
-    // swiftlint:disable invisible_character
+    // oida:disable invisible_character
     static let description = RuleDescription(
         identifier: "invisible_character",
         name: "Invisible Character",
@@ -85,7 +85,7 @@ struct InvisibleCharacterRule: Rule {
             ]),
         ])
     )
-    // swiftlint:enable invisible_character
+    // oida:enable invisible_character
 }
 
 private extension InvisibleCharacterRule {

@@ -43,7 +43,7 @@ private let info: PlatformInfo = {
 }()
 #endif
 
-// swiftlint:disable file_length
+// oida:disable file_length
 
 private let violationMarker = "↓"
 private let violationMarkerChar = violationMarker.first!
@@ -409,7 +409,7 @@ public func verifyRule(_ ruleDescription: RuleDescription,
     if skipDisableCommandTests {
         disableCommands = []
     } else {
-        disableCommands = ruleDescription.allIdentifiers.map { "// swiftlint:disable \($0)\n" }
+        disableCommands = ruleDescription.allIdentifiers.map { "// oida:disable \($0)\n" }
     }
 
     verifyLint(
@@ -431,7 +431,7 @@ public func verifyRule(_ ruleDescription: RuleDescription,
     )
 }
 
-// swiftlint:disable:next function_body_length cyclomatic_complexity
+// oida:disable:next function_body_length cyclomatic_complexity
 func verifyLint(_ ruleDescription: RuleDescription,
                 config: Configuration,
                 commentDoesntViolate: Bool = true,
@@ -559,7 +559,7 @@ func verifyLint(_ ruleDescription: RuleDescription,
     }
 }
 
-// swiftlint:disable:next function_body_length
+// oida:disable:next function_body_length
 private func verifyExamples(triggers: [Example],
                             nonTriggers: [Example],
                             configuration config: Configuration,

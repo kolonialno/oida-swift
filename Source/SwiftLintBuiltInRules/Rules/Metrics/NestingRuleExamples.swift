@@ -1,6 +1,6 @@
 import SwiftLintCore
 
-// swiftlint:disable file_length
+// oida:disable file_length
 
 private let detectingTypes = ["actor", "class", "struct", "enum"]
 

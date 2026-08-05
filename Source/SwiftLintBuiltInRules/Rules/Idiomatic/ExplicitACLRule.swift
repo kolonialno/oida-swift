@@ -108,7 +108,7 @@ struct ExplicitACLRule: Rule {
 
 private enum CheckACLState {
     case yes
-    case no // swiftlint:disable:this identifier_name
+    case no // oida:disable:this identifier_name
 }
 
 private extension ExplicitACLRule {

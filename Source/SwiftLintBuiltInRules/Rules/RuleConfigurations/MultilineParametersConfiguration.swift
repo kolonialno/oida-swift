@@ -12,7 +12,7 @@ struct MultilineParametersConfiguration: SeverityBasedRuleConfiguration {
     @ConfigurationElement(key: "requires_single_line")
     private(set) var requiresSingleLine = false
 
-    // swiftlint:disable:next unneeded_throws_rethrows
+    // oida:disable:next unneeded_throws_rethrows
     func validate() throws(Issue) {
         if requiresSingleLine, !allowsSingleLine {
             Issue.inconsistentConfiguration(

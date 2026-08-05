@@ -19,14 +19,14 @@ struct RegionTests {
     func regionsFromSingleCommand() {
         // disable
         do {
-            let file = SwiftLintFile(contents: "// swiftlint:disable rule_id\n")
+            let file = SwiftLintFile(contents: "// oida:disable rule_id\n")
             let start = Location(file: nil, line: 1, character: 29)
             let end = Location(file: nil, line: .max, character: .max)
             #expect(file.regions() == [Region(start: start, end: end, disabledRuleIdentifiers: ["rule_id"])])
         }
         // enable
         do {
-            let file = SwiftLintFile(contents: "// swiftlint:enable rule_id\n")
+            let file = SwiftLintFile(contents: "// oida:enable rule_id\n")
             let start = Location(file: nil, line: 1, character: 28)
             let end = Location(file: nil, line: .max, character: .max)
             #expect(file.regions() == [Region(start: start, end: end, disabledRuleIdentifiers: [])])
@@ -37,7 +37,7 @@ struct RegionTests {
     func regionsFromMatchingPairCommands() {
         // disable/enable
         do {
-            let file = SwiftLintFile(contents: "// swiftlint:disable rule_id\n// swiftlint:enable rule_id\n")
+            let file = SwiftLintFile(contents: "// oida:disable rule_id\n// oida:enable rule_id\n")
             #expect(file.regions() == [
                 Region(
                     start: Location(file: nil, line: 1, character: 29),
@@ -51,7 +51,7 @@ struct RegionTests {
         }
         // enable/disable
         do {
-            let file = SwiftLintFile(contents: "// swiftlint:enable rule_id\n// swiftlint:disable rule_id\n")
+            let file = SwiftLintFile(contents: "// oida:enable rule_id\n// oida:disable rule_id\n")
             #expect(file.regions() == [
                 Region(
                     start: Location(file: nil, line: 1, character: 28),
@@ -68,8 +68,8 @@ struct RegionTests {
     @Test
     func regionsFromThreeCommandForSingleLine() {
         let file = SwiftLintFile(
-            contents: "// swiftlint:disable:next 1\n" + "// swiftlint:disable:this 2\n"
-                + "// swiftlint:disable:previous 3\n")
+            contents: "// oida:disable:next 1\n" + "// oida:disable:this 2\n"
+                + "// oida:disable:previous 3\n")
         #expect(file.regions() == [
             Region(
                 start: Location(file: nil, line: 2, character: nil),
@@ -85,12 +85,12 @@ struct RegionTests {
     @Test
     func severalRegionsFromSeveralCommands() {
         let file = SwiftLintFile(contents: """
-            // swiftlint:disable 1
-            // swiftlint:disable 2
-            // swiftlint:disable 3
-            // swiftlint:enable 1
-            // swiftlint:enable 2
-            // swiftlint:enable 3
+            // oida:disable 1
+            // oida:disable 2
+            // oida:disable 3
+            // oida:enable 1
+            // oida:enable 2
+            // oida:enable 3
             """
         )
         #expect(file.regions() == [

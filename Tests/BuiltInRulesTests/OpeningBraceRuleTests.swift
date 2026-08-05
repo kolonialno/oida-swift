@@ -122,7 +122,7 @@ struct OpeningBraceRuleTests {
     }
 
     @Test
-    func withIgnoreMultilineFunctionSignaturesTrue() { // swiftlint:disable:this function_body_length
+    func withIgnoreMultilineFunctionSignaturesTrue() { // oida:disable:this function_body_length
         let nonTriggeringExamples = #examples([
             """
                 func abc(

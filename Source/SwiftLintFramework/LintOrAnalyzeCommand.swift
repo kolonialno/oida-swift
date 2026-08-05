@@ -5,7 +5,7 @@ import Dispatch
 import Foundation
 import SourceKittenFramework
 
-// swiftlint:disable file_length
+// oida:disable file_length
 
 package enum LintOrAnalyzeMode {
     case lint, analyze

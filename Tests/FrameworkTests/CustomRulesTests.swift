@@ -6,10 +6,10 @@ import Testing
 @testable import SwiftLintCore
 @testable import SwiftLintFramework
 
-// swiftlint:disable file_length
+// oida:disable file_length
 
 @Suite(.serialized, .rulesRegistered, .sourceKitRequestsWithoutRule)
-struct CustomRulesTests {  // swiftlint:disable:this type_body_length
+struct CustomRulesTests {  // oida:disable:this type_body_length
     private typealias Configuration = RegexConfiguration<CustomRules>
 
     private var testFile: SwiftLintFile {
@@ -149,7 +149,7 @@ struct CustomRulesTests {  // swiftlint:disable:this type_body_length
                 "match_kinds": "comment",
             ],
         ]
-        let example = Example(code: "//swiftlint:disable custom \n// file with a pattern")
+        let example = Example(code: "//oida:disable custom \n// file with a pattern")
         let violations = try violations(forExample: example, customRules: customRules)
         #expect(violations.isEmpty)
     }
@@ -157,7 +157,7 @@ struct CustomRulesTests {  // swiftlint:disable:this type_body_length
     @Test
     func localDisableCustomRuleWithMultipleRules() {
         let (configs, customRules) = getCustomRulesWithTwoRules()
-        let file = SwiftLintFile(contents: "//swiftlint:disable \(configs.1.identifier) \n// file with a pattern")
+        let file = SwiftLintFile(contents: "//oida:disable \(configs.1.identifier) \n// file with a pattern")
         #expect(
             customRules.validate(file: file) == [
                 StyleViolation(
@@ -237,7 +237,7 @@ struct CustomRulesTests {  // swiftlint:disable:this type_body_length
             ],
         ]
         let example = Example(code: """
-                              // swiftlint:disable:next custom_rules
+                              // oida:disable:next custom_rules
                               let ALLOWED = 2
                               """)
 
@@ -256,7 +256,7 @@ struct CustomRulesTests {  // swiftlint:disable:this type_body_length
         ]
 
         let example = Example(code: """
-                              // swiftlint:disable:next \(customRuleIdentifier)
+                              // oida:disable:next \(customRuleIdentifier)
                               let ALLOWED = 2
                               """)
 
@@ -275,7 +275,7 @@ struct CustomRulesTests {  // swiftlint:disable:this type_body_length
         ]
 
         let example = Example(code: """
-                              // swiftlint:disable:next custom_rules \(customRuleIdentifier)
+                              // oida:disable:next custom_rules \(customRuleIdentifier)
                               let ALLOWED = 2
                               """)
 
@@ -297,7 +297,7 @@ struct CustomRulesTests {  // swiftlint:disable:this type_body_length
 
         let example = Example(code: """
                               let FORBIDDEN = 1
-                              // swiftlint:disable:next \(customRuleIdentifier)
+                              // oida:disable:next \(customRuleIdentifier)
                               let ALLOWED = 2
                               """)
 
@@ -317,7 +317,7 @@ struct CustomRulesTests {  // swiftlint:disable:this type_body_length
         ]
 
         let example = Example(code: """
-                              // swiftlint:disable:next custom_rules
+                              // oida:disable:next custom_rules
                               let FORBIDDEN = 1
                               """)
 
@@ -335,7 +335,7 @@ struct CustomRulesTests {  // swiftlint:disable:this type_body_length
             ],
         ]
         let example = Example(code: """
-                              // swiftlint:disable:next forbidden forbidden2
+                              // oida:disable:next forbidden forbidden2
                               let ALLOWED = 2
                               """)
 
@@ -356,7 +356,7 @@ struct CustomRulesTests {  // swiftlint:disable:this type_body_length
             ],
         ]
         let example = Example(code: """
-                              // swiftlint:disable:next forbidden forbidden2
+                              // oida:disable:next forbidden forbidden2
                               let FORBIDDEN = 1
                               """)
 
@@ -376,7 +376,7 @@ struct CustomRulesTests {  // swiftlint:disable:this type_body_length
             ],
         ]
         let example = Example(code: """
-                              // swiftlint:disable:next forbidden forbidden2 custom_rules
+                              // oida:disable:next forbidden forbidden2 custom_rules
                               let FORBIDDEN = 1
                               """)
 
@@ -404,7 +404,7 @@ struct CustomRulesTests {  // swiftlint:disable:this type_body_length
 
         let example = Example(code:
             """
-             // swiftlint:disable custom1 custom3
+             // oida:disable custom1 custom3
              return 10
              """
         )
@@ -426,7 +426,7 @@ struct CustomRulesTests {  // swiftlint:disable:this type_body_length
         ]
         let example = Example(code:
             """
-            // swiftlint:disable:next dont_print
+            // oida:disable:next dont_print
             print("Hello, world")
             """)
         #expect(try violations(forExample: example, customRules: customRules).isEmpty)
@@ -441,7 +441,7 @@ struct CustomRulesTests {  // swiftlint:disable:this type_body_length
         ]
         let example = Example(code:
             """
-            // swiftlint:disable:next all
+            // oida:disable:next all
             print("Hello, world")
             """)
         #expect(try violations(forExample: example, customRules: customRules).isEmpty)
@@ -456,7 +456,7 @@ struct CustomRulesTests {  // swiftlint:disable:this type_body_length
         ]
         let example = Example(code:
             """
-            // swiftlint:disable:next all dont_print
+            // oida:disable:next all dont_print
             print("Hello, world")
             """)
         #expect(try violations(forExample: example, customRules: customRules).isEmpty)
@@ -474,12 +474,12 @@ struct CustomRulesTests {  // swiftlint:disable:this type_body_length
         ]
         let example = Example(code:
             """
-            // swiftlint:disable rule1
-            // swiftlint:disable rule2
+            // oida:disable rule1
+            // oida:disable rule2
             let pattern2 = ""
-            // swiftlint:enable rule2
+            // oida:enable rule2
             let pattern1 = ""
-            // swiftlint:enable rule1
+            // oida:enable rule1
             """)
         #expect(try violations(forExample: example, customRules: customRules).isEmpty)
     }
@@ -498,14 +498,14 @@ struct CustomRulesTests {  // swiftlint:disable:this type_body_length
             ],
         ]
         let example = Example(code: """
-                              // swiftlint:disable rule1
-                              // swiftlint:disable rule2
-                              // swiftlint:disable rule3
+                              // oida:disable rule1
+                              // oida:disable rule2
+                              // oida:disable rule3
                               let pattern2 = ""
-                              // swiftlint:enable rule2
-                              // swiftlint:enable rule3
+                              // oida:enable rule2
+                              // oida:enable rule3
                               let pattern1 = ""
-                              // swiftlint:enable rule1
+                              // oida:enable rule1
                               """)
         let violations = try violations(forExample: example, customRules: customRules)
 
@@ -527,12 +527,12 @@ struct CustomRulesTests {  // swiftlint:disable:this type_body_length
             ],
         ]
         let example = Example(code: """
-                              // swiftlint:disable rule1
-                              // swiftlint:disable rule2 rule3
-                              // swiftlint:enable rule3 rule2
-                              // swiftlint:disable rule2
-                              // swiftlint:enable rule1
-                              // swiftlint:enable rule2
+                              // oida:disable rule1
+                              // oida:disable rule2 rule3
+                              // oida:enable rule3 rule2
+                              // oida:disable rule2
+                              // oida:enable rule1
+                              // oida:enable rule2
                               """)
         let violations = try violations(forExample: example, customRules: customRules)
 

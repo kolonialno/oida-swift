@@ -21,7 +21,7 @@ public struct RegexConfiguration<Parent: Rule>: SeverityBasedRuleConfiguration, 
     public var message = "Regex matched"
     /// The regular expression to apply to trigger violations for this custom rule.
     @ConfigurationElement(key: "regex")
-    package var regex: RegularExpression! // swiftlint:disable:this implicitly_unwrapped_optional
+    package var regex: RegularExpression! // oida:disable:this implicitly_unwrapped_optional
     /// Regular expressions to include when matching the file path.
     public var included: [RegularExpression] = []
     /// Regular expressions to exclude when matching the file path.
@@ -69,7 +69,7 @@ public struct RegexConfiguration<Parent: Rule>: SeverityBasedRuleConfiguration, 
         self.identifier = identifier
     }
 
-    // swiftlint:disable:next cyclomatic_complexity
+    // oida:disable:next cyclomatic_complexity
     public mutating func apply(configuration: Any) throws(Issue) {
         guard let configurationDict = configuration as? [String: Any],
               let regexString = configurationDict[$regex.key] as? String else {

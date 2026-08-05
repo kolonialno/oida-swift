@@ -4,7 +4,7 @@ import SwiftLintCore
 
 extension SwiftLintDev.Rules {
     struct Template: AsyncParsableCommand {
-        // swiftlint:disable:next force_try
+        // oida:disable:next force_try
         private static let camelCaseRegex = try! NSRegularExpression(pattern: "(?<!^)(?=[A-Z])")
 
         static let configuration = CommandConfiguration(

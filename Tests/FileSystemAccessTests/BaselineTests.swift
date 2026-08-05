@@ -6,8 +6,8 @@ import Testing
 @testable import SwiftLintBuiltInRules
 @testable import SwiftLintCore
 
-// swiftlint:disable:next blanket_disable_command
-// swiftlint:disable contains_over_filter_is_empty
+// oida:disable:next blanket_disable_command
+// oida:disable contains_over_filter_is_empty
 
 @Suite(.rulesRegistered)
 struct BaselineTests {

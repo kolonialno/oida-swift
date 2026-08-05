@@ -35,7 +35,7 @@ public extension SeverityBasedRuleConfiguration {
 public extension RuleConfiguration {
     var parameterDescription: RuleConfigurationDescription? { nil }
 
-    // swiftlint:disable:next unneeded_throws_rethrows
+    // oida:disable:next unneeded_throws_rethrows
     func validate() throws(Issue) {
         // Do nothing by default.
     }

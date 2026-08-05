@@ -9,7 +9,7 @@ struct DuplicateImportsRuleTests {
     func disableCommand() {
         let content = """
             import InspireAPI
-            // swiftlint:disable:next duplicate_imports
+            // oida:disable:next duplicate_imports
             import class InspireAPI.Response
             """
         let file = SwiftLintFile(contents: content)

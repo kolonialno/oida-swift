@@ -7,7 +7,7 @@ import Testing
 @Suite(.rulesRegistered)
 struct TypeContentsOrderRuleTests {
     @Test
-    func typeContentsOrderReversedOrder() { // swiftlint:disable:this function_body_length
+    func typeContentsOrderReversedOrder() { // oida:disable:this function_body_length
         // Test with reversed `order` entries
         let nonTriggeringExamples = #examples([
             [
@@ -169,7 +169,7 @@ struct TypeContentsOrderRuleTests {
     }
 
     @Test
-    func typeContentsOrderGroupedOrder() { // swiftlint:disable:this function_body_length
+    func typeContentsOrderGroupedOrder() { // oida:disable:this function_body_length
         // Test with grouped `order` entries
         let nonTriggeringExamples = #examples([
             """

@@ -7,7 +7,7 @@ import Testing
 @Suite(.rulesRegistered)
 struct FileTypesOrderRuleTests {
     @Test
-    func fileTypesOrderReversedOrder() { // swiftlint:disable:this function_body_length
+    func fileTypesOrderReversedOrder() { // oida:disable:this function_body_length
         // Test with reversed `order` entries
         let nonTriggeringExamples = #examples([
             FileTypesOrderRuleExamples.defaultOrderParts.reversed().joined(separator: "\n\n").asExample()

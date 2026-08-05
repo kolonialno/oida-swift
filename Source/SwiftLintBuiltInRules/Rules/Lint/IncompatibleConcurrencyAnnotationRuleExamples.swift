@@ -1,6 +1,6 @@
 import SwiftLintCore
 
-// swiftlint:disable:next type_name
+// oida:disable:next type_name
 struct IncompatibleConcurrencyAnnotationRuleExamples {
     static let nonTriggeringExamples = #examples([
         // Sendable conformance is fine

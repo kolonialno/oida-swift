@@ -253,7 +253,7 @@ extension Configuration {
         return nil
     }
 
-    // swiftlint:disable:next function_parameter_count
+    // oida:disable:next function_parameter_count
     static func validateConfiguredRuleIsEnabled(
         parentConfiguration: Configuration?,
         enabledInParentRules: Set<String>,

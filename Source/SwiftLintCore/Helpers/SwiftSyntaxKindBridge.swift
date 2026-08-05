@@ -8,7 +8,7 @@ import SwiftSyntax
 public enum SwiftSyntaxKindBridge {
     /// Map a SwiftSyntax classification to SourceKitten syntax kind.
     static func mapClassification(_ classification: SyntaxClassification) -> SourceKittenFramework.SyntaxKind? {
-        // swiftlint:disable:previous cyclomatic_complexity
+        // oida:disable:previous cyclomatic_complexity
         switch classification {
         case .attribute:
             return .attributeID

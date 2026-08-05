@@ -1,4 +1,4 @@
-// swiftlint:disable file_length
+// oida:disable file_length
 
 import Foundation
 import SwiftLintCore

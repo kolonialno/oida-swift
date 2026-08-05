@@ -2,7 +2,7 @@ import SwiftLintCore
 import SwiftSyntax
 
 @SwiftSyntaxRule(optIn: true)
-struct NavigationDestinationOnlyInNavigationRule: Rule { // swiftlint:disable:this type_name
+struct NavigationDestinationOnlyInNavigationRule: Rule { // oida:disable:this type_name
     var configuration = PathScopedConfiguration<Self>()
 
     static let description = RuleDescription(

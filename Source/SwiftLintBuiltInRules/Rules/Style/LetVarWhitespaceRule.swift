@@ -82,8 +82,8 @@ struct LetVarWhitespaceRule: Rule {
                 var x = 0
                 """,
             """
-                // swiftlint:disable superfluous_disable_command
-                // swiftlint:disable force_cast
+                // oida:disable superfluous_disable_command
+                // oida:disable force_cast
 
                 let x = bar as! Bar
                 """,

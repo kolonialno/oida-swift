@@ -1,6 +1,6 @@
 import SwiftLintCore
 
-@AutoConfigParser // swiftlint:disable:next type_name
+@AutoConfigParser // oida:disable:next type_name
 struct VerticalWhitespaceClosingBracesConfiguration: SeverityBasedRuleConfiguration {
     @ConfigurationElement(key: "severity")
     private(set) var severityConfiguration = SeverityConfiguration<Parent>(.warning)

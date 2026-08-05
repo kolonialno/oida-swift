@@ -135,7 +135,7 @@ private extension FileTypesOrderRule {
 extension ExtensionDeclSyntax: @retroactive NamedDeclSyntax {
     public var name: TokenSyntax {
         get { TokenSyntax(extendedGraphemeClusterLiteral: extendedType.trimmedDescription) }
-        // swiftlint:disable:next unused_setter_value no_empty_block
+        // oida:disable:next unused_setter_value no_empty_block
         set {}
     }
 }
@@ -143,19 +143,19 @@ extension ExtensionDeclSyntax: @retroactive NamedDeclSyntax {
 extension TypeAliasDeclSyntax: @retroactive DeclGroupSyntax {
     public var introducer: SwiftSyntax.TokenSyntax {
         get { typealiasKeyword }
-        // swiftlint:disable:next unused_setter_value no_empty_block
+        // oida:disable:next unused_setter_value no_empty_block
         set {}
     }
 
     public var inheritanceClause: SwiftSyntax.InheritanceClauseSyntax? {
         get { nil }
-        // swiftlint:disable:next unused_setter_value no_empty_block
+        // oida:disable:next unused_setter_value no_empty_block
         set {}
     }
 
     public var memberBlock: SwiftSyntax.MemberBlockSyntax {
         get { MemberBlockSyntax(members: []) }
-        // swiftlint:disable:next unused_setter_value no_empty_block
+        // oida:disable:next unused_setter_value no_empty_block
         set {}
     }
 }

@@ -3,7 +3,7 @@ public enum RuleIdentifier: Hashable, ExpressibleByStringLiteral, Comparable, Se
     // MARK: - Values
 
     /// Special identifier that should be treated as referring to 'all' SwiftLint rules. One helpful usecase is in
-    /// disabling all SwiftLint rules in a given file by adding a `// swiftlint:disable all` comment at the top of the
+    /// disabling all SwiftLint rules in a given file by adding a `// oida:disable all` comment at the top of the
     /// file.
     case all
 

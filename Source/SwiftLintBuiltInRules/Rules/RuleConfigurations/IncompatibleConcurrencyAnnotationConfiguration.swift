@@ -2,7 +2,7 @@ import SwiftLintCore
 
 @AutoConfigParser
 struct IncompatibleConcurrencyAnnotationConfiguration: SeverityBasedRuleConfiguration {
-    // swiftlint:disable:previous type_name
+    // oida:disable:previous type_name
 
     @ConfigurationElement(key: "severity")
     private(set) var severityConfiguration = SeverityConfiguration<Parent>(.warning)

@@ -1,6 +1,6 @@
 import Foundation
 
-// swiftlint:disable file_length
+// oida:disable file_length
 
 /// A type that can be converted into a human-readable representation.
 public protocol Documentable {
@@ -526,7 +526,7 @@ public struct ConfigurationElement<T: AcceptableByConfigurationElement & Equatab
                 deprecationNotice: DeprecationNotice? = nil,
                 documentPostprocessedValue: Bool = true,
                 postprocessor: @escaping @Sendable (inout T) -> Void = { _ in }) {
-        // swiftlint:disable:previous no_empty_block
+        // oida:disable:previous no_empty_block
         self.init(
             wrappedValue: value,
             key: key,
@@ -582,7 +582,7 @@ public struct ConfigurationElement<T: AcceptableByConfigurationElement & Equatab
                  deprecationNotice: DeprecationNotice? = nil,
                  documentPostprocessedValue: Bool = true,
                  postprocessor: @escaping @Sendable (inout T) -> Void = { _ in }) {
-        // swiftlint:disable:previous no_empty_block
+        // oida:disable:previous no_empty_block
         self.rawWrappedValue = wrappedValue
         self.wrappedValue = wrappedValue
         self.key = key

@@ -1,8 +1,8 @@
 import SwiftLintCore
 
-// swiftlint:disable file_length
+// oida:disable file_length
 
-struct UnneededThrowsRuleExamples { // swiftlint:disable:this type_body_length
+struct UnneededThrowsRuleExamples { // oida:disable:this type_body_length
     static let nonTriggeringExamples = #examples([
         """
             func foo() throws {

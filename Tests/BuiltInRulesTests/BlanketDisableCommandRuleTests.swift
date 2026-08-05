@@ -12,14 +12,14 @@ struct BlanketDisableCommandRuleTests {
 
     @Test
     func alwaysBlanketDisable() {
-        let nonTriggeringExamples = #examples(["// swiftlint:disable file_length\n// swiftlint:enable file_length"])
+        let nonTriggeringExamples = #examples(["// oida:disable file_length\n// oida:enable file_length"])
         verifyRule(Self.emptyDescription.with(nonTriggeringExamples: nonTriggeringExamples))
 
         let triggeringExamples = #examples([
-            "// swiftlint:disable file_length\n// swiftlint:enable ↓file_length",
-            "// swiftlint:disable:previous ↓file_length",
-            "// swiftlint:disable:this ↓file_length",
-            "// swiftlint:disable:next ↓file_length",
+            "// oida:disable file_length\n// oida:enable ↓file_length",
+            "// oida:disable:previous ↓file_length",
+            "// oida:disable:this ↓file_length",
+            "// oida:disable:next ↓file_length",
         ])
         verifyRule(
             Self.emptyDescription.with(triggeringExamples: triggeringExamples),
@@ -29,7 +29,7 @@ struct BlanketDisableCommandRuleTests {
 
     @Test
     func alwaysBlanketDisabledAreAllowed() {
-        let nonTriggeringExamples = #examples(["// swiftlint:disable identifier_name\n"])
+        let nonTriggeringExamples = #examples(["// oida:disable identifier_name\n"])
         verifyRule(
             Self.emptyDescription.with(nonTriggeringExamples: nonTriggeringExamples),
             ruleConfiguration: ["always_blanket_disable": ["identifier_name"], "allowed_rules": []],
@@ -39,8 +39,8 @@ struct BlanketDisableCommandRuleTests {
     @Test
     func allowedRules() {
         let nonTriggeringExamples = #examples([
-            "// swiftlint:disable file_length",
-            "// swiftlint:disable single_test_class",
+            "// oida:disable file_length",
+            "// oida:disable single_test_class",
         ])
         verifyRule(Self.emptyDescription.with(nonTriggeringExamples: nonTriggeringExamples))
     }

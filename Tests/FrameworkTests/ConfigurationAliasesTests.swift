@@ -30,7 +30,7 @@ struct ConfigurationAliasesTests {
 
     @Test
     func onlyRulesFromDeprecatedAlias() {
-        // swiftlint:disable:next force_try
+        // oida:disable:next force_try
         let configuration = try! Configuration(dict: ["only_rules": ["mock"]], ruleList: testRuleList)
         let configuredIdentifiers = configuration.rules.map {
             type(of: $0).identifier
@@ -40,7 +40,7 @@ struct ConfigurationAliasesTests {
 
     @Test
     func disabledRulesFromDeprecatedAlias() {
-        // swiftlint:disable:next force_try
+        // oida:disable:next force_try
         let configuration = try! Configuration(dict: ["disabled_rules": ["mock"]], ruleList: testRuleList)
         #expect(configuration.rules.isEmpty)
     }

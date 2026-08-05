@@ -4,7 +4,7 @@ import Testing
 @testable import SwiftLintBuiltInRules
 @testable import SwiftLintCore
 
-// swiftlint:disable file_length
+// oida:disable file_length
 
 @Suite(.rulesRegistered)
 struct IndentationWidthRuleTests {

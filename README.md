@@ -8,8 +8,9 @@ narrower: the rules we actually want, none of the ones we do not, and decisions 
     oida lint --fix      # fix what can be fixed
     oida lint --format   # hand the corrected files to the swift-format inside Xcode
 
-Rules live in `.oida.yml`. Everything [SwiftLint documents](README-swiftlint.md) still applies; what follows is
-what is ours.
+Rules live in `.oida.yml`, and a rule is suppressed with `// oida:disable:next <rule>`. Everything
+[SwiftLint documents](README-swiftlint.md) still applies, with those two names changed; what follows is what is
+ours.
 
 ## The shape of a list is decided by counting it
 

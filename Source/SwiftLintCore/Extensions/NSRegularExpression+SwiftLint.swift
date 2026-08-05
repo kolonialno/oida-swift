@@ -12,7 +12,7 @@ public struct RegularExpression: Hashable, Comparable, ExpressibleByStringLitera
     }
 
     public init(stringLiteral value: String) {
-        // swiftlint:disable:next force_try
+        // oida:disable:next force_try
         try! self.init(pattern: value)
     }
 

@@ -47,7 +47,7 @@ internal struct DuplicateImportsRuleExamples {
 
     static let triggeringExamples = Array(corrections.keys.sorted())
 
-    // swiftlint:disable:next closure_body_length
+    // oida:disable:next closure_body_length
     static let corrections: [Example: Example] = {
         var corrections = #corrections([
             """

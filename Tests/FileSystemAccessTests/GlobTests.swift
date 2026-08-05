@@ -141,7 +141,7 @@ struct GlobTests {
         assertGlobMatch(pattern: "/**/*Test*", filename: "/a/b/MyTests/c.swift")
     }
 
-    // swiftlint:disable:next identifier_name
+    // oida:disable:next identifier_name
     private func AssertEqualInAnyOrder(_ lhs: [URL], _ rhs: [URL], sourceLocation: SourceLocation = #_sourceLocation) {
         func compare(lhs: URL, rhs: URL) -> Bool {
             lhs.path < rhs.path
@@ -153,7 +153,7 @@ struct GlobTests {
     }
 
     @Test
-    func globstarToleratesUnreadableSubdirectory() throws { // swiftlint:disable:this function_body_length
+    func globstarToleratesUnreadableSubdirectory() throws { // oida:disable:this function_body_length
 #if !os(Windows)
         if getuid() == 0 {
             // Permission-bit tests cannot exercise the tolerance fix when running as root.

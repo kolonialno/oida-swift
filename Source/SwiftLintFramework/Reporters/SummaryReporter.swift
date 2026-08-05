@@ -18,7 +18,7 @@ struct SummaryReporter: Reporter {
 // MARK: - SwiftyTextTable
 
 private extension TextTable {
-    // swiftlint:disable:next function_body_length
+    // oida:disable:next function_body_length
     init(violations: [StyleViolation]) {
         let numberOfWarningsHeader = "warnings"
         let numberOfErrorsHeader = "errors"
@@ -121,7 +121,7 @@ private extension Int {
         return numberFormatter
     }()
     var formattedString: String {
-        // swiftlint:disable:next legacy_objc_type
+        // oida:disable:next legacy_objc_type
         Self.numberFormatter.string(from: NSNumber(value: self)) ?? ""
     }
 }

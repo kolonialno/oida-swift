@@ -18,6 +18,11 @@ array_init:
   meta:
     opt-in: true
     correctable: false
+assets_come_from_the_generated_enum:
+  severity: warning
+  meta:
+    opt-in: true
+    correctable: false
 async_without_await:
   severity: warning
   meta:
@@ -566,7 +571,7 @@ indentation_width:
   meta:
     opt-in: true
     correctable: false
-invalid_swiftlint_command:
+invalid_oida_command:
   severity: warning
   meta:
     opt-in: false

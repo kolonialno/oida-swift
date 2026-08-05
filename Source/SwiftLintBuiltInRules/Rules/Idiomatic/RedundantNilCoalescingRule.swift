@@ -19,8 +19,8 @@ struct RedundantNilCoalescingRule: Rule {
         corrections: #corrections([
             "var myVar: Int? = nil; let foo = myVar ↓?? nil":
                 "var myVar: Int? = nil; let foo = myVar",
-            "let a = b ?? nil // swiftlint:disable:this redundant_nil_coalescing":
-                "let a = b ?? nil // swiftlint:disable:this redundant_nil_coalescing",
+            "let a = b ?? nil // oida:disable:this redundant_nil_coalescing":
+                "let a = b ?? nil // oida:disable:this redundant_nil_coalescing",
         ])
     )
 }

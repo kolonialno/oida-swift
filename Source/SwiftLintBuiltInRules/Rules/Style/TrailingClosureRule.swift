@@ -122,13 +122,13 @@ struct TrailingClosureRule: Rule {
                     """,
             """
                 let dataSource = RxTableViewSectionedReloadDataSource(
-                    configureCell: { cell in // swiftlint:disable:this trailing_closure
+                    configureCell: { cell in // oida:disable:this trailing_closure
                         return cell
                     }
                 )
                 """: """
                 let dataSource = RxTableViewSectionedReloadDataSource(
-                    configureCell: { cell in // swiftlint:disable:this trailing_closure
+                    configureCell: { cell in // oida:disable:this trailing_closure
                         return cell
                     }
                 )

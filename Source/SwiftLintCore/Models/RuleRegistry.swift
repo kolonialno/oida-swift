@@ -10,7 +10,7 @@ public final class RuleRegistry: @unchecked Sendable {
     ///
     /// - note: Adding registering more rules after this was first
     ///         accessed will not work.
-    public private(set) var list: RuleList! // swiftlint:disable:this implicitly_unwrapped_optional
+    public private(set) var list: RuleList! // oida:disable:this implicitly_unwrapped_optional
 
     private init() { /* To guarantee that this is singleton. */ }
 

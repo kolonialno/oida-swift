@@ -4,7 +4,7 @@ import SwiftSyntaxBuilder
 import SwiftSyntaxMacros
 
 enum AutoConfigParser: MemberMacro {
-    // swiftlint:disable:next function_body_length
+    // oida:disable:next function_body_length
     static func expansion(
         of _: AttributeSyntax,
         providingMembersOf declaration: some DeclGroupSyntax,
@@ -176,7 +176,7 @@ private extension EnumDeclSyntax {
 }
 
 private extension String {
-    // swiftlint:disable:next force_try
+    // oida:disable:next force_try
     static let regex = try! NSRegularExpression(pattern: "(?<!^)(?=[A-Z])")
 
     var snakeCased: Self {

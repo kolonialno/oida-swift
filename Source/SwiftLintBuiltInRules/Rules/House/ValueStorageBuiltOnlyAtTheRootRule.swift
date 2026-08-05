@@ -52,7 +52,7 @@ private extension ExprSyntax {
     /// `.preview`, `.test`, or either of them called — the shapes a double names itself with.
     var namesADouble: Bool {
         // `as` is a keyword, so the receiver cannot be dropped here.
-        // swiftlint:disable:next redundant_self
+        // oida:disable:next redundant_self
         let receiver = self.as(FunctionCallExprSyntax.self)?.calledExpression ?? self
         guard let member = receiver.as(MemberAccessExprSyntax.self), member.base == nil else {
             return false

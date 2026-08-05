@@ -1,8 +1,8 @@
 import SwiftLintCore
 
-// swiftlint:disable file_length
+// oida:disable file_length
 
-// swiftlint:disable:next type_body_length
+// oida:disable:next type_body_length
 struct MultilineCallArgumentsRuleExamples {
     static let nonTriggeringExamples: [Example] = #examples([
         // A computation is not a number, so a list of them stays split however its labels read.
@@ -684,4 +684,4 @@ struct MultilineCallArgumentsRuleExamples {
             """,
     ])
 }
-// swiftlint:enable file_length
+// oida:enable file_length

@@ -1,4 +1,4 @@
-import Foundation // swiftlint:disable:this file_name
+import Foundation // oida:disable:this file_name
 import SourceKittenFramework
 
 internal extension Configuration.FileGraph {
@@ -99,10 +99,10 @@ internal extension Configuration.FileGraph {
 
     // MARK: - Edge
     struct Edge: Hashable {
-        // swiftlint:disable implicitly_unwrapped_optional
+        // oida:disable implicitly_unwrapped_optional
         var parent: Vertex!
         var child: Vertex!
-        // swiftlint:enable implicitly_unwrapped_optional
+        // oida:enable implicitly_unwrapped_optional
     }
 
     // MARK: - EdgeType

@@ -9,8 +9,8 @@ struct LineEndingTests {
         #expect(
             violations(
                 Example(code:
-                    "// swiftlint:disable:next blanket_disable_command\r\n"
-                        + "// swiftlint:disable all\r\nprint(123)\r\n"
+                    "// oida:disable:next blanket_disable_command\r\n"
+                        + "// oida:disable all\r\nprint(123)\r\n"
                 )
             ).isEmpty
         )

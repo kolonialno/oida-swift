@@ -11,14 +11,14 @@ private struct CacheTestHelper {
     private let cache: LinterCache
 
     private var fileManager: TestFileManager {
-        // swiftlint:disable:next force_cast
+        // oida:disable:next force_cast
         cache.fileManager as! TestFileManager
     }
 
     fileprivate init(dict: [String: Any], cache: LinterCache) {
         ruleList = RuleList(rules: RuleWithLevelsMock.self)
         ruleDescription = ruleList.list.values.first!.description
-        configuration = try! Configuration(dict: dict, ruleList: ruleList) // swiftlint:disable:this force_try
+        configuration = try! Configuration(dict: dict, ruleList: ruleList) // oida:disable:this force_try
         self.cache = cache
     }
 
@@ -37,7 +37,7 @@ private struct CacheTestHelper {
     }
 
     fileprivate func makeConfig(dict: [String: Any]) -> Configuration {
-        try! Configuration(dict: dict, ruleList: ruleList) // swiftlint:disable:this force_try
+        try! Configuration(dict: dict, ruleList: ruleList) // oida:disable:this force_try
     }
 
     fileprivate func touch(file: URL) {
@@ -91,7 +91,7 @@ final class LinterCacheTests {
     private func cacheAndValidateNoViolationsTwoFiles(configuration: Configuration,
                                                       sourceLocation: SourceLocation = #_sourceLocation) {
         let (file1, file2) = ("file1.swift".url(), "file2.swift".url())
-        // swiftlint:disable:next force_cast
+        // oida:disable:next force_cast
         let fileManager = cache.fileManager as! TestFileManager
         fileManager.stubbedModificationDateByPath = [file1: Date(), file2: Date()]
 

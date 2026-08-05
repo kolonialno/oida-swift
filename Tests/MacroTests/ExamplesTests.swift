@@ -91,7 +91,7 @@ struct ExamplesTests {
 
     @Test
     func expandsDictionaryCapturingLines() {
-        // swiftlint:disable line_length
+        // oida:disable line_length
         assertMacroExpansion(
             """
             #corrections([
@@ -108,7 +108,7 @@ struct ExamplesTests {
             macroSpecs: macros,
             failureHandler: FailureHandler.instance
         )
-        // swiftlint:enable line_length
+        // oida:enable line_length
     }
 
     @Test
@@ -172,7 +172,7 @@ struct ExamplesTests {
     func expandsNonLiteralDictionary() {
         // Keys and values need not be string literals; a non-literal expression (expected to be `Example`-typed
         // at a real call site) is passed through the `Example(_:)` initializer as-is.
-        // swiftlint:disable line_length
+        // oida:disable line_length
         assertMacroExpansion(
             """
             #corrections([
@@ -189,6 +189,6 @@ struct ExamplesTests {
             macroSpecs: macros,
             failureHandler: FailureHandler.instance
         )
-        // swiftlint:enable line_length
+        // oida:enable line_length
     }
 }

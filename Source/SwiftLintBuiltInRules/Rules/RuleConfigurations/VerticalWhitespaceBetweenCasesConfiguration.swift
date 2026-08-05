@@ -1,6 +1,6 @@
 import SwiftLintCore
 
-@AutoConfigParser // swiftlint:disable:next type_name
+@AutoConfigParser // oida:disable:next type_name
 struct VerticalWhitespaceBetweenCasesConfiguration: SeverityBasedRuleConfiguration {
     @AcceptableByConfigurationElement
     enum SeparationStyle: String {

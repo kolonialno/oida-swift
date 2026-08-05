@@ -89,7 +89,7 @@ private extension TypeContentsOrderRule {
             }
         }
 
-        // swiftlint:disable:next cyclomatic_complexity
+        // oida:disable:next cyclomatic_complexity
         private func categorize(member: MemberBlockItemSyntax) -> (position: AbsolutePosition, category: TypeContent)? {
             let decl = member.decl
             if let decl = decl.as(EnumCaseDeclSyntax.self) {

@@ -5,12 +5,12 @@ import Testing
 
 @testable import SwiftLintFramework
 
-// swiftlint:disable file_length
+// oida:disable file_length
 
 private let optInRules = RuleRegistry.shared.list.list.filter({ $0.1.init() is any OptInRule }).map(\.0)
 
 @Suite(.rulesRegistered)
-struct ConfigurationTests { // swiftlint:disable:this type_body_length
+struct ConfigurationTests { // oida:disable:this type_body_length
     init() {
         Configuration.resetCache()
     }
@@ -418,7 +418,7 @@ struct ConfigurationTests { // swiftlint:disable:this type_body_length
 
     @Test
     func isEqualTo() {
-        #expect(Constants.Config._0 == Constants.Config._0) // swiftlint:disable:this identical_operands
+        #expect(Constants.Config._0 == Constants.Config._0) // oida:disable:this identical_operands
     }
 
     @Test

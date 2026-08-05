@@ -3,7 +3,7 @@ import SwiftLintCore
 @AutoConfigParser
 struct ImplicitlyUnwrappedOptionalConfiguration: SeverityBasedRuleConfiguration {
     @AcceptableByConfigurationElement
-    enum ImplicitlyUnwrappedOptionalModeConfiguration: String { // swiftlint:disable:this type_name
+    enum ImplicitlyUnwrappedOptionalModeConfiguration: String { // oida:disable:this type_name
         case all = "all"
         case allExceptIBOutlets = "all_except_iboutlets"
         case weakExceptIBOutlets = "weak_except_iboutlets"

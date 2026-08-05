@@ -23,7 +23,7 @@ final class CommandVisitor: SyntaxVisitor {
         for piece in trivia {
             switch piece {
             case .lineComment(let comment):
-                guard let lower = comment.range(of: "swiftlint:")?.lowerBound.samePosition(in: comment.utf8) else {
+                guard let lower = comment.range(of: Command.prefix)?.lowerBound.samePosition(in: comment.utf8) else {
                     break
                 }
                 let offset = comment.utf8.distance(from: comment.utf8.startIndex, to: lower)

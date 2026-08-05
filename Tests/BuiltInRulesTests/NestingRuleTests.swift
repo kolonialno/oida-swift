@@ -4,14 +4,14 @@ import Testing
 
 @testable import SwiftLintBuiltInRules
 
-// swiftlint:disable file_length
+// oida:disable file_length
 
 private let detectingTypes = ["actor", "class", "struct", "enum"]
 
 @Suite(.rulesRegistered)
-struct NestingRuleTests { // swiftlint:disable:this type_body_length
+struct NestingRuleTests { // oida:disable:this type_body_length
     @Test
-    func nestingWithAlwaysAllowOneTypeInFunctions() { // swiftlint:disable:this function_body_length
+    func nestingWithAlwaysAllowOneTypeInFunctions() { // oida:disable:this function_body_length
         var nonTriggeringExamples = NestingRule.description.nonTriggeringExamples
         nonTriggeringExamples.append(contentsOf: detectingTypes.flatMap { type -> [Example] in
             #examples([
@@ -142,7 +142,7 @@ struct NestingRuleTests { // swiftlint:disable:this type_body_length
             ])
         }
 
-        // swiftlint:disable:next closure_body_length
+        // oida:disable:next closure_body_length
         triggeringExamples.append(contentsOf: detectingTypes.flatMap { type -> [Example] in
             #examples([
                 """
@@ -216,9 +216,9 @@ struct NestingRuleTests { // swiftlint:disable:this type_body_length
     }
 
     @Test
-    func nestingWithoutCheckNestingInClosuresAndStatements() { // swiftlint:disable:this function_body_length
+    func nestingWithoutCheckNestingInClosuresAndStatements() { // oida:disable:this function_body_length
         var nonTriggeringExamples = NestingRule.description.nonTriggeringExamples
-        // swiftlint:disable:next closure_body_length
+        // oida:disable:next closure_body_length
         nonTriggeringExamples.append(contentsOf: detectingTypes.flatMap { type -> [Example] in
             #examples([
                 """
@@ -392,7 +392,7 @@ struct NestingRuleTests { // swiftlint:disable:this type_body_length
             ])
         })
 
-        // swiftlint:disable:next closure_body_length
+        // oida:disable:next closure_body_length
         var triggeringExamples = detectingTypes.flatMap { type -> [Example] in
             #examples([
                 """

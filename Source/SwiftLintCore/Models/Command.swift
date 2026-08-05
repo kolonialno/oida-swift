@@ -2,6 +2,13 @@ import Foundation
 
 /// A SwiftLint-interpretable command to modify SwiftLint's behavior embedded as comments in source code.
 public struct Command: Equatable {
+    /// What a command comment opens with: `// oida:disable …`.
+    ///
+    /// The tool's own name, so a reader of the comment knows which tool reads it. Renamed from
+    /// SwiftLint's prefix when the tool became oida; nothing accepts the old one, because a comment
+    /// that looks like it suppresses a rule and does not is worse than one that plainly does neither.
+    public static let prefix = "oida:"
+
     /// The action (verb) that SwiftLint should perform when interpreting this command.
     public enum Action: String {
         /// The rule(s) associated with this command should be enabled by the SwiftLint engine.
@@ -38,7 +45,7 @@ public struct Command: Equatable {
     /// The purpose of this delimiter is to allow SwiftLint
     /// commands to be documented in source code.
     ///
-    ///     swiftlint:disable:next force_try - Explanation here
+    ///     oida:disable:next force_try - Explanation here
     private static let commentDelimiter = " - "
 
     var isValid: Bool {
@@ -87,7 +94,7 @@ public struct Command: Equatable {
     /// - parameter range:         The range of the command in the line (0-based).
     public init(commandString: String, line: Int, range: Range<Int>) {
         let scanner = Scanner(string: commandString)
-        _ = scanner.scanString("swiftlint:")
+        _ = scanner.scanString(Command.prefix)
         // (enable|disable)(:previous|:this|:next)
         guard let actionAndModifierString = scanner.scanUpToString(" ") else {
             self.init(action: .invalid, line: line, range: range)

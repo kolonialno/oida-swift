@@ -8,7 +8,7 @@ struct DeploymentTargetConfigurationTests {
     private typealias Version = DeploymentTargetConfiguration.Version
 
     @Test
-    func appliesConfigurationFromDictionary() throws { // swiftlint:disable:this function_body_length
+    func appliesConfigurationFromDictionary() throws { // oida:disable:this function_body_length
         var configuration = DeploymentTargetConfiguration()
 
         try configuration.apply(configuration: ["iOS_deployment_target": "10.1", "severity": "error"])

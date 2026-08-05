@@ -220,7 +220,7 @@ public struct Configuration {
         onlyRule: [String] = [],
         cachePath: String? = nil,
         ignoreParentAndChildConfigs: Bool = false,
-        useDefaultConfigOnFailure: Bool? = nil // swiftlint:disable:this discouraged_optional_boolean
+        useDefaultConfigOnFailure: Bool? = nil // oida:disable:this discouraged_optional_boolean
     ) {
         // Store whether there are custom configuration files; use default config file name if there are none
         let hasCustomConfigurationFiles: Bool = configurationFiles.isNotEmpty

@@ -9,15 +9,15 @@ struct BlanketDisableCommandRule: Rule, SourceKitFreeRule {
         identifier: "blanket_disable_command",
         name: "Blanket Disable Command",
         description: """
-                     `swiftlint:disable` commands should use `next`, `this` or `previous` to disable rules for a \
-                     single line, or `swiftlint:enable` to re-enable the rules immediately after the violations \
+                     `oida:disable` commands should use `next`, `this` or `previous` to disable rules for a \
+                     single line, or `oida:enable` to re-enable the rules immediately after the violations \
                      to be ignored, instead of disabling the rule for the rest of the file.
                      """,
         rationale: """
         The intent of this rule is to prevent code like
 
         ```
-        // swiftlint:disable force_unwrapping
+        // oida:disable force_unwrapping
         let foo = bar!
         ```
 
@@ -30,40 +30,40 @@ struct BlanketDisableCommandRule: Rule, SourceKitFreeRule {
         To disable this rule in code you will need to do something like
 
         ```
-        // swiftlint:disable:next blanket_disable_command
-        // swiftlint:disable force_unwrapping
+        // oida:disable:next blanket_disable_command
+        // oida:disable force_unwrapping
         ```
         """,
         kind: .lint,
         nonTriggeringExamples: #examples([
             """
-            // swiftlint:disable unused_import
-            // swiftlint:enable unused_import
+            // oida:disable unused_import
+            // oida:enable unused_import
             """,
             """
-            // swiftlint:disable unused_import unused_declaration
-            // swiftlint:enable unused_import
-            // swiftlint:enable unused_declaration
+            // oida:disable unused_import unused_declaration
+            // oida:enable unused_import
+            // oida:enable unused_declaration
             """,
-            "// swiftlint:disable:this unused_import",
-            "// swiftlint:disable:next unused_import",
-            "// swiftlint:disable:previous unused_import",
+            "// oida:disable:this unused_import",
+            "// oida:disable:next unused_import",
+            "// oida:disable:previous unused_import",
         ]),
         triggeringExamples: #examples([
-            "// swiftlint:disable ↓unused_import",
+            "// oida:disable ↓unused_import",
             """
-            // swiftlint:disable unused_import ↓unused_declaration
-            // swiftlint:enable unused_import
+            // oida:disable unused_import ↓unused_declaration
+            // oida:enable unused_import
             """,
             """
-            // swiftlint:disable unused_import
-            // swiftlint:disable ↓unused_import
-            // swiftlint:enable unused_import
+            // oida:disable unused_import
+            // oida:disable ↓unused_import
+            // oida:enable unused_import
             """,
             """
-            // swiftlint:enable ↓unused_import
+            // oida:enable ↓unused_import
             """,
-            "// swiftlint:disable all",
+            "// oida:disable all",
         ]).skipWrappingInCommentTests().skipDisableCommandTests()
     )
 

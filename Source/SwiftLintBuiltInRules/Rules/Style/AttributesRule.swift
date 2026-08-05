@@ -194,7 +194,7 @@ private extension AttributeListSyntax {
             }
     }
 
-    // swiftlint:disable:next cyclomatic_complexity
+    // oida:disable:next cyclomatic_complexity
     func makeHelper(locationConverter: SourceLocationConverter) -> RuleHelper? {
         guard let parent else {
             return nil

@@ -14,19 +14,19 @@ package struct SuperfluousDisableCommandRule: SourceKitFreeRule, Sendable {
             """,
         kind: .lint,
         nonTriggeringExamples: #examples([
-            "let abc:Void // swiftlint:disable:this colon",
+            "let abc:Void // oida:disable:this colon",
             """
-                // swiftlint:disable colon
+                // oida:disable colon
                 let abc:Void
-                // swiftlint:enable colon
+                // oida:enable colon
                 """,
         ]),
         triggeringExamples: #examples([
-            "let abc: Void // swiftlint:disable:this colon",
+            "let abc: Void // oida:disable:this colon",
             """
-                // swiftlint:disable colon
+                // oida:disable colon
                 let abc: Void
-                // swiftlint:enable colon
+                // oida:enable colon
                 """,
         ])
     )

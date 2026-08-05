@@ -2,41 +2,41 @@ import Foundation
 import SourceKittenFramework
 import SwiftLintCore
 
-struct InvalidSwiftLintCommandRule: Rule, SourceKitFreeRule {
+struct InvalidOidaCommandRule: Rule, SourceKitFreeRule {
     var configuration = SeverityConfiguration<Self>(.warning)
 
     static let description = RuleDescription(
-        identifier: "invalid_swiftlint_command",
-        name: "Invalid SwiftLint Command",
-        description: "swiftlint command is invalid",
+        identifier: "invalid_oida_command",
+        name: "Invalid oida Command",
+        description: "oida command is invalid",
         kind: .lint,
         nonTriggeringExamples: #examples([
-            "// swiftlint:disable unused_import",
-            "// swiftlint:enable unused_import",
-            "// swiftlint:disable:next unused_import",
-            "// swiftlint:disable:previous unused_import",
-            "// swiftlint:disable:this unused_import",
-            "//swiftlint:disable:this unused_import",
-            "_ = \"🤵🏼‍♀️\" // swiftlint:disable:this unused_import".asExample(excludeFromDocumentation: true),
-            "_ = \"🤵🏼‍♀️ 🤵🏼‍♀️\" // swiftlint:disable:this unused_import".asExample(excludeFromDocumentation: true),
+            "// oida:disable unused_import",
+            "// oida:enable unused_import",
+            "// oida:disable:next unused_import",
+            "// oida:disable:previous unused_import",
+            "// oida:disable:this unused_import",
+            "//oida:disable:this unused_import",
+            "_ = \"🤵🏼‍♀️\" // oida:disable:this unused_import".asExample(excludeFromDocumentation: true),
+            "_ = \"🤵🏼‍♀️ 🤵🏼‍♀️\" // oida:disable:this unused_import".asExample(excludeFromDocumentation: true),
         ]),
         triggeringExamples: #examples([
-            "// ↓swiftlint:",
-            "// ↓swiftlint: ",
-            "// ↓swiftlint::",
-            "// ↓swiftlint:: ",
-            "// ↓swiftlint:disable",
-            "// ↓swiftlint:dissable unused_import",
-            "// ↓swiftlint:enaaaable unused_import",
-            "// ↓swiftlint:disable:nxt unused_import",
-            "// ↓swiftlint:enable:prevus unused_import",
-            "// ↓swiftlint:enable:ths unused_import",
-            "// ↓swiftlint:enable",
-            "// ↓swiftlint:enable:",
-            "// ↓swiftlint:enable: ",
-            "// ↓swiftlint:disable: unused_import",
-            "// s↓swiftlint:disable unused_import",
-            "// 🤵🏼‍♀️swiftlint:disable unused_import".asExample(excludeFromDocumentation: true),
+            "// ↓oida:",
+            "// ↓oida: ",
+            "// ↓oida::",
+            "// ↓oida:: ",
+            "// ↓oida:disable",
+            "// ↓oida:dissable unused_import",
+            "// ↓oida:enaaaable unused_import",
+            "// ↓oida:disable:nxt unused_import",
+            "// ↓oida:enable:prevus unused_import",
+            "// ↓oida:enable:ths unused_import",
+            "// ↓oida:enable",
+            "// ↓oida:enable:",
+            "// ↓oida:enable: ",
+            "// ↓oida:disable: unused_import",
+            "// s↓oida:disable unused_import",
+            "// 🤵🏼‍♀️oida:disable unused_import".asExample(excludeFromDocumentation: true),
         ]).skipWrappingInCommentTests()
     )
 

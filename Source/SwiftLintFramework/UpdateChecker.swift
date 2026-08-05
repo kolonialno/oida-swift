@@ -1,4 +1,4 @@
-// swiftlint:disable file_header
+// oida:disable file_header
 //
 // Adapted from periphery's UpdateChecker.swift
 //

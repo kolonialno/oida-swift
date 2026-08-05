@@ -4,7 +4,7 @@ import Testing
 @testable import SwiftLintBuiltInRules
 
 @Suite(.rulesRegistered)
-struct ImplicitlyUnwrappedOptionalConfigurationTests { // swiftlint:disable:this type_name
+struct ImplicitlyUnwrappedOptionalConfigurationTests { // oida:disable:this type_name
 
     @Test
     func implicitlyUnwrappedOptionalConfigurationProperlyAppliesConfigurationFromDictionary() throws {
