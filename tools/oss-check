@@ -1,0 +1,498 @@
+#!/usr/bin/env ruby
+
+################################
+# Requires
+################################
+
+require 'erb'
+require 'fileutils'
+require 'json'
+require 'open3'
+require 'optparse'
+require 'stringio'
+
+################################
+# Options
+################################
+
+@options = {
+  branch: 'HEAD',
+  iterations: 5,
+  skip_clean: false,
+  verbose: false,
+  only_repos: []
+}
+
+OptionParser.new do |opts|
+  opts.on('--branch BRANCH', "Compares the performance of BRANCH against `main`") do |branch|
+    @options[:branch] = branch
+  end
+  opts.on('--iterations N', Integer, 'Runs linting N times on each repository') do |iterations|
+    @options[:iterations] = iterations
+  end
+  opts.on('--skip-clean', 'Skip cleaning upon completion') do |skip_clean|
+    @options[:skip_clean] = skip_clean
+  end
+  opts.on('--force', 'Run oss-check even if binaries are equal') do |force|
+    @options[:force] = force
+  end
+  opts.on('-v', '--[no-]verbose', 'Run verbosely') do |v|
+    @options[:verbose] = v
+  end
+  opts.on('--only-repos REPO1,REPO2', Array, 'Run oss-check only on the specified repositories') do |only_repos|
+    @options[:only_repos] = only_repos
+  end
+end.parse!
+
+################################
+# Classes
+################################
+
+class Repo
+  attr_accessor :name
+  attr_accessor :github_location
+  attr_accessor :keep_config
+  attr_accessor :config
+  attr_accessor :commit_hash
+  attr_accessor :branch_exit_value
+  attr_accessor :branch_duration
+  attr_accessor :main_exit_value
+  attr_accessor :main_duration
+
+  def initialize(name, github_location, keep_config=false, config=nil)
+    @name = name
+    @github_location = github_location
+    @keep_config = keep_config
+    @config = config
+  end
+
+  def git_url
+    "https://github.com/#{github_location}"
+  end
+
+  def to_s
+    @name
+  end
+
+  def duration_report
+    percent_change = 100 * (@main_duration - @branch_duration) / @main_duration
+    faster_slower = nil
+    if @branch_duration < @main_duration
+      faster_slower = 'faster'
+    else
+      faster_slower = 'slower'
+      percent_change *= -1
+    end
+    "Linting #{self} with this PR took #{@branch_duration} s " \
+    "vs #{@main_duration} s on `main` (#{percent_change.to_i}\% #{faster_slower})."
+  end
+end
+
+class ReportEntry < Struct.new(:file, :line, :column, :severity, :message, :rule_id)
+  def self.from_xcode(line)
+    # /path/to/file.swift:line:column: (warning|error): message (rule_id)
+    match = line.match(/^(.*):(\d+):(\d+): (warning|error): (.+) \((\w+)\)$/)
+    if match.nil?
+      error "Could not parse line '#{line}'"
+      return nil
+    end
+    ReportEntry.new(*match.captures)
+  end
+
+  def self.from_json(json)
+    ReportEntry.new(json['file'], json['line'], json['character'], json['severity'], json['reason'], json['rule_id'])
+  end
+
+  def self.html_escape(str)
+    "/#{ERB::Util.url_encode(str.gsub(%r{^/}, ''))}"
+  end
+
+  def to_full_message_with_linked_path(repo)
+    "#{to_linked_relative_path(repo)}: #{severity}: #{message} (#{rule_id})"
+  end
+
+  def to_link(repo)
+    "#{repo.git_url}/blob/#{repo.commit_hash}#{ReportEntry.html_escape(file_as_relative_path(repo))}#L#{line}"
+  end
+
+  def to_linked_relative_path(repo)
+    "[#{file_as_relative_path(repo)}:#{line}:#{column}](#{to_link(repo)})"
+  end
+
+  def file_as_relative_path(repo)
+    file.sub("#{Dir.pwd}/#{$working_dir}/#{repo.name}", '')
+  end
+
+  def equal_to?(other, except = [])
+    (members - except).all? { |member| send(member) == other.send(member) }
+  end
+end
+
+class Change < Struct.new(:category, :new, :old)
+  def print_as_diff(repo, into)
+    into.puts "- #{new.to_linked_relative_path(repo)}  "
+    into.puts "  ```diff"
+    into.puts "  - #{old.send(category)}"
+    into.puts "  + #{new.send(category)}"
+    into.puts "  ```"
+    into.puts
+  end
+end
+
+################################
+# Methods
+################################
+
+def message(str)
+  $stderr.puts('Message: ' + str)
+end
+
+def warn(str)
+  $stderr.puts('Warning: ' + str)
+end
+
+def fail(str)
+  $stderr.puts('Error: ' + str)
+  exit
+end
+
+def perform(command, dir: nil)
+  puts command if @options[:verbose]
+  if dir
+    Dir.chdir(dir) { perform(command) }
+  else
+    system(command)
+  end
+end
+
+def validate_state_to_run
+  if `git symbolic-ref HEAD --short || true`.strip == 'main' && @options[:branch] == 'HEAD'
+    fail "can't run osscheck without '--branch' option from 'main' as the script compares " \
+         "the performance of this branch against 'main'"
+  end
+end
+
+def make_directory_structure
+  ['branch_reports', 'main_reports'].each do |dir|
+    FileUtils.mkdir_p("#{$working_dir}/#{dir}")
+  end
+end
+
+def setup_repos
+  @repos.each do |repo|
+    dir = "#{$working_dir}/#{repo.name}"
+    puts "Cloning #{repo}"
+    perform("git clone #{repo.git_url} --depth 1 #{dir} 2> /dev/null")
+    swiftlint_config = "#{dir}/.swiftlint.yml"
+    if !repo.keep_config
+      FileUtils.rm_rf(swiftlint_config)
+    end
+    if repo.config
+      File.open(swiftlint_config, 'a') do |file|
+        file.puts(repo.config)
+      end
+    end
+    if @only_rules_changed && @rules_changed
+      File.open(swiftlint_config, 'a') do |file|
+        file.puts('only_rules:')
+        file.puts(@rules_changed.map { |rule| "  - #{rule}" })
+      end
+    end
+    Dir.chdir(dir) do
+      repo.commit_hash = `git rev-parse HEAD`.strip
+    end
+  end
+end
+
+def generate_reports(branch)
+  @repos.each do |repo|
+    Dir.chdir("#{$working_dir}/#{repo.name}") do
+      perform("git checkout #{repo.commit_hash}")
+      iterations = @options[:iterations]
+      print "Linting #{iterations} iterations of #{repo} with #{branch}: 1"
+      durations = []
+      start = Time.now
+      command = "../builds/swiftlint-#{branch} lint --no-cache #{'--enable-all-rules' unless @only_rules_changed} --reporter json"
+      File.open("../#{branch}_reports/#{repo}.json", 'w') do |file|
+        puts "\n#{command}" if @options[:verbose]
+        Open3.popen2(command) do |_, stdout, wait_thr|
+          while line = stdout.gets
+            file.puts line
+          end
+          if branch == 'branch'
+            repo.branch_exit_value = wait_thr.value
+          else
+            repo.main_exit_value = wait_thr.value
+          end
+        end
+      end
+      durations << Time.now - start
+      for i in 2..iterations
+        print "..#{i}"
+        start = Time.now
+        puts command if @options[:verbose]
+        Open3.popen2(command) { |_, stdout, _| stdout.read }
+        durations << Time.now - start
+      end
+      puts ''
+      average_duration = (durations.reduce(:+) / iterations).round(2)
+      if branch == 'branch'
+        repo.branch_duration = average_duration
+      else
+        repo.main_duration = average_duration
+      end
+    end
+  end
+end
+
+def build(branch)
+  puts "Building #{branch}"
+
+  dir = "#{$working_dir}/builds"
+  target = branch == 'main' ? @effective_main_commitish : @options[:branch]
+  if File.directory?(dir)
+    perform("git checkout #{target}", dir: dir)
+  else
+    perform("git worktree add --detach #{dir} #{target}")
+  end
+
+  build_command = "bazel build --config=release @SwiftLint//:swiftlint"
+
+  return_value = nil
+  puts build_command if @options[:verbose]
+  Open3.popen3(build_command, :chdir=>"#{dir}")  do |_, stdout, stderr, wait_thr|
+    puts stdout.read.chomp
+    puts stderr.read.chomp
+    return_value = wait_thr.value
+  end
+
+  fail "Could not build #{branch}" unless return_value.success?
+
+  perform("mv bazel-bin/swiftlint swiftlint-#{branch}", dir: dir)
+end
+
+def diff_and_report_changes_to_danger
+  @repos.each { |repo| message repo.duration_report }
+
+  summaries = @repos.map do |repo|
+    if repo.main_exit_value != repo.branch_exit_value
+      warn "This PR changed the exit value from #{repo.main_exit_value} to #{repo.branch_exit_value} when " \
+           "running in #{repo.name}."
+      # If the exit value changed, don't show the fixes or regressions for this
+      # repo because it's likely due to a crash, and all violations would be noisy
+      next
+    end
+
+    branch = JSON.parse(File.read("#{$working_dir}/branch_reports/#{repo.name}.json")).map {
+      |json| ReportEntry.from_json(json)
+    }
+    main = JSON.parse(File.read("#{$working_dir}/main_reports/#{repo.name}.json")).map {
+      |json| ReportEntry.from_json(json)
+    }
+
+    new_violations = branch - main
+    fixed_violations = main - branch
+
+    message_changed = []
+    severity_changed = []
+    rule_id_changed = []
+    column_changed = []
+    remaining_violations = []
+
+    new_violations.each do |line|
+      fixed = fixed_violations.find { |other| line.equal_to?(other, [:message]) }
+      if fixed
+        next message_changed << Change.new(:message, line, fixed)
+      end
+      fixed = fixed_violations.find { |other| line.equal_to?(other, [:severity]) }
+      if fixed
+        next severity_changed << Change.new(:severity, line, fixed)
+      end
+      fixed = fixed_violations.find { |other| line.equal_to?(other, [:rule_id]) }
+      if fixed
+        next rule_id_changed << Change.new(:rule_id, line, fixed)
+      end
+      fixed = fixed_violations.find { |other| line.equal_to?(other, [:column]) }
+      if fixed
+        next column_changed << Change.new(:column, line, fixed)
+      end
+      remaining_violations << line
+    end
+
+    remaining_fixed = fixed_violations - (message_changed + severity_changed + rule_id_changed + column_changed).map(&:old)
+
+    # Print new and fixed violations to be processed by Danger.
+    new_violations.each { |line|
+      warn "This PR introduced a violation in #{repo.name}: #{line.to_full_message_with_linked_path(repo)}"
+    }
+    fixed_violations.each { |line|
+      message "This PR fixed a violation in #{repo.name}: #{line.to_full_message_with_linked_path(repo)}"
+    }
+
+    # Print report in Markdown format that lists all changes by category.
+    summary = StringIO.new
+
+    summary.puts "## #{repo.name}"
+    summary.puts
+    summary.puts "### Message changed (#{message_changed.count})"
+    summary.puts
+    message_changed.each { |change| change.print_as_diff(repo, summary) }
+    summary.puts
+    summary.puts "### Severity changed (#{severity_changed.count})"
+    summary.puts
+    severity_changed.each { |change| change.print_as_diff(repo, summary) }
+    summary.puts
+    summary.puts "### Rule ID changed (#{rule_id_changed.count})"
+    summary.puts
+    rule_id_changed.each { |change| change.print_as_diff(repo, summary) }
+    summary.puts
+    summary.puts "### Column changed (#{column_changed.count})"
+    summary.puts
+    column_changed.each { |change| change.print_as_diff(repo, summary) }
+    summary.puts
+    summary.puts "### Other fixed violations (#{remaining_fixed.count})"
+    summary.puts
+    remaining_fixed.each { |violation| summary.puts "- #{violation.to_full_message_with_linked_path(repo)}" }
+    summary.puts
+    summary.puts "### Other new violations (#{remaining_violations.count})"
+    summary.puts
+    remaining_violations.each { |violation| summary.puts "- #{violation.to_full_message_with_linked_path(repo)}" }
+    summary.puts
+
+    summary.string
+  end
+
+  File.open("oss-check-summary.md", 'w') do |file|
+    file.puts "# Summary"
+    file.puts
+    file.puts summaries.compact.join("\n")
+  end
+end
+
+def fetch_origin
+  perform('git fetch origin')
+end
+
+def clean_up
+  FileUtils.rm_rf($working_dir)
+  perform('git worktree prune')
+end
+
+def set_globals
+  @effective_main_commitish = `git merge-base origin/main #{@options[:branch]}`.chomp
+  @changed_swift_files = `git diff --diff-filter=AMRCU #{@effective_main_commitish} --name-only | grep "\.swift$" || true`.split("\n")
+  @changed_rule_files = @changed_swift_files.select do |file|
+    file.start_with? 'Source/SwiftLintBuiltInRules/Rules/'
+  end
+  @rules_changed = @changed_rule_files.map do |path|
+    if File.read(path) =~ /^\s+identifier: "(\w+)",$/
+      $1
+    else
+      nil
+    end
+  end.compact.sort
+  # True iff the only Swift files that were changed are SwiftLint rules, and that number is one or greater
+  @only_rules_changed = !@rules_changed.empty? && @changed_swift_files.count == @rules_changed.count
+end
+
+def print_rules_changed
+  if @only_rules_changed
+    puts "Only #{@rules_changed.count} rules changed: #{@rules_changed.join(', ')}"
+  end
+end
+
+def report_binary_size
+  size_branch = File.size("#{$working_dir}/builds/swiftlint-branch")
+  size_main = File.size("#{$working_dir}/builds/swiftlint-main")
+  if size_branch == size_main
+    message "Building this branch resulted in the same binary size as when built on `main`."
+  else
+    percent_change = 100 * (size_branch - size_main) / size_main
+    faster_slower = size_branch < size_main ? 'smaller' : 'larger'
+    in_kilo_bytes = ->(size) { (size / 1024.0).round(2) }
+    msg = "Building this branch resulted in a binary size of #{in_kilo_bytes.call(size_branch)} KiB " \
+          "vs #{in_kilo_bytes.call(size_main)} KiB when built on `main` (#{percent_change.to_i}\% #{faster_slower})."
+    if percent_change.abs < 2
+      message msg
+    else
+      warn msg
+    end
+  end
+end
+
+def warmup
+  %w[branch main].each do |branch|
+    perform("../builds/swiftlint-#{branch} lint --no-cache --enable-all-rules", dir: "#{$working_dir}/Aerial")
+  end
+end
+
+################################
+# Script
+################################
+
+# Constants
+$working_dir = 'osscheck'
+@repos = [
+  Repo.new('Aerial', 'JohnCoates/Aerial'),
+  Repo.new('Alamofire', 'Alamofire/Alamofire'),
+  Repo.new('Brave', 'brave/brave-core', false, 'included: ios/brave-ios'),
+  Repo.new('DuckDuckGo', 'duckduckgo/apple-browsers'),
+  Repo.new('Firefox', 'mozilla-mobile/firefox-ios'),
+  Repo.new('Kickstarter', 'kickstarter/ios-oss'),
+  Repo.new('Moya', 'Moya/Moya'),
+  Repo.new('NetNewsWire', 'Ranchero-Software/NetNewsWire'),
+  Repo.new('Nimble', 'Quick/Nimble'),
+  Repo.new('PocketCasts', 'Automattic/pocket-casts-ios'),
+  Repo.new('Quick', 'Quick/Quick'),
+  Repo.new('Realm', 'realm/realm-swift'),
+  Repo.new('Sourcery', 'krzysztofzablocki/Sourcery'),
+  Repo.new('Swift', 'apple/swift', false, 'included: stdlib'),
+  Repo.new('SwiftLintPerformanceTests', 'SimplyDanny/swiftlint-performance-test-setup', true),
+  Repo.new('VLC', 'videolan/vlc-ios'),
+  Repo.new('Wire', 'wireapp/wire-ios', false, 'excluded: wire-ios/Templates/Viper'),
+  Repo.new('WordPress', 'wordpress-mobile/WordPress-iOS')
+].select { |repo| @options[:only_repos].empty? || @options[:only_repos].include?(repo.name) }
+
+# Clean up
+clean_up unless @options[:skip_clean]
+
+# Prep
+$stdout.sync = true
+validate_state_to_run
+fetch_origin
+set_globals
+print_rules_changed
+make_directory_structure
+
+# Build & generate reports for branch & main
+%w[branch main].each do |branch|
+  build(branch)
+end
+
+# Compare binary size of both builds.
+report_binary_size
+
+unless @options[:force]
+  full_version_branch = `#{$working_dir}/builds/swiftlint-branch version --verbose`
+  full_version_main = `#{$working_dir}/builds/swiftlint-main version --verbose`
+
+  if full_version_branch == full_version_main
+    message "Skipping OSS check because SwiftLint hasn't changed compared to `main`."
+    # Clean up
+    clean_up unless @options[:skip_clean]
+    exit
+  end
+end
+
+setup_repos
+warmup
+
+%w[branch main].each do |branch|
+  generate_reports(branch)
+end
+
+# Diff and report changes to Danger
+diff_and_report_changes_to_danger
+
+# Clean up
+clean_up unless @options[:skip_clean]

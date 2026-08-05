@@ -1,0 +1,62 @@
+[
+  {
+    "check_name" : "Line Length",
+    "description" : "Violation Reason 1",
+    "engine_name" : "SwiftLint",
+    "fingerprint" : "19ad62b3ad78be4d03fc82c2846bef0f873c4235611321aaca16ee36f72214f9",
+    "location" : {
+      "lines" : {
+        "begin" : 1,
+        "end" : 1
+      },
+      "path" : "filename"
+    },
+    "severity" : "minor",
+    "type" : "issue"
+  },
+  {
+    "check_name" : "Line Length",
+    "description" : "Violation Reason 2",
+    "engine_name" : "SwiftLint",
+    "fingerprint" : "f7186279d6dc9e8bcd0a13adbc07e111e1bc95178953d0c5d061534c75a81e2f",
+    "location" : {
+      "lines" : {
+        "begin" : 1,
+        "end" : 1
+      },
+      "path" : "filename"
+    },
+    "severity" : "major",
+    "type" : "issue"
+  },
+  {
+    "check_name" : "Syntactic Sugar",
+    "description" : "Shorthand syntactic sugar should be used, i.e. [Int] instead of Array<Int>",
+    "engine_name" : "SwiftLint",
+    "fingerprint" : "740b45a83d152b64836c6703474f2dc8d5f6c89b792d04f83cd058a92fa5db46",
+    "location" : {
+      "lines" : {
+        "begin" : 1,
+        "end" : 1
+      },
+      "path" : "path/file.swift"
+    },
+    "severity" : "major",
+    "type" : "issue"
+  },
+  {
+    "check_name" : "Colon Spacing",
+    "description" : "Colons should be next to the identifier when specifying a type and next to the key in dictionary literals",
+    "engine_name" : "SwiftLint",
+    "fingerprint" : "25477e0cb480fc03bfdcbfa0d7cf569515a6e6ac372406e4121213585404cd9c",
+    "location" : {
+      "lines" : {
+        "begin" : null,
+        "end" : null
+      },
+      "path" : null
+    },
+    "severity" : "major",
+    "type" : "issue"
+  }
+]

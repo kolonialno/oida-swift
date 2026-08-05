@@ -1,0 +1,94 @@
+/// All possible rule list configuration errors.
+public enum RuleListError: Error {
+    /// The rule list contains more than one configuration for the specified rule.
+    case duplicatedConfigurations(rule: any Rule.Type)
+}
+
+/// A list of available SwiftLint rules.
+public struct RuleList {
+    /// The rules contained in this list.
+    public let list: [String: any Rule.Type]
+    private let aliases: [String: String]
+
+    // MARK: - Initializers
+
+    /// Creates a `RuleList` by specifying all its rules.
+    ///
+    /// - parameter rules: The rules to be contained in this list.
+    public init(rules: any Rule.Type...) {
+        self.init(rules: rules)
+    }
+
+    /// Creates a `RuleList` by specifying all its rules.
+    ///
+    /// - parameter rules: The rules to be contained in this list.
+    public init(rules: [any Rule.Type]) {
+        var tmpList = [String: any Rule.Type]()
+        var tmpAliases = [String: String]()
+
+        for rule in rules {
+            let identifier = rule.identifier
+            tmpList[identifier] = rule
+            for alias in rule.description.deprecatedAliases {
+                tmpAliases[alias] = identifier
+            }
+            tmpAliases[identifier] = identifier
+        }
+        list = tmpList
+        aliases = tmpAliases
+    }
+
+    // MARK: - Internal
+
+    package func allRulesWrapped(configurationDict: [String: Any] = [:])
+            throws(RuleListError) -> [ConfigurationRuleWrapper] {
+        var rules = [String: ConfigurationRuleWrapper]()
+
+        // Add rules where configuration exists
+        for (key, configuration) in configurationDict {
+            guard let identifier = identifier(for: key), let ruleType = list[identifier] else { continue }
+            guard rules[identifier] == nil else { throw .duplicatedConfigurations(rule: ruleType) }
+            do {
+                let configuredRule = try ruleType.init(configuration: configuration)
+                let isConfigured = (configuration as? [String: Any])?.isEmpty == false
+                    || ([Any].array(of: configuration))?.isEmpty == false
+                rules[identifier] = ConfigurationRuleWrapper(
+                    rule: configuredRule,
+                    initializedWithNonEmptyConfiguration: isConfigured
+                )
+                continue
+            } catch let issue as Issue {
+                issue.print()
+            } catch {
+                Issue.invalidConfiguration(ruleID: identifier).print()
+            }
+            rules[identifier] = (ruleType.init(), false)
+        }
+
+        // Add remaining rules without configuring them
+        for (identifier, ruleType) in list where rules[identifier] == nil {
+            rules[identifier] = (ruleType.init(), false)
+        }
+
+        return Array(rules.values)
+    }
+
+    package func identifier(for alias: String) -> String? {
+        aliases[alias]
+    }
+
+    package func allValidIdentifiers() -> [String] {
+        list.flatMap { _, rule -> [String] in
+            rule.description.allIdentifiers
+        }
+    }
+}
+
+extension RuleList: Equatable {
+    public static func == (lhs: RuleList, rhs: RuleList) -> Bool {
+        lhs.list.map(\.0) == rhs.list.map(\.0)
+            // swiftlint:disable:next prefer_key_path
+            && lhs.list.map { $0.1.description } == rhs.list.map { $0.1.description }
+            && lhs.aliases == rhs.aliases
+    }
+}

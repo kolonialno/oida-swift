@@ -1,0 +1,66 @@
+import SwiftLintCore
+import SwiftSyntax
+
+@SwiftSyntaxRule(optIn: true)
+struct FirstWhereRule: Rule {
+    var configuration = SeverityConfiguration<Self>(.warning)
+
+    static let description = RuleDescription(
+        identifier: "first_where",
+        name: "First Where",
+        description: "Prefer using `.first(where:)` over `.filter { }.first` in collections",
+        kind: .performance,
+        nonTriggeringExamples: #examples([
+            "kinds.filter(excludingKinds.contains).isEmpty && kinds.first == .identifier",
+            "myList.first(where: { $0 % 2 == 0 })",
+            "match(pattern: pattern).filter { $0.first == .identifier }",
+            "(myList.filter { $0 == 1 }.suffix(2)).first",
+            #"collection.filter("stringCol = '3'").first"#,
+            #"realm?.objects(User.self).filter(NSPredicate(format: "email ==[c] %@", email)).first"#,
+            #"if let pause = timeTracker.pauses.filter("beginDate < %@", beginDate).first { print(pause) }"#,
+        ]),
+        triggeringExamples: #examples([
+            "↓myList.filter { $0 % 2 == 0 }.first",
+            "↓myList.filter({ $0 % 2 == 0 }).first",
+            "↓myList.map { $0 + 1 }.filter({ $0 % 2 == 0 }).first",
+            "↓myList.map { $0 + 1 }.filter({ $0 % 2 == 0 }).first?.something()",
+            "↓myList.filter(someFunction).first",
+            "↓myList.filter({ $0 % 2 == 0 })\n.first",
+            "(↓myList.filter { $0 == 1 }).first",
+            #"↓myListOfDict.filter { dict in dict["1"] }.first"#,
+            #"↓myListOfDict.filter { $0["someString"] }.first"#,
+        ])
+    )
+}
+
+private extension FirstWhereRule {
+    final class Visitor: ViolationsSyntaxVisitor<ConfigurationType> {
+        override func visitPost(_ node: MemberAccessExprSyntax) {
+            guard
+                node.declName.baseName.text == "first",
+                let functionCall = node.base?.asFunctionCall,
+                let calledExpression = functionCall.calledExpression.as(MemberAccessExprSyntax.self),
+                calledExpression.declName.baseName.text == "filter",
+                !functionCall.arguments.contains(where: \.expression.shouldSkip)
+            else {
+                return
+            }
+
+            violations.append(functionCall.positionAfterSkippingLeadingTrivia)
+        }
+    }
+}
+
+private extension ExprSyntax {
+    var shouldSkip: Bool {
+        if `is`(StringLiteralExprSyntax.self) {
+            return true
+        }
+        if let functionCall = `as`(FunctionCallExprSyntax.self),
+           let calledExpression = functionCall.calledExpression.as(DeclReferenceExprSyntax.self),
+           calledExpression.baseName.text == "NSPredicate" {
+            return true
+        }
+        return false
+    }
+}

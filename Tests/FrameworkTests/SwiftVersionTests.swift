@@ -1,0 +1,138 @@
+import SwiftLintFramework
+import Testing
+
+@Suite
+struct SwiftVersionTests {
+    @Test
+    func detectSwiftVersion() { // swiftlint:disable:this function_body_length
+#if compiler(>=6.4)
+        let version = "6.4.0"
+#elseif compiler(>=6.3.3)
+        let version = "6.3.3"
+#elseif compiler(>=6.3.2)
+        let version = "6.3.2"
+#elseif compiler(>=6.3.1)
+        let version = "6.3.1"
+#elseif compiler(>=6.3.0)
+        let version = "6.3.0"
+#elseif compiler(>=6.2.4)
+        let version = "6.2.4"
+#elseif compiler(>=6.2.3)
+        let version = "6.2.3"
+#elseif compiler(>=6.2.2)
+        let version = "6.2.2"
+#elseif compiler(>=6.2.1)
+        let version = "6.2.1"
+#elseif compiler(>=6.2.0)
+        let version = "6.2.0"
+#elseif compiler(>=6.1.2)
+        let version = "6.1.2"
+#elseif compiler(>=6.1.1)
+        let version = "6.1.1"
+#elseif compiler(>=6.1.0)
+        let version = "6.1.0"
+#elseif compiler(>=6.0.3)
+        let version = "6.0.3"
+#elseif compiler(>=6.0.2)
+        let version = "6.0.2"
+#elseif compiler(>=6.0.1)
+        let version = "6.0.1"
+#elseif compiler(>=6.0.0)
+        let version = "6.0.0"
+#elseif compiler(>=5.10.1)
+        let version = "5.10.1"
+#elseif compiler(>=5.10.0)
+        let version = "5.10.0"
+#elseif compiler(>=5.9.2)
+        let version = "5.9.2"
+#elseif compiler(>=5.9.1)
+        let version = "5.9.1"
+#elseif compiler(>=5.9.0)
+        let version = "5.9.0"
+#elseif compiler(>=5.8.1)
+        let version = "5.8.1"
+#elseif compiler(>=5.8.0)
+        let version = "5.8.0"
+#elseif compiler(>=5.7.3)
+        let version = "5.7.3"
+#elseif compiler(>=5.7.2)
+        let version = "5.7.2"
+#elseif compiler(>=5.7.1)
+        let version = "5.7.1"
+#elseif compiler(>=5.7.0)
+        let version = "5.7.0"
+#elseif compiler(>=5.6.3)
+        let version = "5.6.3"
+#elseif compiler(>=5.6.2)
+        let version = "5.6.2"
+#elseif compiler(>=5.6.1)
+        let version = "5.6.1"
+#elseif compiler(>=5.6.0)
+        let version = "5.6.0"
+#elseif compiler(>=5.5.4)
+        let version = "5.5.4"
+#elseif compiler(>=5.5.3)
+        let version = "5.5.3"
+#elseif compiler(>=5.5.2)
+        let version = "5.5.2"
+#elseif compiler(>=5.5.1)
+        let version = "5.5.1"
+#elseif compiler(>=5.5.0)
+        let version = "5.5.0"
+#else
+        #error("Unsupported Swift version")
+#endif
+        #expect(SwiftVersion.current.rawValue == version)
+    }
+
+    @Test
+    func compareBalancedSwiftVersion() {
+        #expect(SwiftVersion(rawValue: "5") != SwiftVersion(rawValue: "6"))
+        #expect(SwiftVersion(rawValue: "5") < SwiftVersion(rawValue: "6"))
+        #expect(!(SwiftVersion(rawValue: "5") > SwiftVersion(rawValue: "6")))
+        #expect(!(SwiftVersion(rawValue: "6") < SwiftVersion(rawValue: "5")))
+
+        #expect(SwiftVersion(rawValue: "5.1") != SwiftVersion(rawValue: "5.2"))
+        #expect(SwiftVersion(rawValue: "5.1") < SwiftVersion(rawValue: "5.2"))
+        #expect(!(SwiftVersion(rawValue: "5.1") > SwiftVersion(rawValue: "5.2")))
+        #expect(!(SwiftVersion(rawValue: "5.2") < SwiftVersion(rawValue: "5.1")))
+
+        #expect(SwiftVersion(rawValue: "5.1.1") != SwiftVersion(rawValue: "5.1.2"))
+        #expect(SwiftVersion(rawValue: "5.1.1") < SwiftVersion(rawValue: "5.1.2"))
+        #expect(!(SwiftVersion(rawValue: "5.1.1") > SwiftVersion(rawValue: "5.1.2")))
+        #expect(!(SwiftVersion(rawValue: "5.1.2") < SwiftVersion(rawValue: "5.1.1")))
+    }
+
+    @Test
+    func compareUnbalancedSwiftVersion() {
+        #expect(SwiftVersion(rawValue: "5") == SwiftVersion(rawValue: "5.0"))
+        #expect(!(SwiftVersion(rawValue: "5") < SwiftVersion(rawValue: "5.0")))
+        #expect(!(SwiftVersion(rawValue: "5") > SwiftVersion(rawValue: "5.0")))
+
+        #expect(SwiftVersion(rawValue: "5.9") != SwiftVersion(rawValue: "6"))
+        #expect(SwiftVersion(rawValue: "5.9") < SwiftVersion(rawValue: "6"))
+        #expect(!(SwiftVersion(rawValue: "5.9") > SwiftVersion(rawValue: "6")))
+        #expect(!(SwiftVersion(rawValue: "6") < SwiftVersion(rawValue: "5.9")))
+
+        #expect(SwiftVersion(rawValue: "5.2") != SwiftVersion(rawValue: "5.10.3"))
+        #expect(SwiftVersion(rawValue: "5.2") < SwiftVersion(rawValue: "5.10.3"))
+        #expect(!(SwiftVersion(rawValue: "5.2") > SwiftVersion(rawValue: "5.10.3")))
+        #expect(!(SwiftVersion(rawValue: "5.10.3") < SwiftVersion(rawValue: "5.2")))
+    }
+
+    @Test
+    func compareProblematicSwiftVersion() {
+        #expect(SwiftVersion(rawValue: "5.010") == SwiftVersion(rawValue: "5.10"))
+        #expect(!(SwiftVersion(rawValue: "5.010") < SwiftVersion(rawValue: "5.10")))
+        #expect(!(SwiftVersion(rawValue: "5.010") > SwiftVersion(rawValue: "5.10")))
+
+        #expect(SwiftVersion(rawValue: "-10") != SwiftVersion(rawValue: "-1"))
+        #expect(SwiftVersion(rawValue: "-10") < SwiftVersion(rawValue: "-1"))
+
+        #expect(SwiftVersion(rawValue: "0") != SwiftVersion(rawValue: "10"))
+        #expect(SwiftVersion(rawValue: "0") < SwiftVersion(rawValue: "10"))
+
+        #expect(SwiftVersion(rawValue: "alpha") != SwiftVersion(rawValue: "beta"))
+        #expect(SwiftVersion(rawValue: "alpha") < SwiftVersion(rawValue: "beta"))
+    }
+}

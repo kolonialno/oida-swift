@@ -1,0 +1,31 @@
+steps:
+  - label: "Bazel"
+    commands:
+      - echo "+++ Build"
+      - bazel build :swiftlint
+      - echo "+++ Test"
+      - make bazel_test
+  - label: "SwiftPM"
+    commands:
+      - echo "+++ Generate Template Rule"
+      - swift run swiftlint-dev rules template FooBarBaz --rewriter --id foo_bar --config --kind metrics --severity error --test
+      - echo "+++ Test"
+      - make spm_test
+    env:
+      SKIP_INTEGRATION_TESTS: true
+  - label: "Danger"
+    commands:
+      - echo "+++ Run OSS Scan"
+      - make oss_scan
+    artifact_paths: "oss-check-summary.md"
+    priority: 10
+  - label: "TSan Tests"
+    commands:
+      - echo "+++ Test"
+      - make bazel_test_tsan
+  - label: "Registration"
+    commands:
+      - echo "+++ Register Rules and Reporters"
+      - make --always-make bazel_register
+      - echo "+++ Diff Files"
+      - git diff --quiet HEAD

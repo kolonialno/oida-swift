@@ -1,0 +1,35 @@
+import SourceKittenFramework
+import SwiftLintCore
+
+@AutoConfigParser
+struct ModifierOrderConfiguration: SeverityBasedRuleConfiguration {
+    @ConfigurationElement(key: "severity")
+    private(set) var severityConfiguration = SeverityConfiguration<Parent>(.warning)
+    @ConfigurationElement(key: "preferred_modifier_order")
+    private(set) var preferredModifierOrder: [SwiftDeclarationAttributeKind.ModifierGroup] = [
+        .override,
+        .isolation,
+        .acl,
+        .setterACL,
+        .dynamic,
+        .mutators,
+        .lazy,
+        .final,
+        .required,
+        .convenience,
+        .typeMethods,
+        .owned,
+    ]
+}
+
+extension SwiftDeclarationAttributeKind.ModifierGroup: AcceptableByConfigurationElement {
+    public init(fromAny value: Any, context ruleID: String) throws(Issue) {
+        if let value = value as? String, let newSelf = Self(rawValue: value), newSelf != .atPrefixed {
+            self = newSelf
+        } else {
+            throw .invalidConfiguration(ruleID: ruleID)
+        }
+    }
+
+    public func asOption() -> OptionType { .symbol(rawValue) }
+}

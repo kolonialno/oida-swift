@@ -1,0 +1,246 @@
+import SwiftLintCore
+import SwiftSyntax
+import SwiftSyntaxBuilder
+
+@SwiftSyntaxRule(explicitRewriter: true, optIn: true)
+struct PreferKeyPathRule: Rule {
+    var configuration = PreferKeyPathConfiguration()
+
+    private static let extendedMode = ["restrict_to_standard_functions": false]
+    private static let ignoreIdentity = ["ignore_identity_closures": true]
+    private static let extendedModeAndIgnoreIdentity = [
+        "restrict_to_standard_functions": false,
+        "ignore_identity_closures": true,
+    ]
+
+    static let description = RuleDescription(
+        identifier: "prefer_key_path",
+        name: "Prefer Key Path",
+        description: "Use a key path argument instead of a closure with property access",
+        rationale: """
+            Note: Swift 5 doesn't support identity key path conversions (`{ $0 }` -> `(\\.self)`) and so
+            SwiftLint disregards `ignore_identity_closures: false` if it runs on a Swift <6 project.
+            """,
+        kind: .idiomatic,
+        minSwiftVersion: .fiveDotTwo,
+        nonTriggeringExamples: #examples([
+            "f {}",
+            "f { $0 }",
+            "f { $0.a }",
+            "let f = { $0.a }(b)",
+            "f {}".asExample(configuration: extendedMode),
+            "f() { g() }".asExample(configuration: extendedMode),
+            "f { a.b.c }".asExample(configuration: extendedMode),
+            "f { a, b in a.b }".asExample(configuration: extendedMode),
+            "f { (a, b) in a.b }".asExample(configuration: extendedMode),
+            "f { $0.a } g: { $0.b }".asExample(configuration: extendedMode),
+            "[1, 2, 3].reduce(1) { $0 + $1 }".asExample(configuration: extendedMode),
+            "f { $0 }".asExample(configuration: extendedModeAndIgnoreIdentity),
+            "f.map { $0 }".asExample(configuration: ignoreIdentity),
+            "f.map(1) { $0.a }",
+            "f.filter({ $0.a }, x)",
+            "#Predicate { $0.a }",
+            "let transform: (Int) -> Int = nil ?? { $0.a }",
+        ]),
+        triggeringExamples: #examples([
+            "f.map ↓{ $0.a }",
+            "f.filter ↓{ $0.a }",
+            "f.first ↓{ $0.a }",
+            "f.contains ↓{ $0.a }",
+            "f.contains(where: ↓{ $0.a })",
+            "f(↓{ $0.a })".asExample(configuration: extendedMode),
+            "f(a: ↓{ $0.b })".asExample(configuration: extendedMode),
+            "f(a: ↓{ a in a.b }, x)".asExample(configuration: extendedMode),
+            "f.map ↓{ a in a.b.c }",
+            "f.allSatisfy ↓{ (a: A) in a.b }",
+            "f.first ↓{ (a b: A) in b.c }",
+            "f.contains ↓{ $0.0.a }",
+            "f.compactMap ↓{ $0.a.b.c.d }",
+            "f.flatMap ↓{ $0.a.b }",
+            "let f: (Int) -> Int = ↓{ $0.bigEndian }".asExample(configuration: extendedMode),
+            "transform = ↓{ $0.a }",
+        ]),
+        corrections: #corrections([
+            "f.map { $0.a }": "f.map(\\.a)",
+            """
+            // begin
+            f.map { $0.a } // end
+            """:
+                """
+                // begin
+                f.map(\\.a) // end
+                """,
+            "f.map({ $0.a })": "f.map(\\.a)",
+            "f(a: { $0.a })".asExample(configuration: extendedMode): "f(a: \\.a)",
+            "f({ $0.a })".asExample(configuration: extendedMode): "f(\\.a)",
+
+            "let f = /* begin */ { $0.a } // end".asExample(configuration: extendedMode):
+                "let f = /* begin */ \\.a // end",
+
+            "let f = { $0.a }(b)": "let f = { $0.a }(b)",
+
+            "let f: (Int) -> Int = ↓{ $0.bigEndian }".asExample(configuration: extendedMode):
+                "let f: (Int) -> Int = \\.bigEndian",
+
+            "f.partition ↓{ $0.a.b }": "f.partition(by: \\.a.b)",
+            "f.contains ↓{ $0.a.b }": "f.contains(where: \\.a.b)",
+            "f.first ↓{ element in element.a }": "f.first(where: \\.a)",
+            "f.drop ↓{ element in element.a }": "f.drop(while: \\.a)",
+            "f.compactMap ↓{ $0.a.b.c.d }": "f.compactMap(\\.a.b.c.d)",
+
+            "f { $0 }".asExample(configuration: extendedModeAndIgnoreIdentity): // no change with option enabled
+            "f { $0 }".asExample(configuration: extendedModeAndIgnoreIdentity),
+
+            "f.map { $0 }".asExample(configuration: ignoreIdentity): // no change with option enabled
+            "f.map { $0 }".asExample(configuration: ignoreIdentity),
+
+            """
+            myList
+                .map { $0.a } // swiftlint:disable:this prefer_key_path
+            """:
+                """
+                myList
+                    .map { $0.a } // swiftlint:disable:this prefer_key_path
+                """,
+        ])
+    )
+}
+
+private extension PreferKeyPathRule {
+    final class Visitor: ViolationsSyntaxVisitor<ConfigurationType> {
+        override func visitPost(_ node: ClosureExprSyntax) {
+            if node.isInvalid(restrictToStandardFunctions: configuration.restrictToStandardFunctions) {
+                return
+            }
+            if let onlyStmt = node.onlyExprStmt,
+               onlyStmt.accesses(identifier: node.onlyParameter) {
+                if onlyStmt.is(DeclReferenceExprSyntax.self),
+                   configuration.ignoreIdentityClosures || SwiftVersion.current < .six {
+                    return
+                }
+
+                violations.append(node.positionAfterSkippingLeadingTrivia)
+            }
+        }
+    }
+
+    final class Rewriter: ViolationsSyntaxRewriter<ConfigurationType> {
+        override func visit(_ node: FunctionCallExprSyntax) -> ExprSyntax {
+            guard node.additionalTrailingClosures.isEmpty,
+                  let closure = node.trailingClosure,
+                  !isDisabled(atStartPositionOf: closure),
+                  !closure.isInvalid(restrictToStandardFunctions: configuration.restrictToStandardFunctions),
+                  let expr = closure.onlyExprStmt,
+                  expr.accesses(identifier: closure.onlyParameter) == true,
+                  let replacement = expr.asKeyPath(ignoreIdentityClosures: configuration.ignoreIdentityClosures),
+                  let calleeName = node.calleeName else {
+                return super.visit(node)
+            }
+            numberOfCorrections += 1
+            var node = node.with(\.calledExpression, node.calledExpression.with(\.trailingTrivia, []))
+            if node.leftParen == nil {
+                node = node.with(\.leftParen, .leftParenToken())
+            }
+            let newArg = LabeledExprSyntax(
+                label: argumentLabelByStandardFunction[calleeName, default: nil],
+                expression: replacement
+            )
+            node = node.with(\.arguments, [newArg]
+            )
+            if node.rightParen == nil {
+                node = node.with(\.rightParen, .rightParenToken())
+            }
+            node = node
+                .with(\.trailingClosure, nil)
+                .with(\.trailingTrivia, node.trailingTrivia)
+            return super.visit(node)
+        }
+
+        override func visit(_ node: ClosureExprSyntax) -> ExprSyntax {
+            if node.isInvalid(restrictToStandardFunctions: configuration.restrictToStandardFunctions) {
+                return super.visit(node)
+            }
+            if let expr = node.onlyExprStmt,
+               expr.accesses(identifier: node.onlyParameter) == true,
+               let replacement = expr.asKeyPath(ignoreIdentityClosures: configuration.ignoreIdentityClosures) {
+                numberOfCorrections += 1
+                let node = replacement
+                    .with(\.leadingTrivia, node.leadingTrivia)
+                    .with(\.trailingTrivia, node.trailingTrivia)
+                return super.visit(node)
+            }
+            return super.visit(node)
+        }
+    }
+}
+
+private extension ExprSyntax {
+    func accesses(identifier: String?) -> Bool {
+        if let base = `as`(MemberAccessExprSyntax.self)?.base {
+            return base.accesses(identifier: identifier)
+        }
+        if let declRef = `as`(DeclReferenceExprSyntax.self) {
+            return declRef.baseName.text == identifier ?? "$0"
+        }
+        return false
+    }
+}
+
+private extension ClosureExprSyntax {
+    var onlyParameter: String? {
+        switch signature?.parameterClause {
+        case let .simpleInput(params):
+            return params.onlyElement?.name.text
+        case let .parameterClause(params):
+            let param = params.parameters.onlyElement
+            return param?.secondName?.text ?? param?.firstName.text
+        case nil: return nil
+        }
+    }
+
+    var onlyExprStmt: ExprSyntax? {
+        if case let .expr(expr) = statements.onlyElement?.item {
+            return expr
+        }
+        return nil
+    }
+
+    func isInvalid(restrictToStandardFunctions: Bool) -> Bool {
+        guard keyPathInParent != \FunctionCallExprSyntax.calledExpression,
+              let parent,
+              ![.macroExpansionExpr, .multipleTrailingClosureElement].contains(parent.kind),
+              previousToken(viewMode: .sourceAccurate)?.text != "??" else {
+            return true
+        }
+        if let call = parent.as(LabeledExprSyntax.self)?.parent?.parent?.as(FunctionCallExprSyntax.self) {
+            // Closure is function argument.
+            return restrictToStandardFunctions && !call.isStandardFunction
+        }
+        if let call = parent.as(FunctionCallExprSyntax.self) {
+            // Trailing closure.
+            return call.additionalTrailingClosures.isNotEmpty || restrictToStandardFunctions && !call.isStandardFunction
+        }
+        return false
+    }
+}
+
+private extension ExprSyntax {
+    func asKeyPath(ignoreIdentityClosures: Bool) -> ExprSyntax? {
+        if let memberAccess = `as`(MemberAccessExprSyntax.self) {
+            var this = memberAccess.base
+            var elements = [memberAccess.declName]
+            while this?.is(DeclReferenceExprSyntax.self) != true {
+                if let memberAccess = this?.as(MemberAccessExprSyntax.self) {
+                    elements.append(memberAccess.declName)
+                    this = memberAccess.base
+                }
+            }
+            return "\\.\(raw: elements.reversed().map(\.baseName.text).joined(separator: "."))" as Self
+        }
+
+        if !ignoreIdentityClosures, SwiftVersion.current >= .six, `is`(DeclReferenceExprSyntax.self) {
+            return "\\.self"
+        }
+        return nil
+    }
+}

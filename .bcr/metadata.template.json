@@ -1,0 +1,20 @@
+{
+    "homepage": "https://github.com/realm/SwiftLint",
+    "maintainers": [
+        {
+            "email": "jp@jpsim.com",
+            "github": "jpsim",
+            "name": "JP Simard"
+        },
+        {
+            "email": "danny.moesch@icloud.com",
+            "github": "SimplyDanny",
+            "name": "Danny Mösch"
+        }
+    ],
+    "repository": [
+        "github:realm/SwiftLint"
+    ],
+    "versions": [],
+    "yanked_versions": {}
+}

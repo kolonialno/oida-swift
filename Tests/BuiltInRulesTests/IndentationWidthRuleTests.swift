@@ -1,0 +1,411 @@
+import TestHelpers
+import Testing
+
+@testable import SwiftLintBuiltInRules
+@testable import SwiftLintCore
+
+// swiftlint:disable file_length
+
+@Suite(.rulesRegistered)
+struct IndentationWidthRuleTests {
+    @Test
+    func invalidIndentation() async throws {
+        let defaultValue = IndentationWidthConfiguration().indentationWidth
+
+        for indentation in [0, -1, -5] {
+            let console = try await Issue.captureConsole {
+                var testee = IndentationWidthConfiguration()
+                try testee.apply(configuration: ["indentation_width": indentation])
+
+                // Value remains the default.
+                #expect(testee.indentationWidth == defaultValue)
+            }
+            #expect(
+                console == "warning: Invalid configuration for 'indentation_width' rule. Falling back to default."
+            )
+        }
+    }
+
+    /// It's not okay to have the first line indented.
+    @Test
+    func firstLineIndentation() {
+        assert1Violation(in: "    firstLine")
+        assert1Violation(in: "   firstLine")
+        assert1Violation(in: " firstLine")
+        assert1Violation(in: "\tfirstLine")
+
+        assertNoViolation(in: "firstLine")
+    }
+
+    /// It's not okay to indent using both tabs and spaces in one line.
+    @Test
+    func mixedTabSpaceIndentation() {
+        // Expect 2 violations as secondLine is also indented by 8 spaces (which isn't valid)
+        assertViolations(in: "firstLine\n\t    secondLine", equals: 2)
+        assertViolations(in: "firstLine\n    \tsecondLine", equals: 2)
+    }
+
+    /// It's okay to indent using either tabs or spaces in different lines.
+    @Test
+    func mixedTabsAndSpacesIndentation() {
+        assertNoViolation(in: "firstLine\n\tsecondLine\n        thirdLine")
+        assertNoViolation(in: "firstLine\n    secondLine\n\t\tthirdLine")
+        assertNoViolation(in: "firstLine\n\tsecondLine\n        thirdLine\n\t\t\tfourthLine")
+    }
+
+    /// It's okay to keep the same indentation.
+    @Test
+    func keepingIndentation() {
+        assertNoViolation(in: "firstLine\nsecondLine")
+        assertNoViolation(in: "firstLine    \nsecondLine\n    thirdLine")
+        assertNoViolation(in: "firstLine\t\nsecondLine\n\tthirdLine")
+    }
+
+    /// It's only okay to indent using one tab or indentationWidth spaces.
+    @Test
+    func indentationLength() {
+        assert1Violation(in: "firstLine\n        secondLine", indentationWidth: 1)
+        assert1Violation(in: "firstLine\n        secondLine", indentationWidth: 2)
+        assert1Violation(in: "firstLine\n        secondLine", indentationWidth: 3)
+        assert1Violation(in: "firstLine\n        secondLine", indentationWidth: 4)
+        assert1Violation(in: "firstLine\n        secondLine", indentationWidth: 5)
+        assert1Violation(in: "firstLine\n        secondLine", indentationWidth: 6)
+        assert1Violation(in: "firstLine\n        secondLine", indentationWidth: 7)
+        assert1Violation(in: "firstLine\n\t\tsecondLine")
+        assert1Violation(in: "firstLine\n\t\t\tsecondLine")
+        assert1Violation(in: "firstLine\n\t\t\t\t\t\tsecondLine")
+
+        assertNoViolation(in: "firstLine\n\tsecondLine")
+        assertNoViolation(in: "firstLine\n secondLine", indentationWidth: 1)
+        assertNoViolation(in: "firstLine\n  secondLine", indentationWidth: 2)
+        assertNoViolation(in: "firstLine\n   secondLine", indentationWidth: 3)
+        assertNoViolation(in: "firstLine\n    secondLine", indentationWidth: 4)
+        assertNoViolation(in: "firstLine\n     secondLine", indentationWidth: 5)
+        assertNoViolation(in: "firstLine\n      secondLine", indentationWidth: 6)
+        assertNoViolation(in: "firstLine\n       secondLine", indentationWidth: 7)
+        assertNoViolation(in: "firstLine\n        secondLine", indentationWidth: 8)
+    }
+
+    /// It's okay to unindent indentationWidth * (1, 2, 3, ...) - x iff x == 0.
+    @Test
+    func unindentation() {
+        assert1Violation(in: "firstLine\n    secondLine\n        thirdLine\n fourthLine")
+        assert1Violation(in: "firstLine\n    secondLine\n        thirdLine\n  fourthLine")
+        assert1Violation(in: "firstLine\n    secondLine\n        thirdLine\n   fourthLine")
+        assert1Violation(in: "firstLine\n    secondLine\n    thirdLine\n   fourthLine")
+
+        assertNoViolation(in: "firstLine\n    secondLine\n        thirdLine\nfourthLine")
+        assertNoViolation(in: "firstLine\n    secondLine\n    thirdLine\nfourthLine")
+        assertNoViolation(in: "firstLine\n\tsecondLine\n\t\tthirdLine\n\t\t\tfourthLine\nfifthLine")
+    }
+
+    /// It's okay to have empty lines between iff the following indentations obey the rules.
+    @Test
+    func emptyLinesBetween() {
+        assertNoViolation(in: "firstLine\n\tsecondLine\n\n\tfourthLine")
+        assertNoViolation(in: "firstLine\n\tsecondLine\n \n\tfourthLine")
+        assertNoViolation(in: "firstLine\n\tsecondLine\n           \n\tfourthLine")
+        assertNoViolation(in: "firstLine\n\tsecondLine\n\n    fourthLine")
+        assertNoViolation(in: "firstLine\n\tsecondLine\n \n    fourthLine")
+        assertNoViolation(in: "firstLine\n\tsecondLine\n           \n    fourthLine")
+
+        assert1Violation(in: "firstLine\n\tsecondLine\n\n\t\t\tfourthLine")
+        assert1Violation(in: "firstLine\n\tsecondLine\n \n\t\t\tfourthLine")
+        assert1Violation(in: "firstLine\n\tsecondLine\n           \n\t\t\tfourthLine")
+        assert1Violation(in: "firstLine\n\tsecondLine\n\n            fourthLine")
+        assert1Violation(in: "firstLine\n\tsecondLine\n \n            fourthLine")
+        assert1Violation(in: "firstLine\n\tsecondLine\n           \n            fourthLine")
+    }
+
+    @Test
+    func sBrackets() {
+        assertNoViolation(
+            in: "firstLine\n    [\n        .thirdLine\n    ]\nfifthLine",
+            includeComments: true
+        )
+
+        assertNoViolation(
+            in: "firstLine\n    [\n        .thirdLine\n    ]\nfifthLine",
+            includeComments: false
+        )
+
+        assertNoViolation(
+            in: "firstLine\n    (\n        .thirdLine\n    )\nfifthLine",
+            includeComments: true
+        )
+
+        assertNoViolation(
+            in: "firstLine\n    (\n        .thirdLine\n    )\nfifthLine",
+            includeComments: false
+        )
+    }
+
+    /// It's okay to have comments not following the indentation pattern iff the configuration allows this.
+    @Test
+    func commentLines() {
+        assert1Violation(
+            in: "firstLine\n\tsecondLine\n\t\tthirdLine\n//test\n\t\tfourthLine",
+            includeComments: true
+        )
+        assertViolations(
+            in: "firstLine\n\tsecondLine\n\t\tthirdLine\n//test\n // test\n//test\n\t\tfourthLine",
+            equals: 2,
+            includeComments: true
+        )
+        assertViolations(
+            in: "firstLine\n\tsecondLine\n\t\tthirdLine\n/*test\n  bad indent...\n test*/\n\t\tfourthLine",
+            equals: 3,
+            includeComments: true
+        )
+
+        assertNoViolation(
+            in: "firstLine\n\tsecondLine\n\t\tthirdLine\n//test\n\t\tfourthLine",
+            includeComments: false
+        )
+        assertNoViolation(
+            in: "firstLine\n\tsecondLine\n\t\tthirdLine\n//test\n // test\n//test\n\t\tfourthLine",
+            includeComments: false
+        )
+        assertNoViolation(
+            in: "firstLine\n\tsecondLine\n\t\tthirdLine\n/*test\n  bad indent...\n test*/\n\t\tfourthLine",
+            includeComments: false
+        )
+    }
+
+    /// Duplicate warnings for one actual indentation issue should be avoided.
+    @Test
+    func duplicateWarningAvoidanceMechanism() {
+        // thirdLine is indented correctly, yet not in-line with the badly indented secondLine. This should be allowed.
+        assert1Violation(in: "firstLine\n secondLine\nthirdLine")
+
+        // thirdLine is indented correctly, yet not in-line with the badly indented secondLine. This should be allowed.
+        assert1Violation(in: "firstLine\n     secondLine\n    thirdLine")
+
+        // thirdLine is indented badly, yet in-line with the badly indented secondLine. This should be allowed.
+        assert1Violation(in: "firstLine\n     secondLine\n     thirdLine")
+
+        // This pattern should go on indefinitely...
+        assert1Violation(in: "firstLine\n     secondLine\n     thirdLine\n    fourthLine")
+        assert1Violation(in: "firstLine\n     secondLine\n     thirdLine\n     fourthLine")
+
+        // Still, this won't disable multiple line warnings in one file if suitable...
+        assertViolations(in: "firstLine\n     secondLine\nthirdLine\n     fourthLine", equals: 2)
+        assertViolations(in: "firstLine\n     secondLine\n    thirdLine\n     fourthLine", equals: 2)
+        assertViolations(in: "firstLine\n     secondLine\n     thirdLine\nfourthLine\n     fifthLine", equals: 2)
+        assertViolations(in: "firstLine\n     secondLine\n     thirdLine\n    fourthLine\n     fifthLine", equals: 2)
+    }
+
+    @Test
+    func ignoredCompilerDirectives() {
+        assertNoViolation(in: """
+            struct S {
+                            #if os(iOS)
+                var i: Int = 0
+            #endif
+                var j: Int = 0
+
+                func reset() {
+                #if os(iOS)
+                    i = 0
+                            #endif
+                    j = 0
+                }
+            }
+            """, includeCompilerDirectives: false)
+
+        assertNoViolation(in: """
+            struct S {
+                #if os(iOS)
+                    var i: Int = 0
+                #endif
+                var j: Int = 0
+
+                func reset() {
+                    #if os(iOS)
+                        i = 0
+                    #endif
+                    j = 0
+                }
+            }
+            """, includeCompilerDirectives: true)
+    }
+
+    @Test
+    func includeMultilineStrings() {
+        let example0 = #"""
+            let x = """
+                string1
+                    string2
+                  string3
+                """
+            """#
+        assertNoViolation(in: example0, includeMultilineStrings: false)
+        assert1Violation(in: example0, includeMultilineStrings: true)
+
+        let example1 = #"""
+            let x = """
+                string1
+                    string2
+                  string3
+                 string4
+                """
+            """#
+        assertNoViolation(in: example1, includeMultilineStrings: false)
+        assertViolations(in: example1, equals: 2, includeMultilineStrings: true)
+
+        let example2 = ##"""
+            let x = #"""
+                string1
+               """#
+            """##
+        assert1Violation(in: example2, includeMultilineStrings: false)
+        assert1Violation(in: example2, includeMultilineStrings: true)
+
+        let example3 = """
+            let x = [
+                "key": [
+                    ["nestedKey": "string"],
+                ],
+            ]
+            """
+        assertNoViolation(in: example3, includeMultilineStrings: false)
+        assertNoViolation(in: example3, includeMultilineStrings: true)
+
+        let example4 = #"""
+            func test() -> String {
+                """
+                ▿ Type:
+                  - property: \(123) + \(456)
+                \(true)
+                """
+            }
+            """#
+        assertNoViolation(in: example4, includeMultilineStrings: false)
+        assert1Violation(in: example4, includeMultilineStrings: true)
+    }
+
+    @Test
+    func multilineConditionsSkippedByDefault() {
+        assertNoViolation(in: "guard let x = foo(),\n      let y = bar() else {\n    return\n}")
+        assertNoViolation(in: "if let x = foo(),\n   let y = bar() {\n    doSomething()\n}")
+        assertNoViolation(in: "while let x = foo(),\n      let y = bar() {\n    doSomething()\n}")
+        assertNoViolation(in: "guard let x = foo() else {\n    return\n}")
+        // Misaligned but skipped when include_multiline_conditions: false
+        assertNoViolation(in: "if let x = foo(),\n        let y = bar() {\n    doSomething()\n}")
+    }
+
+    @Test
+    func multilineConditionsAlignmentChecked() {
+        // Properly aligned — no violations
+        let guardAligned = "guard let x = foo(),\n      let y = bar() else {\n    return\n}"
+        let ifAligned = "if let x = foo(),\n   let y = bar() {\n    doSomething()\n}"
+        let whileAligned = "while let x = foo(),\n      let y = bar() {\n    doSomething()\n}"
+        let guardNextLine = "guard\n    let x = foo(),\n    let y = bar()\nelse {\n    return\n}"
+        let ifThreeAligned = "if let a = foo(),\n   let b = bar(),\n   let c = baz() {\n    doSomething()\n}"
+        assertNoViolation(in: guardAligned, includeMultilineConditions: true)
+        assertNoViolation(in: ifAligned, includeMultilineConditions: true)
+        assertNoViolation(in: whileAligned, includeMultilineConditions: true)
+        assertNoViolation(in: guardNextLine, includeMultilineConditions: true)
+        assertNoViolation(in: ifThreeAligned, includeMultilineConditions: true)
+    }
+
+    @Test
+    func multilineConditionsMisaligned() {
+        let ifMisaligned = "if let x = foo(),\n       let y = bar() {\n    doSomething()\n}"
+        let guardMisaligned = "guard let x = foo(),\n        let y = bar() else {\n    return\n}"
+        let ifThreeMisaligned =
+            "if let a = foo(),\n       let b = bar(),\n       let c = baz() {\n    doSomething()\n}"
+        assert1Violation(in: ifMisaligned, includeMultilineConditions: true)
+        assert1Violation(in: guardMisaligned, includeMultilineConditions: true)
+        assertViolations(in: ifThreeMisaligned, equals: 2, includeMultilineConditions: true)
+    }
+
+    // MARK: Helpers
+    private func countViolations(
+        in example: Example,
+        indentationWidth: Int? = nil,
+        includeComments: Bool = true,
+        includeCompilerDirectives: Bool = true,
+        includeMultilineStrings: Bool = true,
+        includeMultilineConditions: Bool = false,
+        sourceLocation: SourceLocation = #_sourceLocation
+    ) -> Int {
+        var configDict: [String: Any] = [:]
+        if let indentationWidth {
+            configDict["indentation_width"] = indentationWidth
+        }
+        configDict["include_comments"] = includeComments
+        configDict["include_compiler_directives"] = includeCompilerDirectives
+        configDict["include_multiline_strings"] = includeMultilineStrings
+        configDict["include_multiline_conditions"] = includeMultilineConditions
+
+        guard let config = makeConfig(configDict, IndentationWidthRule.identifier) else {
+            Testing.Issue.record("Unable to create rule configuration.", sourceLocation: sourceLocation)
+            return 0
+        }
+
+        return violations(example.with(code: example.code + "\n"), config: config).count
+    }
+
+    private func assertViolations(
+        in string: String,
+        equals expectedCount: Int,
+        indentationWidth: Int? = nil,
+        includeComments: Bool = true,
+        includeCompilerDirectives: Bool = true,
+        includeMultilineStrings: Bool = true,
+        includeMultilineConditions: Bool = false,
+        file: StaticString = #filePath,
+        line: UInt = #line,
+        sourceLocation: SourceLocation = #_sourceLocation
+    ) {
+        #expect(
+            countViolations(
+                in: Example(code: string, file: (file), line: line),
+                indentationWidth: indentationWidth,
+                includeComments: includeComments,
+                includeCompilerDirectives: includeCompilerDirectives,
+                includeMultilineStrings: includeMultilineStrings,
+                includeMultilineConditions: includeMultilineConditions,
+                sourceLocation: sourceLocation
+            ) == expectedCount,
+            sourceLocation: sourceLocation
+        )
+    }
+
+    private func assertNoViolation(
+        in string: String,
+        indentationWidth: Int? = nil,
+        includeComments: Bool = true,
+        includeCompilerDirectives: Bool = true,
+        includeMultilineStrings: Bool = true,
+        includeMultilineConditions: Bool = false,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) {
+        assertViolations(
+            in: string, equals: 0, indentationWidth: indentationWidth,
+            includeComments: includeComments, includeCompilerDirectives: includeCompilerDirectives,
+            includeMultilineStrings: includeMultilineStrings,
+            includeMultilineConditions: includeMultilineConditions, file: file, line: line
+        )
+    }
+
+    private func assert1Violation(
+        in string: String,
+        indentationWidth: Int? = nil,
+        includeComments: Bool = true,
+        includeCompilerDirectives: Bool = true,
+        includeMultilineStrings: Bool = true,
+        includeMultilineConditions: Bool = false,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) {
+        assertViolations(
+            in: string, equals: 1, indentationWidth: indentationWidth,
+            includeComments: includeComments, includeCompilerDirectives: includeCompilerDirectives,
+            includeMultilineStrings: includeMultilineStrings,
+            includeMultilineConditions: includeMultilineConditions, file: file, line: line
+        )
+    }
+}

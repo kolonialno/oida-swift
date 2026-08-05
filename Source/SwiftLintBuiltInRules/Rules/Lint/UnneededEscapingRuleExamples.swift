@@ -1,0 +1,234 @@
+import SwiftLintCore
+
+struct UnneededEscapingRuleExamples {
+    static let nonTriggeringExamples = #examples([
+        """
+        func outer(completion: @escaping () -> Void) { inner(completion: completion) }
+        """,
+        """
+        func f(completion: @escaping [Int] -> Void) {
+            g {
+                let result = [1].map { _ in 0 }
+                completion(result)
+            }
+        }
+        """,
+        """
+        func outer(closure: @escaping @autoclosure () -> String) {
+            inner(closure: closure())
+        }
+        """,
+        """
+        func outer(closure: @escaping () -> String) {
+            inner(tuple: (closure, 42))
+        }
+        """,
+        """
+        func returning(_ work: @escaping () -> Void) -> () -> Void { return work }
+        """,
+        """
+        func implicitlyReturning(g: @escaping () -> Void) -> () -> Void { g }
+        """,
+        """
+        struct S {
+            var closure: (() -> Void)?
+            mutating func setClosure(_ newValue: @escaping () -> Void) {
+                closure = newValue
+            }
+            mutating func setToSelf(_ newValue: @escaping () -> Void) {
+                self.closure = newValue
+            }
+        }
+        """,
+        """
+        func closure(completion: @escaping () -> Void) {
+            DispatchQueue.main.async { completion() }
+        }
+        """,
+        """
+        func capture(completion: @escaping () -> Void) {
+            let closure = { completion() }
+            closure()
+        }
+        """,
+        """
+        func assignToLocal(completion: @escaping () -> Void) {
+            let (local, _) = (completion, 17)
+            self.local = local
+        }
+        """,
+        """
+        func assignToLocal(completion: @escaping () -> Void) {
+            let local = (completion, 17)
+            self.local = local
+        }
+        """,
+        """
+        func assignToLocal(completion: @escaping () -> Void) {
+            let local = (completion, 17)
+            let (c, n) = local
+            self.c = c
+        }
+        """,
+        """
+        func reassignLocal(completion: @escaping () -> Void) -> () -> Void {
+            var local = { print("initial") }
+            local = completion
+            return local
+        }
+        """,
+        """
+        func global(completion: @escaping () -> Void) {
+            Global.completion = completion
+        }
+        """,
+        """
+        func chain(c: @escaping () -> Void) -> () -> Void {
+            let c1 = c
+            if condition {
+                let c2 = c1
+                return c2
+            }
+            let c3 = c1
+            return c3
+        }
+        """,
+        """
+        var arrayOfCompletions = [() -> Void]()
+        func array(completion: @escaping () -> Void) {
+            var completions = [() -> Void]()
+            completions[0] = completion
+            arrayOfCompletions = completions
+        }
+        """.asExample(excludeFromDocumentation: true),
+        """
+        var arrayOfCompletions = [() -> Void]()
+        func array(completion: @escaping () -> Void) {
+            arrayOfCompletions[0] = completion
+        }
+        """.asExample(excludeFromDocumentation: true),
+        """
+        var _testSuiteFailedCallback: (() -> Void)?
+        public func _setTestSuiteFailedCallback(_ callback: @escaping () -> Void) {
+            _testSuiteFailedCallback = callback
+        }
+        """.asExample(excludeFromDocumentation: true),
+        """
+        func f(c: @escaping () -> Void) {
+            var cs = [() -> Void]()
+            cs[0] = c
+        }
+        """.asExample(excludeFromDocumentation: true),
+        """
+        func f(c: @escaping () -> Void) {
+            var cs = [c]
+        }
+        """.asExample(excludeFromDocumentation: true),
+        """
+        func f(c: @escaping () -> Void) {
+            var cs = [1: c]
+        }
+        """.asExample(excludeFromDocumentation: true),
+        """
+        func f(c: @escaping () -> Void) {
+            f(true ? c : { })
+        }
+        """,
+    ])
+
+    static let triggeringExamples = #examples([
+        """
+        func f(c: ↓@escaping () -> Int) {
+            print(c())
+        }
+        """,
+        """
+        func forEach(action: ↓@escaping (Int) -> Void) {
+            for i in 0..<10 {
+                action(i)
+            }
+        }
+        """,
+        """
+        func process(completion: ↓@escaping () -> Void) {
+            completion()
+        }
+        """,
+        """
+        func apply(_ transform: ↓@escaping (Int) -> Int) -> Int {
+            return transform(5)
+        }
+        """,
+        """
+        func optional(completion: (↓@escaping () -> Void)?) {
+            completion?()
+        }
+        """,
+        """
+        func multiple(first: ↓@escaping () -> Void, second: ↓@escaping () -> Void) {
+            first()
+            second()
+        }
+        """,
+        """
+        subscript(transform: ↓@escaping (Int) -> String) -> String {
+            transform(42)
+        }
+        """,
+        """
+        func assignToLocal(completion: ↓@escaping () -> Void) {
+            let local = completion
+            local()
+        }
+        """,
+        """
+        func assignToLocal(completion: ↓@escaping () -> Void) {
+            let (local, _) = (completion, 17)
+            local()
+        }
+        """,
+        """
+        func reassignLocal(completion: ↓@escaping () -> Void) {
+            var local = { print(\"initial\") }
+            local = completion
+            local()
+        }
+        """,
+        """
+        func assignToLocal(completion: ↓@escaping () -> Void) {
+            _ = completion
+        }
+        """,
+    ])
+
+    static let corrections = #corrections([
+        """
+        func forEach(action: ↓@escaping (Int) -> Void) {
+            for i in 0..<10 {
+                action(i)
+            }
+        }
+        """: """
+            func forEach(action: (Int) -> Void) {
+                for i in 0..<10 {
+                    action(i)
+                }
+            }
+            """,
+        """
+        func process(completion: ↓@escaping () -> Void) { completion() }
+        """: """
+            func process(completion: () -> Void) { completion() }
+            """,
+        """
+        subscript(transform: ↓@escaping (Int) -> String) -> String { transform(42) }
+        """: """
+            subscript(transform: (Int) -> String) -> String { transform(42) }
+            """,
+        """
+        func f(c: ↓@escaping() -> Void) { c() }
+        """: """
+            func f(c: () -> Void) { c() }
+            """,
+    ])
+}

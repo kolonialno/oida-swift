@@ -1,0 +1,12 @@
+#!/bin/bash
+
+set -euo pipefail
+
+readonly version="$1"
+readonly artifactbundle="SwiftLintBinary.artifactbundle.zip"
+readonly checksum="$(shasum -a 256 "$artifactbundle" | cut -d " " -f1 | xargs)"
+
+sed -i '' \
+  -e "s/.*\/releases\/download\/.*/        url: \"https:\/\/github.com\/realm\/SwiftLint\/releases\/download\/$version\/SwiftLintBinary\.artifactbundle\.zip\",/g" \
+  -e "s/.*checksum.*/        checksum: \"$checksum\"/g" \
+  Package.swift

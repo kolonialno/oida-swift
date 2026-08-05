@@ -1,0 +1,53 @@
+import SwiftLintCore
+import SwiftSyntax
+
+@SwiftSyntaxRule(foldExpressions: true, explicitRewriter: true, optIn: true)
+struct RedundantNilCoalescingRule: Rule {
+    var configuration = SeverityConfiguration<Self>(.warning)
+
+    static let description = RuleDescription(
+        identifier: "redundant_nil_coalescing",
+        name: "Redundant Nil Coalescing",
+        description: "Coalescing operator with right-hand side nil is redundant",
+        kind: .idiomatic,
+        nonTriggeringExamples: #examples([
+            "var myVar: Int?; myVar ?? 0"
+        ]),
+        triggeringExamples: #examples([
+            "var myVar: Int? = nil; myVar ↓?? nil"
+        ]),
+        corrections: #corrections([
+            "var myVar: Int? = nil; let foo = myVar ↓?? nil":
+                "var myVar: Int? = nil; let foo = myVar",
+            "let a = b ?? nil // swiftlint:disable:this redundant_nil_coalescing":
+                "let a = b ?? nil // swiftlint:disable:this redundant_nil_coalescing",
+        ])
+    )
+}
+
+private extension RedundantNilCoalescingRule {
+    final class Visitor: ViolationsSyntaxVisitor<ConfigurationType> {
+        override func visitPost(_ node: InfixOperatorExprSyntax) {
+            if node.operator.isNilCoalescingOperator, node.rightOperand.is(NilLiteralExprSyntax.self) {
+                violations.append(node.operator.positionAfterSkippingLeadingTrivia)
+            }
+        }
+    }
+
+    final class Rewriter: ViolationsSyntaxRewriter<ConfigurationType> {
+        override func visit(_ node: InfixOperatorExprSyntax) -> ExprSyntax {
+            guard node.operator.isNilCoalescingOperator,
+                  node.rightOperand.is(NilLiteralExprSyntax.self) else {
+                return super.visit(node)
+            }
+            numberOfCorrections += 1
+            return super.visit(node.leftOperand.with(\.trailingTrivia, []))
+        }
+    }
+}
+
+private extension ExprSyntax {
+    var isNilCoalescingOperator: Bool {
+        `as`(BinaryOperatorExprSyntax.self)?.operator.tokenKind == .binaryOperator("??")
+    }
+}

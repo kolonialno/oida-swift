@@ -1,0 +1,228 @@
+import SwiftLintCore
+import SwiftSyntax
+
+@SwiftSyntaxRule(explicitRewriter: true, optIn: true)
+struct ClosureSpacingRule: Rule {
+    var configuration = SeverityConfiguration<Self>(.warning)
+
+    static let description = RuleDescription(
+        identifier: "closure_spacing",
+        name: "Closure Spacing",
+        description: "Closure expressions should have a single space inside each brace",
+        kind: .style,
+        nonTriggeringExamples: #examples([
+            "[].map ({ $0.description })",
+            "[].filter { $0.contains(location) }",
+            "extension UITableViewCell: ReusableView { }",
+            "extension UITableViewCell: ReusableView {}",
+            #"let r = /\{\}/"#.asExample(excludeFromDocumentation: true),
+            """
+            var tapped: (UITapGestureRecognizer) -> Void = { _ in /* no-op */ }
+            """.asExample(excludeFromDocumentation: true),
+            """
+            let test1 = func1(arg: { /* do nothing */ })
+            let test2 = func1 { /* do nothing */ }
+            """.asExample(excludeFromDocumentation: true),
+        ]),
+        triggeringExamples: #examples([
+            "[].filter↓{ $0.contains(location) }",
+            "[].filter(↓{$0.contains(location)})",
+            "[].map(↓{$0})",
+            "(↓{each in return result.contains(where: ↓{e in return e}) }).count",
+            "filter ↓{ sorted ↓{ $0 < $1}}",
+            """
+            var tapped: (UITapGestureRecognizer) -> Void = ↓{ _ in /* no-op */  }
+            """.asExample(excludeFromDocumentation: true),
+        ]),
+        corrections: #corrections([
+            "[].filter(↓{$0.contains(location) })":
+                "[].filter({ $0.contains(location) })",
+            "[].map(↓{$0})":
+                "[].map({ $0 })",
+            "filter ↓{sorted ↓{ $0 < $1}}":
+                "filter { sorted { $0 < $1 } }",
+            "(↓{each in return result.contains(where: ↓{e in return 0})}).count":
+                "({ each in return result.contains(where: { e in return 0 }) }).count",
+            "var c = {}": "var c = {}",
+            "var c = { }": "var c = { }",
+            "var c = ↓{  }": "var c = { }",
+            "var c = { /* comment */ }": "var c = { /* comment */ }",
+            "var c = ↓{/* comment */}": "var c = { /* comment */ }",
+            "var c = ↓{/* comment */ }": "var c = { /* comment */ }",
+            "var c = ↓{ /* comment */}": "var c = { /* comment */ }",
+        ])
+    )
+}
+
+private extension ClosureSpacingRule {
+    final class Visitor: ViolationsSyntaxVisitor<ConfigurationType> {
+        override func visitPost(_ node: ClosureExprSyntax) {
+            if node.shouldCheckForClosureSpacingRule(locationConverter: locationConverter),
+               node.violations.hasViolations {
+                violations.append(node.positionAfterSkippingLeadingTrivia)
+            }
+        }
+    }
+
+    final class Rewriter: ViolationsSyntaxRewriter<ConfigurationType> {
+        override func visit(_ node: ClosureExprSyntax) -> ExprSyntax {
+            var node = node
+            node.statements = visit(node.statements)
+
+            guard node.shouldCheckForClosureSpacingRule(locationConverter: locationConverter) else {
+                return super.visit(node)
+            }
+
+            let violations = node.violations
+            if violations.leftBraceLeftSpace {
+                node.leftBrace = node.leftBrace.with(\.leadingTrivia, .spaces(1))
+            }
+            let wrapsOnlyTrivia = node.leftBrace.nextToken(viewMode: .sourceAccurate)?.id == node.rightBrace.id
+            if wrapsOnlyTrivia {
+                let trivia = node.leftBrace.trailingTrivia
+                if trivia.containsComments {
+                    if violations.leftBraceRightSpace {
+                        node.leftBrace = node.leftBrace.with(\.trailingTrivia, .spaces(1) + trivia)
+                    }
+                    if violations.rightBraceLeftSpace {
+                        node.rightBrace = node.rightBrace.with(\.leadingTrivia, .spaces(1))
+                    }
+                } else {
+                    node.leftBrace = node.leftBrace.with(\.trailingTrivia, .spaces(1))
+                }
+            } else {
+                if violations.leftBraceRightSpace {
+                    node.leftBrace = node.leftBrace.with(\.trailingTrivia, .spaces(1))
+                }
+                if violations.rightBraceLeftSpace {
+                    node.rightBrace = node.rightBrace.with(\.leadingTrivia, .spaces(1))
+                }
+            }
+            if violations.rightBraceRightSpace {
+                node.rightBrace = node.rightBrace.with(\.trailingTrivia, .spaces(1))
+            }
+            if violations.hasViolations {
+                numberOfCorrections += 1
+            }
+            return super.visit(node)
+        }
+    }
+}
+
+// MARK: - Private Helpers
+
+private struct ClosureSpacingRuleClosureViolations {
+    let leftBraceLeftSpace: Bool
+    let leftBraceRightSpace: Bool
+    let rightBraceLeftSpace: Bool
+    let rightBraceRightSpace: Bool
+
+    var hasViolations: Bool {
+        leftBraceLeftSpace ||
+            leftBraceRightSpace ||
+            rightBraceLeftSpace ||
+            rightBraceRightSpace
+    }
+}
+
+private extension ClosureExprSyntax {
+    var violations: ClosureSpacingRuleClosureViolations {
+        ClosureSpacingRuleClosureViolations(
+            leftBraceLeftSpace: !leftBrace.hasSingleSpaceToItsLeft &&
+                !leftBrace.hasAllowedNoSpaceLeftToken &&
+                !leftBrace.hasLeadingNewline,
+            leftBraceRightSpace: !leftBrace.hasSingleSpaceToItsRight,
+            rightBraceLeftSpace: !rightBrace.hasSingleSpaceToItsLeft,
+            rightBraceRightSpace: !rightBrace.hasSingleSpaceToItsRight &&
+                !rightBrace.hasAllowedNoSpaceRightToken &&
+                !rightBrace.hasTrailingLineComment
+        )
+    }
+
+    func shouldCheckForClosureSpacingRule(locationConverter: SourceLocationConverter) -> Bool {
+        guard parent?.is(PostfixOperatorExprSyntax.self) == false, // Workaround for Regex literals
+              (rightBrace.position.utf8Offset - leftBrace.position.utf8Offset) > 1, // Allow '{}'
+              case let startLine = startLocation(converter: locationConverter).line,
+              case let endLine = endLocation(converter: locationConverter).line,
+              startLine == endLine // Only check single-line closures
+        else {
+            return false
+        }
+
+        return true
+    }
+}
+
+private extension TokenSyntax {
+    var hasSingleSpaceToItsLeft: Bool {
+        if case .spaces(1) = Array(leadingTrivia).last {
+            return true
+        }
+        if let previousToken = previousToken(viewMode: .sourceAccurate),
+           case .spaces(1) = Array(previousToken.trailingTrivia).last {
+            return true
+        }
+        return false
+    }
+
+    var hasSingleSpaceToItsRight: Bool {
+        if case .spaces(1) = trailingTrivia.first {
+            return true
+        }
+        if let nextToken = nextToken(viewMode: .sourceAccurate),
+           case .spaces(1) = nextToken.leadingTrivia.first {
+            return true
+        }
+        return false
+    }
+
+    var hasLeadingNewline: Bool {
+        leadingTrivia.contains { piece in
+            if case .newlines = piece {
+                return true
+            }
+            return false
+        }
+    }
+
+    var hasTrailingLineComment: Bool {
+        trailingTrivia.contains { piece in
+            if case .lineComment = piece {
+                return true
+            }
+            return false
+        }
+    }
+
+    var hasAllowedNoSpaceLeftToken: Bool {
+        let previousTokenKind = parent?.previousToken(viewMode: .sourceAccurate)?.tokenKind
+        return previousTokenKind == .leftParen || previousTokenKind == .leftSquare
+    }
+
+    var hasAllowedNoSpaceRightToken: Bool {
+        let allowedKinds = [
+            TokenKind.colon,
+            .comma,
+            .endOfFile,
+            .exclamationMark,
+            .leftParen,
+            .leftSquare,
+            .period,
+            .postfixQuestionMark,
+            .rightParen,
+            .rightSquare,
+            .semicolon,
+        ]
+        if case .newlines = trailingTrivia.first {
+            return true
+        }
+        if case .newlines = nextToken(viewMode: .sourceAccurate)?.leadingTrivia.first {
+            return true
+        }
+        if let nextToken = nextToken(viewMode: .sourceAccurate),
+           allowedKinds.contains(nextToken.tokenKind) {
+            return true
+        }
+        return false
+    }
+}

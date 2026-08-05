@@ -1,0 +1,248 @@
+import Foundation
+import SwiftLintCore
+import SwiftSyntax
+
+@SwiftSyntaxRule
+struct IdentifierNameRule: Rule {
+    var configuration = IdentifierNameConfiguration()
+
+    static let description = RuleDescription(
+        identifier: "identifier_name",
+        name: "Identifier Name",
+        description: "Identifier names should only contain alphanumeric characters and " +
+            "start with a lowercase character or should only contain capital letters. " +
+            "In an exception to the above, variable names may start with a capital letter " +
+            "when they are declared as static. Variable names should not be too " +
+            "long or too short.",
+        kind: .style,
+        nonTriggeringExamples: IdentifierNameRuleExamples.nonTriggeringExamples,
+        triggeringExamples: IdentifierNameRuleExamples.triggeringExamples,
+        deprecatedAliases: ["variable_name"]
+    )
+}
+
+private extension IdentifierNameRule {
+    final class Visitor: ViolationsSyntaxVisitor<ConfigurationType> {
+        private lazy var nameConfiguration = configuration.nameConfiguration
+
+        override func visitPost(_ node: AccessorParametersSyntax) {
+            collectViolations(from: .variable(name: node.name, isStatic: false, isPrivate: false), on: node.name)
+        }
+
+        override func visitPost(_ node: ClosureParameterSyntax) {
+            if node.modifiers.contains(keyword: .override) {
+                return
+            }
+            let name = node.secondName ?? node.firstName
+            collectViolations(
+                from: .closureParameter(name: name),
+                on: name
+            )
+        }
+
+        override func visitPost(_ node: ClosureShorthandParameterSyntax) {
+            collectViolations(
+                from: .closureParameter(name: node.name),
+                on: node.name
+            )
+        }
+
+        override func visitPost(_ node: EnumCaseElementSyntax) {
+            collectViolations(from: .enumElement(name: node.name), on: node.name)
+        }
+
+        override func visitPost(_ node: EnumCaseParameterSyntax) {
+            if let name = node.secondName ?? node.firstName {
+                collectViolations(from: .variable(name: name, isStatic: false, isPrivate: false), on: name)
+            }
+        }
+
+        override func visitPost(_ node: FunctionDeclSyntax) {
+            let name = node.name
+            if node.modifiers.contains(keyword: .override) || isOperator(name: name.text) {
+                return
+            }
+            let type = NamedDeclType.function(
+                name: name,
+                resolvedName: node.resolvedName,
+                isPrivate: node.modifiers.containsPrivateOrFileprivate()
+            )
+            collectViolations(from: type, on: node.name)
+        }
+
+        override func visitPost(_ node: FunctionParameterSyntax) {
+            if node.modifiers.contains(keyword: .override) {
+                return
+            }
+            let name = (node.secondName ?? node.firstName)
+            collectViolations(
+                from: .variable(name: name, isStatic: false, isPrivate: false),
+                on: name
+            )
+        }
+
+        override func visitPost(_ node: GenericParameterSyntax) {
+            guard node.specifier?.tokenKind == .keyword(.let) else {
+                return
+            }
+            collectViolations(
+                from: .variable(name: node.name, isStatic: false, isPrivate: false),
+                on: node.name
+            )
+        }
+
+        override func visitPost(_ node: IdentifierPatternSyntax) {
+            let varDecl = node.enclosingVarDecl
+            if varDecl?.modifiers.contains(keyword: .override) ?? false {
+                return
+            }
+            let type = NamedDeclType.variable(
+                name: node.identifier,
+                isStatic: varDecl?.modifiers.contains(keyword: .static) ?? false,
+                isPrivate: varDecl?.modifiers.containsPrivateOrFileprivate() ?? false
+            )
+            collectViolations(from: type, on: node.identifier)
+        }
+
+        private func collectViolations(from type: NamedDeclType, on token: TokenSyntax) {
+            if let violation = violates(type) {
+                violations.append(ReasonedRuleViolation(
+                    position: token.positionAfterSkippingLeadingTrivia,
+                    reason: violation.reason,
+                    severity: violation.severity
+                ))
+            }
+        }
+
+        private func violates(_ type: NamedDeclType) -> (reason: String, severity: ViolationSeverity)? {
+            guard !nameConfiguration.shouldExclude(name: type.tokenText), type.name != "_",
+                  let firstCharacter = type.name.first else {
+                return nil
+            }
+            if case .function = type {
+                // Do not perform additional checks.
+            } else {
+                if !nameConfiguration.containsOnlyAllowedCharacters(name: type.name) {
+                    let reason = """
+                        \(type) should only contain alphanumeric and other \
+                        allowed characters
+                        """
+                    return (reason, nameConfiguration.unallowedSymbolsSeverity.severity)
+                }
+
+                if let severity = nameConfiguration.severity(forLength: type.name.count) {
+                    let reason = """
+                        \(type) should be between \
+                        \(nameConfiguration.minLengthThreshold) and \
+                        \(nameConfiguration.maxLengthThreshold) characters long
+                        """
+                    return (reason, severity)
+                }
+            }
+            if nameConfiguration.allowedSymbols.contains(String(firstCharacter)) {
+                return nil
+            }
+            if let caseCheckSeverity = nameConfiguration.validatesStartWithLowercase.severity,
+               !type.isStatic, type.name.isViolatingCase, !isOperator(name: type.name) {
+                let reason = "\(type) should start with a lowercase character"
+                return (reason, caseCheckSeverity)
+            }
+            return nil
+        }
+
+        private func isOperator(name: String) -> Bool {
+            configuration.additionalOperators.contains { name.hasPrefix($0) }
+        }
+    }
+}
+
+private extension IdentifierPatternSyntax {
+    var enclosingVarDecl: VariableDeclSyntax? {
+        let identifierDecl =
+             parent?.as(PatternBindingSyntax.self)?
+            .parent?.as(PatternBindingListSyntax.self)?
+            .parent?.as(VariableDeclSyntax.self)
+        if identifierDecl != nil {
+            return identifierDecl
+        }
+        return
+             parent?.as(TuplePatternElementSyntax.self)?
+            .parent?.as(TuplePatternElementListSyntax.self)?
+            .parent?.as(TuplePatternSyntax.self)?
+            .parent?.as(PatternBindingSyntax.self)?
+            .parent?.as(PatternBindingListSyntax.self)?
+            .parent?.as(VariableDeclSyntax.self)
+    }
+}
+
+private enum NamedDeclType: CustomStringConvertible {
+    case function(name: TokenSyntax, resolvedName: String, isPrivate: Bool)
+    case enumElement(name: TokenSyntax)
+    case variable(name: TokenSyntax, isStatic: Bool, isPrivate: Bool)
+    case closureParameter(name: TokenSyntax)
+
+    var description: String {
+        switch self {
+        case let .function(_, resolvedName, _): "Function name '\(resolvedName)'"
+        case .enumElement: "Enum element name '\(tokenText)'"
+        case .variable: "Variable name '\(tokenText)'"
+        case .closureParameter: "Variable name '\(tokenText)'"
+        }
+    }
+
+    var isStatic: Bool {
+        switch self {
+        case .function, .enumElement, .closureParameter: false
+        case let .variable(_, isStatic, _): isStatic
+        }
+    }
+
+    var isPrivate: Bool {
+        switch self {
+        case let .function(_, _, isPrivate): isPrivate
+        case .enumElement, .closureParameter: false
+        case let .variable(_, _, isPrivate): isPrivate
+        }
+    }
+
+    var tokenText: String {
+        switch self {
+        case let .function(name, _, _): name.text
+        case let .enumElement(name): name.text
+        case let .variable(name, _, _): name.text
+        case let .closureParameter(name): name.text.leadingDollarStripped
+        }
+    }
+
+    var name: String {
+        tokenText
+            .trimmingCharacters(in: CharacterSet(charactersIn: "`"))
+            .strippingLeadingUnderscore(if: isPrivate)
+    }
+}
+
+private extension String {
+    var isViolatingCase: Bool {
+        let firstCharacter = String(self[startIndex])
+        guard firstCharacter.isUppercase() else {
+            return false
+        }
+        guard count > 1 else {
+            return true
+        }
+        let secondCharacter = String(self[index(after: startIndex)])
+        return secondCharacter.isLowercase()
+    }
+
+    func strippingLeadingUnderscore(if isPrivate: Bool) -> Self {
+        isPrivate && first == "_" ? allButFirstCharacter : self
+    }
+
+    var leadingDollarStripped: Self {
+        first == "$" ? allButFirstCharacter : self
+    }
+
+    private var allButFirstCharacter: String {
+        String(self[index(after: startIndex)...])
+    }
+}

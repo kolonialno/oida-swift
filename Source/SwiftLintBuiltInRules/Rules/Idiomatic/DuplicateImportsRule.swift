@@ -1,0 +1,275 @@
+import SwiftSyntax
+
+// MARK: - Rule
+
+struct DuplicateImportsRule: SwiftSyntaxCorrectableRule {
+    var configuration = SeverityConfiguration<Self>(.warning)
+
+    // List of all possible import kinds
+    static let importKinds = [
+        "typealias", "struct", "class",
+        "enum", "protocol", "let",
+        "var", "func",
+    ]
+
+    static let description = RuleDescription(
+        identifier: "duplicate_imports",
+        name: "Duplicate Imports",
+        description: "Imports should be unique",
+        kind: .idiomatic,
+        nonTriggeringExamples: DuplicateImportsRuleExamples.nonTriggeringExamples,
+        triggeringExamples: DuplicateImportsRuleExamples.triggeringExamples,
+        corrections: DuplicateImportsRuleExamples.corrections
+    )
+
+    func validate(file: SwiftLintFile) -> [StyleViolation] {
+        file.duplicateImportsViolationPositions().map { position in
+            StyleViolation(
+                ruleDescription: Self.description,
+                severity: configuration.severity,
+                location: Location(file: file, position: position)
+            )
+        }
+    }
+
+    func makeVisitor(file _: SwiftLintFile) -> ViolationsSyntaxVisitor<ConfigurationType> {
+        queuedFatalError("Unreachable: `validate(file:)` will be used instead")
+    }
+
+    func makeRewriter(file: SwiftLintFile) -> ViolationsSyntaxRewriter<ConfigurationType>? {
+        Rewriter(configuration: configuration, file: file)
+    }
+}
+
+// MARK: - Private
+
+private struct Import {
+    let position: AbsolutePosition
+    let path: [String]
+    let hasAttributes: Bool
+}
+
+private final class ImportPathVisitor: SyntaxVisitor {
+    var importPaths = [Import]()
+    var sortedImportPaths: [Import] {
+        importPaths.sorted { $0.position < $1.position }
+    }
+
+    override func visitPost(_ node: ImportDeclSyntax) {
+        importPaths.append(
+            .init(
+                position: node.positionAfterSkippingLeadingTrivia,
+                path: node.path.map(\.name.text),
+                hasAttributes: node.attributes.contains { $0.is(AttributeSyntax.self) }
+            )
+        )
+    }
+}
+
+private typealias ByteSourceRange = Range<AbsolutePosition>
+
+private final class IfConfigClauseVisitor: SyntaxVisitor {
+    var ifConfigRanges = [ByteSourceRange]()
+
+    override func visitPost(_ node: IfConfigClauseSyntax) {
+        ifConfigRanges.append(node.range)
+    }
+}
+
+private struct ImportPathUsage: Hashable {
+    struct HashableByteSourceRange: Hashable {
+        let value: ByteSourceRange
+
+        func hash(into hasher: inout Hasher) {
+            hasher.combine(value.lowerBound.utf8Offset)
+            hasher.combine(value.length.utf8Length)
+        }
+    }
+
+    init(ifConfigRanges: [ByteSourceRange], path: [String]) {
+        self.hashableIfConfigRanges = ifConfigRanges.map(HashableByteSourceRange.init)
+        self.path = path
+    }
+
+    var ifConfigRanges: [ByteSourceRange] { hashableIfConfigRanges.map(\.value) }
+    let hashableIfConfigRanges: [HashableByteSourceRange]
+    let path: [String]
+}
+
+private let explicitSystemModules = Set([
+    "AddressBook.ABActions",
+    "AddressBook.ABPeoplePicker",
+    "AddressBook.ABPeoplePickerView",
+    "AddressBook.ABPersonPicker",
+    "AddressBook.ABPersonPickerDelegate",
+    "AddressBook.ABPersonView",
+    "AGL.Context",
+    "AGL.GLM",
+    "AGL.Macro",
+    "AGL.Renderers",
+    "AppKit.NSNibConnector",
+    "AppKit.NSNibControlConnector",
+    "AppKit.NSNibOutletConnector",
+    "AudioToolbox.AUCocoaUIView",
+    "AudioToolbox.AudioUnitCarbonView",
+    "AudioToolbox.DefaultAudioOutput",
+    "AudioUnit.AUCocoaUIView",
+    "AudioUnit.AudioUnitCarbonView",
+    "CoreAudio.AudioServerPlugIn",
+    "CoreData.CloudKit",
+    "CoreFoundation.CFPlugInCOM",
+    "CoreImage.CIFilterBuiltins",
+    "CoreMediaIO.CMIOHardwarePlugIn",
+    "CoreMediaIO.CMIOSampleBuffer",
+    "CoreVideo.CVHostTime",
+    "DirectoryService.DirServicesCustom",
+    "ForceFeedback.IOForceFeedbackLib",
+    "Foundation.NSDebug",
+    "GSS.krb5",
+    "IOKit.ata",
+    "IOKit.audio",
+    "IOKit.avc",
+    "IOKit.firewire",
+    "IOKit.graphics",
+    "IOKit.hid",
+    "IOKit.hidsystem",
+    "IOKit.i2c",
+    "IOKit.kext",
+    "IOKit.ndrvsupport",
+    "IOKit.network",
+    "IOKit.ps",
+    "IOKit.pwr_mgt",
+    "IOKit.sbp2",
+    "IOKit.scsi",
+    "IOKit.serial",
+    "IOKit.storage",
+    "IOKit.stream",
+    "IOKit.usb",
+    "IOKit.video",
+    "Kerberos.CredentialsCache2",
+    "Kerberos.locate_plugin",
+    "Kerberos.preauth_plugin",
+    "LDAP.lber",
+    "NetFS.NetFSPlugin",
+    "NetFS.NetFSUtil",
+    "Network.FoundationExtension",
+    "OpenGL.Ext",
+    "OpenGL.GL",
+    "OpenGL.GL3",
+    "OpenGL.GLU",
+    "OpenGL.IOSurface",
+    "OpenGL.Macro",
+    "SceneKit.ModelIO",
+    "Security.AuthorizationPlugin",
+    "Security.AuthSession",
+    "Security.CodeSigning",
+    "Security.eisl",
+    "Security.SecAsn1Coder",
+    "Security.SecAsn1Templates",
+    "Security.SecKey",
+    "Security.SecRandom",
+    "Security.SecureDownload",
+    "Security.SecureTransport",
+    "SecurityFoundation.SFAuthorization",
+    "SystemConfiguration.CaptiveNetwork",
+    "SystemConfiguration.DHCPClientPreferences",
+    "SystemConfiguration.SCDynamicStoreCopyDHCPInfo",
+].map { $0.split(separator: ".").map(String.init) })
+
+private extension SwiftLintFile {
+    func duplicateImportsViolationPositions() -> [AbsolutePosition] {
+        let importPaths = ImportPathVisitor(viewMode: .sourceAccurate)
+            .walk(file: self, handler: \.sortedImportPaths)
+
+        let ifConfigRanges = IfConfigClauseVisitor(viewMode: .sourceAccurate)
+            .walk(file: self, handler: \.ifConfigRanges)
+
+        func ranges(for position: AbsolutePosition) -> [ByteSourceRange] {
+            let positionRange = position..<(position + SourceLength(utf8Length: 1))
+            return ifConfigRanges.filter { $0.overlapsOrTouches(positionRange) }
+        }
+
+        var violationPositions = Set<AbsolutePosition>()
+        var seen = Set<ImportPathUsage>()
+
+        // Exact matches
+        for `import` in importPaths {
+            let path = `import`.path
+            let position = `import`.position
+            let rangesForPosition = ranges(for: position)
+
+            defer {
+                seen.insert(
+                    ImportPathUsage(ifConfigRanges: rangesForPosition, path: path)
+                )
+            }
+
+            guard seen.map(\.path).contains(path) else {
+                continue
+            }
+
+            let intersects = {
+                let otherRangesForPosition = seen
+                    .filter { $0.path == path }
+                    .flatMap(\.ifConfigRanges)
+
+                return rangesForPosition.contains(where: otherRangesForPosition.contains)
+            }
+
+            if rangesForPosition.isEmpty || intersects() {
+                violationPositions.insert(position)
+            }
+        }
+
+        // Partial matches
+        for `import` in importPaths where !`import`.hasAttributes && !explicitSystemModules.contains(`import`.path) {
+            let path = `import`.path
+            let position = `import`.position
+            let violation = importPaths.contains { other in
+                let otherPath = other.path
+                guard path.starts(with: otherPath), otherPath != path else { return false }
+                let rangesForPosition = ranges(for: position)
+                let otherRangesForPosition = ranges(for: other.position)
+                let intersects = rangesForPosition.contains { range in
+                    otherRangesForPosition.contains(range)
+                }
+                return intersects || rangesForPosition.isEmpty
+            }
+            if violation {
+                violationPositions.insert(position)
+            }
+        }
+
+        return violationPositions.sorted()
+    }
+}
+
+private extension DuplicateImportsRule {
+    final class Rewriter: ViolationsSyntaxRewriter<ConfigurationType> {
+        private lazy var importPositionsToRemove = file.duplicateImportsViolationPositions()
+
+        override func visit(_ node: CodeBlockItemListSyntax) -> CodeBlockItemListSyntax {
+            let itemsToRemove = node
+                .enumerated()
+                .filter { !$1.isContainedIn(regions: disabledRegions, locationConverter: locationConverter) }
+                .map { ($0, $1.item.positionAfterSkippingLeadingTrivia) }
+                .filter { importPositionsToRemove.contains($1) }
+                .map { (indexInParent: $0, absolutePosition: $1) }
+            if itemsToRemove.isEmpty {
+                return super.visit(node)
+            }
+            numberOfCorrections += itemsToRemove.count
+            var copy = node
+            for indexInParent in itemsToRemove.map(\.indexInParent).reversed() {
+                let currentIndex = copy.index(copy.startIndex, offsetBy: indexInParent)
+                let nextIndex = copy.index(after: currentIndex)
+                // Preserve leading trivia by moving it to the next item
+                if nextIndex < copy.endIndex {
+                    copy[nextIndex].leadingTrivia = copy[currentIndex].leadingTrivia
+                }
+                copy.remove(at: currentIndex)
+            }
+            return super.visit(copy)
+        }
+    }
+}

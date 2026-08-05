@@ -1,0 +1,54 @@
+name: Release
+
+# Publishes the binary the consuming repositories download. A tag is the trigger, so the version in
+# Source/SwiftLintFramework/Models/Version.swift and the tag cannot drift: the job asserts they match before
+# it builds anything.
+
+on:
+  push:
+    tags: ["[0-9]*"]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Tag to build, e.g. 0.1.0"
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      - name: Check the tag matches the version the binary reports
+        run: |
+          TAG="${{ inputs.tag || github.ref_name }}"
+          DECLARED=$(sed -n 's/.*Self(value: "\(.*\)").*/\1/p' Source/SwiftLintFramework/Models/Version.swift)
+          if [ "$TAG" != "$DECLARED" ]; then
+            echo "::error::Tag $TAG but Version.swift says $DECLARED. A release nobody can identify is worse than no release."
+            exit 1
+          fi
+          echo "VERSION=$TAG" >> "$GITHUB_ENV"
+      # arm64 only: the package builds a macro plugin, and SwiftPM cannot build one for two
+      # architectures in a single invocation. Every Mac here is Apple Silicon, and bin/lint says so
+      # plainly if it ever runs somewhere else.
+      - name: Build
+        run: |
+          swift build -c release --product oida
+          strip -rSTx .build/release/oida
+      - name: Package with the checksum a consumer verifies
+        run: |
+          cd .build/release
+          zip -q "oida-macos-arm64.zip" oida
+          shasum -a 256 oida-macos-arm64.zip | cut -d' ' -f1 > oida-macos-arm64.zip.sha256
+          echo "Built $VERSION: $(cat oida-macos-arm64.zip.sha256)"
+      - name: Publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cd .build/release
+          gh release create "$VERSION" \
+            --title "$VERSION" \
+            --notes "oida, macOS arm64. A consuming repository downloads this and verifies the checksum." \
+            oida-macos-arm64.zip oida-macos-arm64.zip.sha256
