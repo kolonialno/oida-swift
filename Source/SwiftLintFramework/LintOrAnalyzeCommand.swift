@@ -432,13 +432,25 @@ enum SwiftFormat {
     /// that two swift-format versions format this code differently — was never measured. If churn ever shows
     /// up after an Xcode update, that is the measurement, and the answer would be a floor rather than an
     /// exact match.
+    ///
+    /// Linux has no Xcode to ask, so it asks the Swift toolchain instead: the official toolchain images
+    /// ship their own swift-format on `PATH`, tied to the same version already pinned for everything else
+    /// that builds this binary, which is the closest Linux equivalent of "whatever Xcode has."
     private static func formatter() throws -> URL {
+        #if os(macOS)
         let found = try output(
             of: URL(fileURLWithPath: "/usr/bin/xcrun"), arguments: ["--find", "swift-format"])
         guard found.isNotEmpty else {
             throw SwiftLintError.usageError(
                 description: "swift-format not found. It ships inside Xcode, which is what Format File runs.")
         }
+        #else
+        let found = try output(of: URL(fileURLWithPath: "/usr/bin/which"), arguments: ["swift-format"])
+        guard found.isNotEmpty else {
+            throw SwiftLintError.usageError(
+                description: "swift-format not found. It ships with the Swift toolchain.")
+        }
+        #endif
         return URL(fileURLWithPath: found)
     }
 }

@@ -25,3 +25,15 @@ jobs:
         run: swift build --product oida
       - name: Test the rules
         run: swift test --filter "GeneratedTests"
+
+  build-and-test-linux:
+    # We also publish a Linux binary (for CI runners that don't have Xcode), so that build gets the
+    # same per-PR check as the macOS one rather than only being discovered broken at tag time.
+    runs-on: ubuntu-latest
+    container: swift:6.3.2-noble
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      - name: Build
+        run: swift build --product oida
+      - name: Test the rules
+        run: swift test --filter "GeneratedTests"

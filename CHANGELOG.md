@@ -14,6 +14,13 @@
 
 ### Enhancements
 
+* Publish a Linux x86_64 build of `oida` alongside the macOS one, and resolve `swift-format` through
+  `which` instead of `xcrun` when running on Linux — the official Swift toolchain container ships its
+  own `swift-format` and `libsourcekitdInProc.so`, so both the formatting handoff and the SourceKit-based
+  rules work with no bundling. A consuming repository's CI can now lint on a Linux runner instead of
+  competing for the shared, scarce pool of macOS ones.  
+  [Elvis Nunez](https://github.com/3lvis)
+
 * Speed up the `collection_alignment` rule, which read the whole file's
   source lines once per element of a dictionary literal.  
   [Brett-Best](https://github.com/Brett-Best)

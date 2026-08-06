@@ -12,7 +12,7 @@ public struct Version: VersionComparable, Sendable {
     ///
     /// Ours, counted from one: this is oida, whose rules and shape decisions are its own. The number a
     /// consumer pins is this one, so it can never be confused with the SwiftLint release the code grew from.
-    public static let current = Self(value: "0.4.0")
+    public static let current = Self(value: "0.5.0")
 
     /// Public initializer.
     ///

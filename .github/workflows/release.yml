@@ -19,9 +19,12 @@ permissions:
 jobs:
   publish:
     runs-on: macos-15
+    outputs:
+      version: ${{ steps.check.outputs.version }}
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
       - name: Check the tag matches the version the binary reports
+        id: check
         run: |
           TAG="${{ inputs.tag || github.ref_name }}"
           DECLARED=$(sed -n 's/.*Self(value: "\(.*\)").*/\1/p' Source/SwiftLintFramework/Models/Version.swift)
@@ -30,6 +33,7 @@ jobs:
             exit 1
           fi
           echo "VERSION=$TAG" >> "$GITHUB_ENV"
+          echo "version=$TAG" >> "$GITHUB_OUTPUT"
       # arm64 only: the package builds a macro plugin, and SwiftPM cannot build one for two
       # architectures in a single invocation. Every Mac here is Apple Silicon, and bin/lint says so
       # plainly if it ever runs somewhere else.
@@ -50,5 +54,49 @@ jobs:
           cd .build/release
           gh release create "$VERSION" \
             --title "$VERSION" \
-            --notes "oida, macOS arm64. A consuming repository downloads this and verifies the checksum." \
+            --notes "oida. A consuming repository downloads the archive for its platform and verifies the checksum." \
             oida-macos-arm64.zip oida-macos-arm64.zip.sha256
+
+  # A separate job because the build needs the Swift toolchain container (for a deterministic
+  # compiler version, and because it's where swift-format ships for the Linux side of
+  # SwiftFormat.formatter()) but that image has no `gh`, so publishing happens on the bare runner.
+  build-linux:
+    runs-on: ubuntu-latest
+    container: swift:6.3.2-noble
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      - name: Build
+        run: |
+          apt-get update && apt-get install -y zip
+          swift build -c release -Xswiftc -static-stdlib --product oida
+          BIN_PATH=$(swift build -c release -Xswiftc -static-stdlib --show-bin-path)
+          strip -s "$BIN_PATH/oida"
+          mkdir -p artifact
+          cp "$BIN_PATH/oida" artifact/oida
+      - name: Package with the checksum a consumer verifies
+        run: |
+          cd artifact
+          zip -q "oida-linux-x86_64.zip" oida
+          sha256sum oida-linux-x86_64.zip | cut -d' ' -f1 > oida-linux-x86_64.zip.sha256
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: oida-linux-x86_64
+          path: |
+            artifact/oida-linux-x86_64.zip
+            artifact/oida-linux-x86_64.zip.sha256
+          retention-days: 1
+
+  publish-linux:
+    needs: [publish, build-linux]
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      VERSION: ${{ needs.publish.outputs.version }}
+    steps:
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: oida-linux-x86_64
+      - name: Attach the Linux archive to the release
+        run: |
+          gh release upload "$VERSION" oida-linux-x86_64.zip oida-linux-x86_64.zip.sha256 \
+            --repo "${{ github.repository }}"
