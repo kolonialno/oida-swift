@@ -71,6 +71,12 @@
 
 ### Bug Fixes
 
+* Stop `unhandled_throwing_task` reporting a `try` that belongs to a nested closure literal rather than to
+  the task body, so `Task { navigator.navigate(awaiting: { try await resolver.resolve(url) }) }` is quiet.
+  A closure's `throws` is part of its own type; anything it propagates reaches the task through a call the
+  compiler makes the body spell `try`, which the rule still catches.  
+  [Elvis Nunez](https://github.com/3lvis)
+
 * Add an opt-in `allow_explicit_unsafe_unowned` option to let the
   `unowned_variable_capture` rule accept explicit `unowned(unsafe)` captures.  
   [Yurii Bakurov](https://github.com/Yurii201811)

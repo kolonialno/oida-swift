@@ -107,6 +107,16 @@ struct UnhandledThrowingTaskRule: Rule {
               }
             }
             """,
+            """
+            Task {
+              navigator.navigate(awaiting: { try await resolver.resolve(url) })
+            }
+            """,
+            """
+            Task {
+              navigator.navigate { try await resolver.resolve(url) }
+            }
+            """,
         ]),
         triggeringExamples: #examples([
             """
@@ -183,6 +193,11 @@ struct UnhandledThrowingTaskRule: Rule {
               }
             }
             """,
+            """
+            ↓Task {
+              try items.map { try transform($0) }
+            }
+            """,
         ])
     )
 }
@@ -248,15 +263,41 @@ private extension FunctionCallExprSyntax {
     }
 
     var doesThrow: Bool {
-        ThrowsVisitor(viewMode: .sourceAccurate)
+        ThrowsVisitor(viewMode: .sourceAccurate, bodyClosuresOf: self)
             .walk(tree: self, handler: \.doesThrow)
     }
 }
 
 /// If the `doesThrow` property is true after visiting, then this node throws an error that is "unhandled."
 /// Try statements inside a `do` with a `catch` that handles all errors will not be marked as throwing.
+///
+/// A nested closure literal's `try` belongs to that closure's own type, not to the body being visited, so
+/// the walk stops at one. Anything it propagates reaches the body through a call the compiler makes the
+/// body spell `try`, which this visitor still sees.
 private final class ThrowsVisitor: SyntaxVisitor {
     var doesThrow = false
+
+    private let bodyClosureIDs: Set<SyntaxIdentifier>
+
+    init(viewMode: SyntaxTreeViewMode, bodyClosuresOf call: FunctionCallExprSyntax? = nil) {
+        var identifiers: Set<SyntaxIdentifier> = []
+        if let call {
+            if let trailingClosure = call.trailingClosure {
+                identifiers.insert(trailingClosure.id)
+            }
+            for argument in call.arguments {
+                if let closure = argument.expression.as(ClosureExprSyntax.self) {
+                    identifiers.insert(closure.id)
+                }
+            }
+        }
+        bodyClosureIDs = identifiers
+        super.init(viewMode: viewMode)
+    }
+
+    override func visit(_ node: ClosureExprSyntax) -> SyntaxVisitorContinueKind {
+        bodyClosureIDs.contains(node.id) ? .visitChildren : .skipChildren
+    }
 
     override func visit(_ node: DoStmtSyntax) -> SyntaxVisitorContinueKind {
         // No need to continue traversing if we already throw.
@@ -285,22 +326,6 @@ private final class ThrowsVisitor: SyntaxVisitor {
 
         // We don't need to visit children of the `do` node, since all errors are handled by the catch.
         return .skipChildren
-    }
-
-    override func visit(_ node: FunctionCallExprSyntax) -> SyntaxVisitorContinueKind {
-        // No need to continue traversing if we already throw.
-        if doesThrow {
-            return .skipChildren
-        }
-
-        // Result initializers with trailing closures handle thrown errors.
-        if let typeIdentifier = node.calledExpression.as(DeclReferenceExprSyntax.self),
-           typeIdentifier.baseName.text == "Result",
-           node.trailingClosure != nil {
-            return .skipChildren
-        }
-
-        return .visitChildren
     }
 
     override func visitPost(_ node: TryExprSyntax) {
