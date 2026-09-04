@@ -76,6 +76,7 @@ disabled_rules:
   - no_print_in_app_code
   - no_share_link
   - no_timing_guess
+  - no_uiapplication_shared
   - no_user_defaults_in_app_code
   - tienda_api_kit_is_ui_free
   - value_storage_built_only_at_the_root

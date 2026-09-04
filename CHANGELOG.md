@@ -14,6 +14,12 @@
 
 ### Enhancements
 
+* Add an opt-in `no_uiapplication_shared` rule: reaching for the shared application instance reaches
+  around whatever injected seam this code was handed instead — the navigator for a window, a
+  link-opener for a URL, the composition root for anything else. That seam is what a preview, a test or
+  a second window can replace; the singleton cannot be.  
+  [Elvis Nunez](https://github.com/3lvis)
+
 * Add an opt-in `no_timing_guess` rule: a fixed delay before mutating state or presenting, dismissing or
   navigating (`DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { ... }`) is a guess at how long an
   animation or transition takes, not a signal that it finished, and the guess is what breaks first on

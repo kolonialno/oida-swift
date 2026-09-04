@@ -10,6 +10,14 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
+struct UnownedVariableCaptureRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(UnownedVariableCaptureRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
 struct UntypedErrorInCatchRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {

@@ -50,6 +50,14 @@ struct NoTimingGuessRuleGeneratedTests {
 }
 
 @Suite(.rulesRegistered)
+struct NoUIApplicationSharedRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(NoUIApplicationSharedRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
 struct NoUserDefaultsInAppCodeRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -198,13 +206,5 @@ struct PreferKeyPathRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(PreferKeyPathRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct PreferNimbleRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(PreferNimbleRule.description)
     }
 }

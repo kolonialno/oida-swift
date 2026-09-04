@@ -10,6 +10,14 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
+struct SwitchCaseAlignmentRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(SwitchCaseAlignmentRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
 struct SwitchCaseOnNewlineRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -198,13 +206,5 @@ struct UnneededThrowsRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(UnneededThrowsRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct UnownedVariableCaptureRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(UnownedVariableCaptureRule.description)
     }
 }

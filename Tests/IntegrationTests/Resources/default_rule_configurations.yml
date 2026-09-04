@@ -892,6 +892,11 @@ no_timing_guess:
   meta:
     opt-in: true
     correctable: false
+no_uiapplication_shared:
+  severity: warning
+  meta:
+    opt-in: true
+    correctable: false
 no_user_defaults_in_app_code:
   severity: warning
   meta:

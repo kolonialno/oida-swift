@@ -10,6 +10,14 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
+struct PreferNimbleRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(PreferNimbleRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
 struct PreferSelfInStaticReferencesRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -198,13 +206,5 @@ struct RedundantObjcAttributeRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(RedundantObjcAttributeRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct RedundantSelfRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(RedundantSelfRule.description)
     }
 }

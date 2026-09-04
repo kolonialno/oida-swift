@@ -160,6 +160,7 @@ public let builtInRules: [any Rule.Type] = [
     NoShareLinkRule.self,
     NoSpaceInMethodCallRule.self,
     NoTimingGuessRule.self,
+    NoUIApplicationSharedRule.self,
     NoUserDefaultsInAppCodeRule.self,
     NonOptionalStringDataConversionRule.self,
     NonOverridableClassDeclarationRule.self,
