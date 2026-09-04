@@ -98,6 +98,11 @@
 
 ### Bug Fixes
 
+* Stop `no_share_link` matching a member access spelled the same as the type, like an `L10n` key named
+  `ShareLink` — it now only flags a `ShareLink(…)` construction or a `ShareLink` type reference, the two
+  forms the real SwiftUI view can actually take.  
+  [Elvis Nunez](https://github.com/3lvis)
+
 * Stop `unhandled_throwing_task` reporting a `try` that belongs to a nested closure literal rather than to
   the task body, so `Task { navigator.navigate(awaiting: { try await resolver.resolve(url) }) }` is quiet.
   A closure's `throws` is part of its own type; anything it propagates reaches the task through a call the

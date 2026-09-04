@@ -17,6 +17,7 @@ struct NoShareLinkRule: Rule {
         nonTriggeringExamples: #examples([
             "Button(\"Share\") { navigator.navigate(to: .shareSheet(items: [url])) }",
             "struct ShareSheetPresenter {}",
+            "L10n.Referrals.ShareLink.text",
         ]),
         triggeringExamples: #examples([
             "↓ShareLink(item: url) { Label(\"Share\", systemImage: \"square.and.arrow.up\") }",
@@ -32,8 +33,18 @@ struct NoShareLinkRule: Rule {
 
 private extension NoShareLinkRule {
     final class Visitor: ViolationsSyntaxVisitor<ConfigurationType> {
-        override func visitPost(_ node: TokenSyntax) {
-            guard case .identifier("ShareLink") = node.tokenKind else {
+        /// A construction, `ShareLink(…)` — never `someBase.ShareLink(…)`, since it isn't a member.
+        override func visitPost(_ node: FunctionCallExprSyntax) {
+            guard node.calledExpression.as(DeclReferenceExprSyntax.self)?.baseName.text == "ShareLink" else {
+                return
+            }
+            violations.append(node.calledExpression.positionAfterSkippingLeadingTrivia)
+        }
+
+        /// A type reference, `ShareLink` or `ShareLink<Label, Item>` — never a member access, which is
+        /// what a name like `L10n.Referrals.ShareLink.text` is.
+        override func visitPost(_ node: IdentifierTypeSyntax) {
+            guard node.name.text == "ShareLink" else {
                 return
             }
             violations.append(node.positionAfterSkippingLeadingTrivia)
