@@ -104,6 +104,12 @@
 
 ### Bug Fixes
 
+* Stop `--format` handing a document file to `swift-format`. `oida lint --format` merged the Markdown
+  files a document rule covers into the same list it passes to `swift-format check`, which then parsed
+  each one as Swift source and reported its prose as a wall of syntax errors — real violations were
+  still correct underneath, but `--format`'s own noise buried them.  
+  [Elvis Nunez](https://github.com/3lvis)
+
 * Stop `no_share_link` matching a member access spelled the same as the type, like an `L10n` key named
   `ShareLink` — it now only flags a `ShareLink(…)` construction or a `ShareLink` type reference, the two
   forms the real SwiftUI view can actually take.  

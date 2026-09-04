@@ -152,13 +152,15 @@ package struct LintOrAnalyzeCommand {
 
     private static func lintOrAnalyze(_ options: LintOrAnalyzeOptions) async throws {
         let builder = LintOrAnalyzeResultBuilder(options)
-        var files = try await collectViolations(builder: builder)
-        if options.mode == .lint {
-            files += lintDocuments(builder: builder)
-        }
+        let swiftFiles = try await collectViolations(builder: builder)
         if options.format {
             // Linting asks the formatter the same question correcting answers, so one command reports both.
-            try SwiftFormat.check(paths: files.compactMap { $0.path?.path }, quiet: options.quiet)
+            // Document files never reach swift-format — it would parse their Markdown as Swift source.
+            try SwiftFormat.check(paths: swiftFiles.compactMap { $0.path?.path }, quiet: options.quiet)
+        }
+        var files = swiftFiles
+        if options.mode == .lint {
+            files += lintDocuments(builder: builder)
         }
         if let baselineOutputPath = options.writeBaseline ?? builder.configuration.writeBaseline {
             try Baseline(violations: builder.unfilteredViolations).write(toPath: baselineOutputPath)
