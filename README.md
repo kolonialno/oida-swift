@@ -80,6 +80,7 @@ applies to, since a built-in rule takes no path filters from the run.
 | Rule | What it protects |
 |---|---|
 | `no_direct_presentation` | Screens signal through a navigator; SwiftUI's own presentation belongs to the navigation layer |
+| `no_direct_navigation_controller_calls` | A raw `NavigationLink` or a direct push/present/pop/dismiss desyncs the navigator's tracked stack |
 | `navigation_destination_only_in_navigation` | A local routing table is a screen the navigator cannot reach, restore or deep-link to |
 | `no_presentation_state_outside_navigation` | A view reports finishing; it never carries a Bool saying whether it is on screen |
 | `no_legacy_router_readers` | Reading a retired router resolves to a dead default and silently no-ops |
@@ -88,11 +89,27 @@ applies to, since a built-in rule takes no path filters from the run.
 | `keychain_built_only_at_the_root` | A preview or test building its own credential store reads the real device keychain |
 | `value_storage_built_only_at_the_root` | Building storage mid-tree is a global by another name, and splits the table two views watch |
 | `no_print_in_app_code` | Console output is invisible in a shipped build |
+| `no_share_link` | `ShareLink`'s share sheet leaves touch delivery dead for the rest of the session after an interactive dismiss |
+| `no_timing_guess` | A fixed delay before mutating state or presenting/dismissing is a guess about how long an animation takes, and the guess is what breaks first |
 | `no_live_uikit_frame_reads` | Measuring a live UIKit bar from a body-reachable property wedges the view |
 | `multiline_string_opens_on_its_own_line` | Opening a literal inside a call ties its contents to how the call wraps, so a reformat edits the value |
 | `tienda_api_kit_is_ui_free` | A networking layer imports no UI framework |
 | `environment_key_needs_judgement` | An environment key needs a branch that reads a different value than its parent |
 | `environment_value_reassertion` | Re-injecting a value you already read means it was never context |
+
+## A document is linted too, not just Swift
+
+`oida lint` also walks every `.md` file the run covers and checks it against the same voice a PR or a
+ticket is written in. A document rule reads raw prose through `file.contents`, never a syntax tree — a
+Markdown file has no Swift syntax to have — so it runs on a track of its own: `Linter` hands a `.md` file
+only to rules conforming to `DocumentRule`, and hands every other rule everything but `.md` files — each
+file kind reaches only the rules built for it.
+
+| Rule | What it protects |
+|---|---|
+| `document_says_what_is` | A negation is a sentence waiting to be turned around into what actually is |
+| `document_avoids_retired_words` | A retired word promises what a plain description already shows |
+| `document_links_resolve` | A relative link outlives the file it once pointed to, so a reader follows it into nothing |
 
 ## Releases
 

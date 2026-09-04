@@ -41,13 +41,20 @@ extension SwiftLintDev.Rules {
                     "Failed to enumerate rule files in \(rulesDirectory.relativeToCurrentDirectory)."
                 )
             }
-            let rules = enumerator
-                .compactMap { ($0 as? URL)?.lastPathComponent }
-                .filter { $0.hasSuffix("Rule.swift") }
-                .sorted()
+            let ruleURLs = enumerator
+                .compactMap { $0 as? URL }
+                .filter { $0.lastPathComponent.hasSuffix("Rule.swift") }
+                .sorted { $0.lastPathComponent < $1.lastPathComponent }
+            let rules = ruleURLs.map(\.lastPathComponent)
             try registerInRulesList(rules)
-            try registerInTests(rules)
-            try registerInTestsBzl(rules)
+            // Document rules validate a Markdown document's raw text (its examples are prose, not Swift),
+            // so `verifyRule`'s Swift-comment/string-wrapping checks don't apply to them — they get a
+            // hand-written test in Tests/BuiltInRulesTests instead of a generated one.
+            let testableRules = ruleURLs
+                .filter { $0.deletingLastPathComponent().lastPathComponent != "Document" }
+                .map(\.lastPathComponent)
+            try registerInTests(testableRules)
+            try registerInTestsBzl(testableRules)
             try registerInTestReference(adding: newRule)
             print("(Re-)Registered \(rules.count) rules.")
         }

@@ -152,7 +152,10 @@ package struct LintOrAnalyzeCommand {
 
     private static func lintOrAnalyze(_ options: LintOrAnalyzeOptions) async throws {
         let builder = LintOrAnalyzeResultBuilder(options)
-        let files = try await collectViolations(builder: builder)
+        var files = try await collectViolations(builder: builder)
+        if options.mode == .lint {
+            files += lintDocuments(builder: builder)
+        }
         if options.format {
             // Linting asks the formatter the same question correcting answers, so one command reports both.
             try SwiftFormat.check(paths: files.compactMap { $0.path?.path }, quiet: options.quiet)
@@ -210,6 +213,32 @@ package struct LintOrAnalyzeCommand {
             linter.file.invalidateCache()
             builder.report(violations: filteredViolations, realtimeCondition: true)
         }
+    }
+
+    /// Lints the Markdown documents `configuration`'s document rules cover, alongside the Swift files
+    /// `collectViolations` already handled. A document rule only ever runs here, against a `.md` file —
+    /// `Linter` filters every other rule out of this pass, and every document rule out of the Swift pass.
+    @discardableResult
+    private static func lintDocuments(builder: LintOrAnalyzeResultBuilder) -> [SwiftLintFile] {
+        let options = builder.options
+        guard builder.configuration.rules.contains(where: { $0 is any DocumentRule }) else {
+            return []
+        }
+        let files = options.paths.flatMap {
+            builder.configuration.documentFiles(
+                inPath: $0,
+                forceExclude: options.forceExclude,
+                excludeByPrefix: options.useExcludingByPrefix
+            )
+        }
+        for file in files {
+            let linter = Linter(file: file, configuration: builder.configuration, cache: builder.cache)
+            let violations = linter.collect(into: builder.storage).styleViolations(using: builder.storage)
+            builder.unfilteredViolations += violations
+            builder.violations += violations
+            builder.report(violations: violations, realtimeCondition: true)
+        }
+        return files
     }
 
     private static func postProcessViolations(

@@ -10,6 +10,30 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
+struct SwitchCaseOnNewlineRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(SwitchCaseOnNewlineRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct SyntacticSugarRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(SyntacticSugarRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct TestCaseAccessibilityRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(TestCaseAccessibilityRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
 struct TiendaAPIKitIsUIFreeRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -182,29 +206,5 @@ struct UnownedVariableCaptureRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(UnownedVariableCaptureRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct UntypedErrorInCatchRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(UntypedErrorInCatchRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct UnusedClosureParameterRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(UnusedClosureParameterRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct UnusedControlFlowLabelRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(UnusedControlFlowLabelRule.description)
     }
 }

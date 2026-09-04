@@ -138,6 +138,14 @@ struct NimbleOperatorRuleGeneratedTests {
 }
 
 @Suite(.rulesRegistered)
+struct NoDirectNavigationControllerCallsRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(NoDirectNavigationControllerCallsRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
 struct NoDirectPresentationRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -198,13 +206,5 @@ struct NoMagicNumbersRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(NoMagicNumbersRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct NoPresentationStateOutsideNavigationRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(NoPresentationStateOutsideNavigationRule.description)
     }
 }

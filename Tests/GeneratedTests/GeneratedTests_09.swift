@@ -10,6 +10,30 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
+struct RedundantSendableRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(RedundantSendableRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct RedundantSetAccessControlRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(RedundantSetAccessControlRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct RedundantStringEnumValueRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(RedundantStringEnumValueRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
 struct RedundantTypeAnnotationRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -182,29 +206,5 @@ struct SwitchCaseAlignmentRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(SwitchCaseAlignmentRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct SwitchCaseOnNewlineRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(SwitchCaseOnNewlineRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct SyntacticSugarRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(SyntacticSugarRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct TestCaseAccessibilityRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(TestCaseAccessibilityRule.description)
     }
 }

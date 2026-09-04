@@ -10,6 +10,14 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
+struct NoPresentationStateOutsideNavigationRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(NoPresentationStateOutsideNavigationRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
 struct NoPrintInAppCodeRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -18,10 +26,26 @@ struct NoPrintInAppCodeRuleGeneratedTests {
 }
 
 @Suite(.rulesRegistered)
+struct NoShareLinkRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(NoShareLinkRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
 struct NoSpaceInMethodCallRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(NoSpaceInMethodCallRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct NoTimingGuessRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(NoTimingGuessRule.description)
     }
 }
 
@@ -182,29 +206,5 @@ struct PreferNimbleRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(PreferNimbleRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct PreferSelfInStaticReferencesRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(PreferSelfInStaticReferencesRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct PreferSelfTypeOverTypeOfSelfRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(PreferSelfTypeOverTypeOfSelfRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct PreferTypeCheckingRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(PreferTypeCheckingRule.description)
     }
 }

@@ -14,6 +14,33 @@
 
 ### Enhancements
 
+* Add an opt-in `no_timing_guess` rule: a fixed delay before mutating state or presenting, dismissing or
+  navigating (`DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { ... }`) is a guess at how long an
+  animation or transition takes, not a signal that it finished, and the guess is what breaks first on
+  another device or a slower run.  
+  [Elvis Nunez](https://github.com/3lvis)
+
+* Lint Markdown documents, not just Swift source. `oida lint` now walks every `.md` file the run covers
+  and runs a new `DocumentRule` category against it, kept on a track structurally separate from
+  Swift-syntax rules — a document rule only ever sees a `.md` file, and a Swift rule never does. Three
+  opt-in rules ship with it: `document_says_what_is` (a negation is a sentence waiting to be turned
+  around into what actually is), `document_avoids_retired_words` (a retired word promises what a plain
+  description already shows), and `document_links_resolve` (a relative link outlives the file it once
+  pointed to).  
+  [Elvis Nunez](https://github.com/3lvis)
+
+* Add an opt-in `no_direct_navigation_controller_calls` rule, and extend `no_direct_presentation` to
+  catch `.alert` and `.confirmationDialog`. A raw `NavigationLink`, a direct
+  push/present/pop/dismiss, or an untracked alert desyncs the navigator's tracked stack the same way an
+  untracked sheet already did.  
+  [Elvis Nunez](https://github.com/3lvis)
+
+* Add an opt-in `no_share_link` rule. `ShareLink` presents its share sheet through Apple's remote-scene
+  sharing bridge, and an interactive (swipe-down) dismissal of that sheet leaves the window's touch
+  delivery dead for the rest of the session — present through the navigator's own share sheet
+  destination instead.  
+  [Elvis Nunez](https://github.com/3lvis)
+
 * Publish a Linux x86_64 build of `oida` alongside the macOS one, and resolve `swift-format` through
   `which` instead of `xcrun` when running on Linux — the official Swift toolchain container ships its
   own `swift-format` and `libsourcekitdInProc.so`, so both the formatting handoff and the SourceKit-based

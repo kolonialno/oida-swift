@@ -10,6 +10,30 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
+struct UntypedErrorInCatchRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(UntypedErrorInCatchRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct UnusedClosureParameterRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(UnusedClosureParameterRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct UnusedControlFlowLabelRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(UnusedControlFlowLabelRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
 struct UnusedDeclarationRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {

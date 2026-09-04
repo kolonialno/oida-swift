@@ -269,7 +269,16 @@ public struct Linter {
         self.configuration = configuration
         self.compilerArguments = compilerArguments
 
+        // A document rule reads Markdown prose, not Swift syntax, so it only ever runs against a Markdown
+        // file, and every other rule only ever runs against everything else — the two file kinds stay on
+        // structurally separate tracks all the way down to this one filter.
         let rules = configuration.rules.filter { rule in
+            if file.path?.pathExtension == "md" {
+                return rule is any DocumentRule
+            }
+            guard !(rule is any DocumentRule) else {
+                return false
+            }
             if compilerArguments.isEmpty {
                 return !(rule is any AnalyzerRule)
             }

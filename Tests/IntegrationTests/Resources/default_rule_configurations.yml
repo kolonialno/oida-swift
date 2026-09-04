@@ -244,6 +244,21 @@ discouraged_optional_collection:
   meta:
     opt-in: true
     correctable: false
+document_avoids_retired_words:
+  severity: warning
+  meta:
+    opt-in: true
+    correctable: false
+document_links_resolve:
+  severity: warning
+  meta:
+    opt-in: true
+    correctable: false
+document_says_what_is:
+  severity: warning
+  meta:
+    opt-in: true
+    correctable: false
 duplicate_conditions:
   severity: error
   meta:
@@ -803,6 +818,11 @@ nimble_operator:
   meta:
     opt-in: true
     correctable: true
+no_direct_navigation_controller_calls:
+  severity: warning
+  meta:
+    opt-in: true
+    correctable: false
 no_direct_presentation:
   severity: warning
   meta:
@@ -857,11 +877,21 @@ no_print_in_app_code:
   meta:
     opt-in: true
     correctable: false
+no_share_link:
+  severity: warning
+  meta:
+    opt-in: true
+    correctable: false
 no_space_in_method_call:
   severity: warning
   meta:
     opt-in: false
     correctable: true
+no_timing_guess:
+  severity: warning
+  meta:
+    opt-in: true
+    correctable: false
 no_user_defaults_in_app_code:
   severity: warning
   meta:

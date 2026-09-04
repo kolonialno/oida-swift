@@ -55,7 +55,8 @@ private struct CacheTestHelper {
 
 private class TestFileManager: LintableFileManager {
     fileprivate func filesToLint(inPath _: URL,
-                                 excluder _: Excluder) -> [URL] {
+                                 excluder _: Excluder,
+                                 extension _: String) -> [URL] {
         []
     }
 

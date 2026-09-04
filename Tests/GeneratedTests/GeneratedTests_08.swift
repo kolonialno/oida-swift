@@ -10,6 +10,30 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
+struct PreferSelfInStaticReferencesRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(PreferSelfInStaticReferencesRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct PreferSelfTypeOverTypeOfSelfRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(PreferSelfTypeOverTypeOfSelfRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct PreferTypeCheckingRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(PreferTypeCheckingRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
 struct PreferZeroOverExplicitInitRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -182,29 +206,5 @@ struct RedundantSelfRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(RedundantSelfRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct RedundantSendableRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(RedundantSendableRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct RedundantSetAccessControlRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(RedundantSetAccessControlRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct RedundantStringEnumValueRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(RedundantStringEnumValueRule.description)
     }
 }

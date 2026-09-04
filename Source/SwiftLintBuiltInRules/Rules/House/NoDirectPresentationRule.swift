@@ -31,6 +31,8 @@ struct NoDirectPresentationRule: Rule {
             "view↓.fullScreenCover(isPresented: $isShown) { Detail() }",
             "view↓.popover(isPresented: $isShown) { Detail() }",
             "view↓.sheet(item: $selected) { Detail(item: $0) }",
+            "view↓.alert(\"Title\", isPresented: $isShown) { Button(\"OK\") {} }",
+            "view↓.confirmationDialog(\"Title\", isPresented: $isShown) { Button(\"OK\") {} }",
             """
                 view
                     ↓.sheet(
@@ -47,7 +49,7 @@ struct NoDirectPresentationRule: Rule {
 
 private extension NoDirectPresentationRule {
     /// A presentation modifier bound to state rather than to content, which is the navigator's job.
-    static let modifiers: Set<String> = ["sheet", "fullScreenCover", "popover"]
+    static let modifiers: Set<String> = ["sheet", "fullScreenCover", "popover", "alert", "confirmationDialog"]
     static let stateLabels: Set<String> = ["isPresented", "item"]
 
     final class Visitor: ViolationsSyntaxVisitor<ConfigurationType> {
@@ -61,8 +63,10 @@ private extension NoDirectPresentationRule {
         override func visitPost(_ node: FunctionCallExprSyntax) {
             guard let name = node.calledMemberName,
                 NoDirectPresentationRule.modifiers.contains(name),
-                let label = node.firstArgumentLabel,
-                NoDirectPresentationRule.stateLabels.contains(label),
+                node.arguments.contains(where: { argument in
+                    guard let label = argument.label?.text else { return false }
+                    return NoDirectPresentationRule.stateLabels.contains(label)
+                }),
                 let position = node.calledMemberPeriodPosition
             else {
                 return
