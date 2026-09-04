@@ -50,7 +50,7 @@ struct ConfigurationTests { // oida:disable:this type_body_length
     func initWithRelativePathAndRootPath() {
         let expectedConfig = Constants.Config._0
 
-        let config = Configuration(configurationFiles: [".swiftlint.yml".url()])
+        let config = Configuration(configurationFiles: [".oida.yml".url()])
 
         #expect(config.rulesWrapper.disabledRuleIdentifiers == expectedConfig.rulesWrapper.disabledRuleIdentifiers)
         #expect(config.includedPaths == expectedConfig.includedPaths)
