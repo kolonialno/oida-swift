@@ -34,6 +34,14 @@ struct NoShareLinkRuleGeneratedTests {
 }
 
 @Suite(.rulesRegistered)
+struct NoSingleUseVoidFunctionsRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(NoSingleUseVoidFunctionsRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
 struct NoSpaceInMethodCallRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -198,13 +206,5 @@ struct PreferConditionListRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(PreferConditionListRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct PreferKeyPathRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(PreferKeyPathRule.description)
     }
 }

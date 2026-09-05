@@ -14,6 +14,18 @@
 
 ### Enhancements
 
+* Add an opt-in `no_single_use_void_functions` rule: a function that returns nothing states nothing in
+  its signature about what it touches, so a reader learns what it did by reading it. When it is also
+  reachable from nowhere but its own file and called from one place, the jump buys nothing, and the
+  statements read better where they run. It counts call sites within the file, so it takes the functions
+  the file is guaranteed to hold every caller of: `private` and `fileprivate` ones, and the
+  internal-by-keyword ones inside a private type, a private extension or another function. Functions that
+  return a value are left alone — the name stands for the value, and it survives only as long as the
+  function. So are `@objc`/`@IBAction` targets a selector reaches, overrides, overloaded names, members
+  of a private type that conforms to a protocol, and functions nothing calls at all, which
+  `unused_declaration` reports.  
+  [Elvis Nunez](https://github.com/3lvis)
+
 * Add an opt-in `no_uiapplication_shared` rule: reaching for the shared application instance reaches
   around whatever injected seam this code was handed instead — the navigator for a window, a
   link-opener for a URL, the composition root for anything else. That seam is what a preview, a test or

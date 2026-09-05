@@ -158,6 +158,7 @@ public let builtInRules: [any Rule.Type] = [
     NoPresentationStateOutsideNavigationRule.self,
     NoPrintInAppCodeRule.self,
     NoShareLinkRule.self,
+    NoSingleUseVoidFunctionsRule.self,
     NoSpaceInMethodCallRule.self,
     NoTimingGuessRule.self,
     NoUIApplicationSharedRule.self,

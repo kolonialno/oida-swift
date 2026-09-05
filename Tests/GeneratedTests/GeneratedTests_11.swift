@@ -10,6 +10,14 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
+struct UnneededThrowsRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(UnneededThrowsRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
 struct UnownedVariableCaptureRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -198,13 +206,5 @@ struct XCTSpecificMatcherRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(XCTSpecificMatcherRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct YodaConditionRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(YodaConditionRule.description)
     }
 }

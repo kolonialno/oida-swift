@@ -10,6 +10,14 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
+struct PreferKeyPathRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(PreferKeyPathRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
 struct PreferNimbleRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -198,13 +206,5 @@ struct RedundantNilCoalescingRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(RedundantNilCoalescingRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct RedundantObjcAttributeRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(RedundantObjcAttributeRule.description)
     }
 }
