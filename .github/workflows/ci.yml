@@ -16,20 +16,23 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-and-test:
-    # macOS because the binary we publish is a macOS one, so the thing tested is the thing shipped.
+  build:
+    # The published binary is a macOS one, and some of what it does is macOS-only — `--format` finds
+    # swift-format inside Xcode here and in the toolchain on Linux — so this build is the only place that
+    # code compiles before a tag. The tests do not run here: they are rule tests, identical on both
+    # platforms, and on this runner they deadlock in swiftpm-testing until the six-hour cap kills the job.
     runs-on: macos-15
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
       - name: Build
         run: swift build --product oida
-      - name: Test the rules
-        run: swift test --filter "GeneratedTests"
 
   build-and-test-linux:
-    # We also publish a Linux binary (for CI runners that don't have Xcode), so that build gets the
-    # same per-PR check as the macOS one rather than only being discovered broken at tag time.
+    # We also publish a Linux binary (for CI runners that don't have Xcode), and this is where the rules
+    # are tested, since a rule behaves the same on either platform.
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     container: swift:6.3.2-noble
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
