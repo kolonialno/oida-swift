@@ -10,6 +10,22 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
+struct UnneededParenthesesInClosureArgumentRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(UnneededParenthesesInClosureArgumentRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct UnneededSynthesizedInitializerRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(UnneededSynthesizedInitializerRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
 struct UnneededThrowsRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -190,21 +206,5 @@ struct WeakDelegateRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(WeakDelegateRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct XCTFailMessageRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(XCTFailMessageRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct XCTSpecificMatcherRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(XCTSpecificMatcherRule.description)
     }
 }

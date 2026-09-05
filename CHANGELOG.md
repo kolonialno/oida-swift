@@ -14,6 +14,22 @@
 
 ### Enhancements
 
+* Add an opt-in `comment_adds_no_word` rule: when every word of a comment already appears in the code
+  beneath it, a reader who reads the code learns nothing from having read the comment first. It compares
+  the comment's words against the declaration or statement it sits above, splitting identifiers into
+  words (`UIDevice` is `UI` and `Device`), and fires only when the comment introduces none of its own. It
+  leaves alone anything carrying intent or a pointer — `TODO`, `FIXME`, a lint directive, a bare link, a
+  parameter list — and is deliberately not correctable: the comments it finds are worth a glance before
+  they go.  
+  [Elvis Nunez](https://github.com/3lvis)
+
+* Add an opt-in `no_mark_comments` rule: a `// MARK:` banner names a section the declarations below it
+  already name, and it is maintained by hand while everything around it moves. Xcode's jump bar reads
+  them, so this is a decision rather than a reading of the field — Airbnb's style guide requires a MARK
+  above every type and Google's endorses them for grouping. A file that needs section headers to be
+  navigable is a file to split. Correctable: `--fix` deletes the line.  
+  [Elvis Nunez](https://github.com/3lvis)
+
 * Add an opt-in `no_single_use_void_functions` rule: a function that returns nothing states nothing in
   its signature about what it touches, so a reader learns what it did by reading it. When it is also
   reachable from nowhere but its own file and called from one place, the jump buys nothing, and the

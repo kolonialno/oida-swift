@@ -10,6 +10,22 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
+struct NoMagicNumbersRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(NoMagicNumbersRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct NoMarkCommentsRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(NoMarkCommentsRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
 struct NoPresentationStateOutsideNavigationRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -190,21 +206,5 @@ struct PeriodSpacingRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(PeriodSpacingRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct PreferAssetSymbolsRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(PreferAssetSymbolsRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct PreferConditionListRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(PreferConditionListRule.description)
     }
 }

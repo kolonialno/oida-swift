@@ -10,6 +10,22 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
+struct XCTFailMessageRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(XCTFailMessageRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct XCTSpecificMatcherRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(XCTSpecificMatcherRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
 struct YodaConditionRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {

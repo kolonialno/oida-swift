@@ -118,6 +118,11 @@ comma_inheritance:
   meta:
     opt-in: true
     correctable: true
+comment_adds_no_word:
+  severity: warning
+  meta:
+    opt-in: true
+    correctable: false
 comment_spacing:
   severity: warning
   meta:
@@ -867,6 +872,11 @@ no_magic_numbers:
   meta:
     opt-in: true
     correctable: false
+no_mark_comments:
+  severity: warning
+  meta:
+    opt-in: true
+    correctable: true
 no_presentation_state_outside_navigation:
   severity: warning
   meta:
