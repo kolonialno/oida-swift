@@ -10,6 +10,14 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
+struct RedundantObjcAttributeRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(RedundantObjcAttributeRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
 struct RedundantSelfRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -198,13 +206,5 @@ struct StrongIBOutletRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(StrongIBOutletRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct SuperfluousElseRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(SuperfluousElseRule.description)
     }
 }

@@ -52,9 +52,10 @@ disabled_rules:
   - type_contents_order
   - variable_shadowing
   - vertical_whitespace_between_cases
-  # The house rules in Rules/House belong to the consumer, not to this codebase — they encode one app's
-  # layering, navigation and storage boundaries. `opt_in_rules: all` above would otherwise enforce them
-  # here, where they mean nothing: 655 violations, and the integration test that lints this project fails.
+  # The house rules in Rules/House belong to the consumer, not to this codebase — most encode one app's
+  # layering, navigation and storage boundaries, and `no_single_use_void_functions` reads a style the inherited
+  # SwiftLint code was never written to. `opt_in_rules: all` above would otherwise enforce them here, and
+  # the integration test that lints this project fails on what they find.
   # `grouped_imports` has to be among them for a second reason — it disagrees with `sorted_imports`, which
   # `all` also enables, and a file corrected by both ends up with its header comment moved below an import.
   - document_avoids_retired_words
@@ -75,6 +76,7 @@ disabled_rules:
   - no_presentation_state_outside_navigation
   - no_print_in_app_code
   - no_share_link
+  - no_single_use_void_functions
   - no_timing_guess
   - no_uiapplication_shared
   - no_user_defaults_in_app_code

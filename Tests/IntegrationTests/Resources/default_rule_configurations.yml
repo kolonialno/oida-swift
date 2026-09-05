@@ -882,6 +882,11 @@ no_share_link:
   meta:
     opt-in: true
     correctable: false
+no_single_use_void_functions:
+  severity: warning
+  meta:
+    opt-in: true
+    correctable: false
 no_space_in_method_call:
   severity: warning
   meta:
