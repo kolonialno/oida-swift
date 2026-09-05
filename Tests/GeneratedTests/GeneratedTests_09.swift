@@ -10,6 +10,22 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
+struct RedundantFinalRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(RedundantFinalRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct RedundantNilCoalescingRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(RedundantNilCoalescingRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
 struct RedundantObjcAttributeRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -190,21 +206,5 @@ struct StaticOverFinalClassRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(StaticOverFinalClassRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct StrictFilePrivateRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(StrictFilePrivateRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct StrongIBOutletRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(StrongIBOutletRule.description)
     }
 }

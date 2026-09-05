@@ -10,6 +10,14 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
+struct MultilineArgumentsBracketsRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(MultilineArgumentsBracketsRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
 struct MultilineArgumentsRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -198,13 +206,5 @@ struct NoLiveUIKitFrameReadsRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(NoLiveUIKitFrameReadsRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct NoMagicNumbersRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(NoMagicNumbersRule.description)
     }
 }

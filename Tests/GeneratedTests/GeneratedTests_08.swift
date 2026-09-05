@@ -10,6 +10,22 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
+struct PreferAssetSymbolsRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(PreferAssetSymbolsRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct PreferConditionListRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(PreferConditionListRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
 struct PreferKeyPathRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -190,21 +206,5 @@ struct RedundantDiscardableLetRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(RedundantDiscardableLetRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct RedundantFinalRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(RedundantFinalRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct RedundantNilCoalescingRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(RedundantNilCoalescingRule.description)
     }
 }

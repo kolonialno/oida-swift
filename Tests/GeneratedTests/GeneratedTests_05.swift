@@ -10,6 +10,14 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
+struct IsDisjointRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(IsDisjointRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
 struct JoinedDefaultParameterRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -198,13 +206,5 @@ struct ModifierOrderRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(ModifierOrderRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct MultilineArgumentsBracketsRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(MultilineArgumentsBracketsRule.description)
     }
 }

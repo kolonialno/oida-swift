@@ -58,6 +58,7 @@ disabled_rules:
   # the integration test that lints this project fails on what they find.
   # `grouped_imports` has to be among them for a second reason — it disagrees with `sorted_imports`, which
   # `all` also enables, and a file corrected by both ends up with its header comment moved below an import.
+  - comment_adds_no_word
   - document_avoids_retired_words
   - document_links_resolve
   - document_says_what_is
@@ -73,6 +74,7 @@ disabled_rules:
   - no_direct_presentation
   - no_legacy_router_readers
   - no_live_uikit_frame_reads
+  - no_mark_comments
   - no_presentation_state_outside_navigation
   - no_print_in_app_code
   - no_share_link

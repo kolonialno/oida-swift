@@ -10,6 +10,22 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
+struct StrictFilePrivateRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(StrictFilePrivateRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct StrongIBOutletRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(StrongIBOutletRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
 struct SuperfluousElseRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -190,21 +206,5 @@ struct UnneededOverrideRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(UnneededOverrideRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct UnneededParenthesesInClosureArgumentRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(UnneededParenthesesInClosureArgumentRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct UnneededSynthesizedInitializerRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(UnneededSynthesizedInitializerRule.description)
     }
 }
