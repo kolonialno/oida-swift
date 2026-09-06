@@ -93,7 +93,7 @@ applies to, since a built-in rule takes no path filters from the run.
 | `no_timing_guess` | A fixed delay before mutating state or presenting/dismissing is a guess about how long an animation takes, and the guess is what breaks first |
 | `comment_adds_no_word` | Every word of the comment is already in the code beneath it, so reading it first teaches the reader nothing |
 | `no_mark_comments` | A banner names a section the declarations below it already name, and it is kept by hand while they move |
-| `no_single_use_void_functions` | A function returning nothing says nothing about what it touches, so one only this file can reach, called from one place, is a jump that buys the reader nothing |
+| `no_single_use_void_functions` | A function returning nothing says nothing about what it touches, so one called once from the file that declares it is a jump that buys the reader nothing |
 | `no_uiapplication_shared` | Reaching for the shared application instance reaches around whatever injected seam this code was handed instead — a seam a preview, a test or a second window can replace, and the singleton cannot |
 | `no_live_uikit_frame_reads` | Measuring a live UIKit bar from a body-reachable property wedges the view |
 | `multiline_string_opens_on_its_own_line` | Opening a literal inside a call ties its contents to how the call wraps, so a reformat edits the value |

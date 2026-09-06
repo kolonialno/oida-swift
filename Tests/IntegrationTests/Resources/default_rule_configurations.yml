@@ -894,6 +894,7 @@ no_share_link:
     correctable: false
 no_single_use_void_functions:
   severity: warning
+  test_path_fragments: ["Tests/", "UITests", "Tests.swift", "TestHelpers/", "Spec.swift"]
   meta:
     opt-in: true
     correctable: false
