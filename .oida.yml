@@ -71,6 +71,7 @@ disabled_rules:
   - multiline_string_opens_on_its_own_line
   - navigation_destination_only_in_navigation
   - no_direct_navigation_controller_calls
+  - no_doc_comments
   - no_direct_presentation
   - no_legacy_router_readers
   - no_live_uikit_frame_reads

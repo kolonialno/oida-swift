@@ -10,6 +10,14 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
+struct RedundantDiscardableLetRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(RedundantDiscardableLetRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
 struct RedundantFinalRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -198,13 +206,5 @@ struct StaticOperatorRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(StaticOperatorRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct StaticOverFinalClassRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(StaticOverFinalClassRule.description)
     }
 }

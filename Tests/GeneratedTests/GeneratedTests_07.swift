@@ -10,6 +10,14 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
+struct NoLiveUIKitFrameReadsRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(NoLiveUIKitFrameReadsRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
 struct NoMagicNumbersRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -198,13 +206,5 @@ struct PatternMatchingKeywordsRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(PatternMatchingKeywordsRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct PeriodSpacingRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(PeriodSpacingRule.description)
     }
 }

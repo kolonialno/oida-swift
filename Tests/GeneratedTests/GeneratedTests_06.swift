@@ -162,6 +162,14 @@ struct NoDirectPresentationRuleGeneratedTests {
 }
 
 @Suite(.rulesRegistered)
+struct NoDocCommentsRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(NoDocCommentsRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
 struct NoEmptyBlockRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -198,13 +206,5 @@ struct NoLegacyRouterReadersRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(NoLegacyRouterReadersRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct NoLiveUIKitFrameReadsRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(NoLiveUIKitFrameReadsRule.description)
     }
 }
