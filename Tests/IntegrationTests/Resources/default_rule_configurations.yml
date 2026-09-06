@@ -876,7 +876,7 @@ no_mark_comments:
   severity: warning
   meta:
     opt-in: true
-    correctable: true
+    correctable: false
 no_presentation_state_outside_navigation:
   severity: warning
   meta:
