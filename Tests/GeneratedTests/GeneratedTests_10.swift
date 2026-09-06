@@ -10,6 +10,14 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
+struct StaticOverFinalClassRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(StaticOverFinalClassRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
 struct StrictFilePrivateRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -198,13 +206,5 @@ struct UnneededEscapingRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(UnneededEscapingRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct UnneededOverrideRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(UnneededOverrideRule.description)
     }
 }

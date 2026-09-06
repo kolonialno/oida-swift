@@ -10,6 +10,14 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
+struct PeriodSpacingRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(PeriodSpacingRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
 struct PreferAssetSymbolsRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -198,13 +206,5 @@ struct ReduceIntoRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(ReduceIntoRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct RedundantDiscardableLetRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(RedundantDiscardableLetRule.description)
     }
 }

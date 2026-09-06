@@ -14,6 +14,17 @@
 
 ### Enhancements
 
+* Add an opt-in `no_doc_comments` rule: a doc comment's job is to describe the declaration it sits on,
+  which is restatement by purpose. The ones that carry something the code cannot say read exactly like
+  the ones that do not — same length, same shape, same position — so measuring 45 of them by hand
+  separated them and no parser could. This cuts all of them rather than none, deliberately: better to
+  cut too much than too little. Ordinary `//` comments are untouched, because those are mostly the notes
+  that stop someone deleting code that only looks wrong. Not correctable — 1,200 deletions is a job
+  somebody does on purpose.  
+  [Elvis Nunez](https://github.com/3lvis)
+
+
+
 * `no_mark_comments` is no longer correctable. `--fix` walks the whole repository, so a rule that deletes
   a line everywhere lands every one of those files in whichever commit runs it first — 88 files arrived
   in an unrelated two-line change that way, and were noticed only by reading `git status` after

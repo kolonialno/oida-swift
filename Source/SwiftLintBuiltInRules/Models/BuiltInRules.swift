@@ -149,6 +149,7 @@ public let builtInRules: [any Rule.Type] = [
     NimbleOperatorRule.self,
     NoDirectNavigationControllerCallsRule.self,
     NoDirectPresentationRule.self,
+    NoDocCommentsRule.self,
     NoEmptyBlockRule.self,
     NoExtensionAccessModifierRule.self,
     NoFallthroughOnlyRule.self,

@@ -833,6 +833,11 @@ no_direct_presentation:
   meta:
     opt-in: true
     correctable: false
+no_doc_comments:
+  severity: warning
+  meta:
+    opt-in: true
+    correctable: false
 no_empty_block:
   severity: warning
   disabled_block_types: []
