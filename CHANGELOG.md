@@ -14,6 +14,14 @@
 
 ### Enhancements
 
+* `no_mark_comments` is no longer correctable. `--fix` walks the whole repository, so a rule that deletes
+  a line everywhere lands every one of those files in whichever commit runs it first — 88 files arrived
+  in an unrelated two-line change that way, and were noticed only by reading `git status` after
+  committing. Sweeping the banners is a job somebody does on purpose, not a side effect of formatting.  
+  [Elvis Nunez](https://github.com/3lvis)
+
+
+
 * `no_single_use_void_functions` counts callers across the whole run rather than reading one file, and
   access level has left the rule. What made it true was never `private` — it was that the caller and the
   callee share a file, so the reader pays a jump. A call from another file is an interface across a
