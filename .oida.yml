@@ -115,6 +115,7 @@ file_name:
     # type to be named after.
     - GroupedImports.swift
     - HouseSwiftUISyntax.swift
+    - SingleUseFacts.swift
     - StandardHigherOrderFunctions.swift
     - DocumentVoice.swift
   excluded_paths:

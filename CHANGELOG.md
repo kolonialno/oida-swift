@@ -14,6 +14,17 @@
 
 ### Enhancements
 
+* `no_single_use_void_functions` now counts callers across the whole run by resolving each call's
+  receiver — `screen.resolve(into: error)` is `ScreenNavigator.resolve(into:)` because `screen` came from
+  `navigator.navigator(for:)`, whose return type is declared in another file. Properties typed by their
+  initializer, nested types, protocol witnesses, overloads by label, and Swift's preference for the
+  exact-arity overload are all resolved from the syntax tree alone; a receiver the parser cannot type
+  withholds the verdict rather than guessing. Measured against the compiler's index of tienda-ios: 99.5%
+  of the 619 functions it flags have exactly one production caller, and it finds 91% of them; the misses
+  are overloads told apart only by argument type and `$0` closures. Tests are not counted as callers, so
+  a function whose only other reader is a test is still flagged. Whole-repository run: about 4 seconds.  
+  [Elvis Nunez](https://github.com/3lvis)
+
 * Add an opt-in `no_doc_comments` rule: a doc comment's job is to describe the declaration it sits on,
   which is restatement by purpose. The ones that carry something the code cannot say read exactly like
   the ones that do not — same length, same shape, same position — so measuring 45 of them by hand
