@@ -14,6 +14,19 @@
 
 ### Enhancements
 
+* `no_single_use_void_functions` counts callers across the whole run rather than reading one file, and
+  access level has left the rule. What made it true was never `private` — it was that the caller and the
+  callee share a file, so the reader pays a jump. A call from another file is an interface across a
+  layer, and inlining it would push logic the wrong way; a call from a test neither saves a function nor
+  condemns it, so test targets are out of the count (`test_path_fragments` says which paths those are).
+  Measured against a compiler index store on a 1,800-file app: 239 violations, 223 of them known to the
+  index, 223 confirmed. The old shape read 228 of the 627 single-call-site void functions and could be
+  escaped by widening `private` to `internal`, which enlarged a type's API to dodge a readability rule.
+  Widening now changes nothing, because the caller has not moved.  
+  [Elvis Nunez](https://github.com/3lvis)
+
+
+
 * Add an opt-in `comment_adds_no_word` rule: when every word of a comment already appears in the code
   beneath it, a reader who reads the code learns nothing from having read the comment first. It compares
   the comment's words against the declaration or statement it sits above, splitting identifiers into
