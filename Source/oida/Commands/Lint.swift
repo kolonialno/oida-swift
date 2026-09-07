@@ -14,10 +14,6 @@ extension SwiftLint {
         var quiet = false
         @Flag(help: "Don't print deprecation warnings.")
         var silenceDeprecationWarnings = false
-        @Option(help: "The directory of the cache used when linting.")
-        var cachePath: String?
-        @Flag(help: "Ignore cache when linting.")
-        var noCache = false
         @Flag(help: "Run all rules, even opt-in and disabled ones, ignoring `only_rules`.")
         var enableAllRules = false
         @Flag(
@@ -56,8 +52,8 @@ extension SwiftLint {
                 quiet: quiet,
                 output: common.output,
                 progress: common.progress,
-                cachePath: cachePath,
-                ignoreCache: noCache,
+                cachePath: nil,
+                ignoreCache: true,
                 enableAllRules: enableAllRules,
                 onlyRule: common.onlyRule,
                 autocorrect: common.fix,
