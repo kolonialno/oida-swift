@@ -2,21 +2,10 @@ import Foundation
 
 // MARK: - CustomRulesConfiguration
 
-package struct CustomRulesConfiguration: RuleConfiguration, CacheDescriptionProvider {
+package struct CustomRulesConfiguration: RuleConfiguration {
     package typealias Parent = CustomRules
 
     package var parameterDescription: RuleConfigurationDescription? { RuleConfigurationOption.noOptions }
-    package var cacheDescription: String {
-        let configsDescription = customRuleConfigurations
-            .sorted { $0.identifier < $1.identifier }
-            .map(\.cacheDescription)
-            .joined(separator: "\n")
-
-        if let defaultMode = defaultExecutionMode {
-            return "default_execution_mode:\(defaultMode.rawValue)\n\(configsDescription)"
-        }
-        return configsDescription
-    }
     var customRuleConfigurations = [RegexConfiguration<Parent>]()
     var defaultExecutionMode: RegexConfiguration<Parent>.ExecutionMode?
 
@@ -52,13 +41,9 @@ package struct CustomRulesConfiguration: RuleConfiguration, CacheDescriptionProv
 // MARK: - CustomRules
 
 @DisabledWithoutSourceKit
-package struct CustomRules: Rule, CacheDescriptionProvider, ConditionallySourceKitFree {
+package struct CustomRules: Rule, ConditionallySourceKitFree {
     package init() {
         // Nothing to initialize.
-    }
-
-    package var cacheDescription: String {
-        configuration.cacheDescription
     }
 
     var customRuleIdentifiers: [String] {

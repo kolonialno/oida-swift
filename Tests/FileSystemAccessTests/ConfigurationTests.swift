@@ -67,8 +67,7 @@ struct ConfigurationTests { // oida:disable:this type_body_length
     func enableAllRulesConfiguration() throws {
         let configuration = try Configuration(
             dict: [:],
-            enableAllRules: true,
-            cachePath: nil
+            enableAllRules: true
         )
 
         #expect(configuration.rules.count == RuleRegistry.shared.list.list.count)
@@ -78,8 +77,7 @@ struct ConfigurationTests { // oida:disable:this type_body_length
     func onlyRule() throws {
         let configuration = try Configuration(
             dict: [:],
-            onlyRule: ["nesting"],
-            cachePath: nil
+            onlyRule: ["nesting"]
         )
 
         #expect(configuration.rules.count == 1)
@@ -90,8 +88,7 @@ struct ConfigurationTests { // oida:disable:this type_body_length
         let onlyRuleIdentifiers = ["nesting", "todo"].sorted()
         let configuration = try Configuration(
             dict: ["only_rules": "line_length"],
-            onlyRule: onlyRuleIdentifiers,
-            cachePath: nil
+            onlyRule: onlyRuleIdentifiers
         )
         #expect(onlyRuleIdentifiers == configuration.enabledRuleIdentifiers)
 
@@ -609,51 +606,6 @@ struct ConfigurationTests { // oida:disable:this type_body_length
         )
         let filenames = paths.map(\.lastPathComponent).sorted()
         #expect(filenames == ["Level1.swift"])
-    }
-
-    @Test
-    func dictInitWithCachePath() throws {
-        let configuration = try Configuration(
-            dict: ["cache_path": "cache/path/1"]
-        )
-
-        #expect(configuration.cachePath == "cache/path/1")
-    }
-
-    @Test
-        func dictInitWithCachePathFromCommandLine() throws {
-        let configuration = try Configuration(
-            dict: ["cache_path": "cache/path/1"],
-            cachePath: "cache/path/2"
-        )
-
-        #expect(configuration.cachePath == "cache/path/2")
-    }
-
-    @Test
-    func mainInitWithCachePath() {
-        let configuration = Configuration(
-            configurationFiles: [],
-            cachePath: "cache/path/1"
-        )
-
-        #expect(configuration.cachePath == "cache/path/1")
-    }
-
-    @Test(.temporaryDirectory)
-    func mainInitWithCachePathAndCachedConfig() {
-        let configuration1 = Configuration(
-            configurationFiles: [],
-            cachePath: "cache/path/1"
-        )
-
-        let configuration2 = Configuration(
-            configurationFiles: [],
-            cachePath: "cache/path/2"
-        )
-
-        #expect(configuration1.cachePath == "cache/path/1")
-        #expect(configuration2.cachePath == "cache/path/2")
     }
 
     private func assertEqual(_ relativeExpectedPaths: [String],

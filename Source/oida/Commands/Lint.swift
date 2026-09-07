@@ -52,8 +52,6 @@ extension SwiftLint {
                 quiet: quiet,
                 output: common.output,
                 progress: common.progress,
-                cachePath: nil,
-                ignoreCache: true,
                 enableAllRules: enableAllRules,
                 onlyRule: common.onlyRule,
                 autocorrect: common.fix,

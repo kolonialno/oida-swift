@@ -41,8 +41,7 @@ package extension Configuration {
         // MARK: - Methods
         internal mutating func resultingConfiguration(
             enableAllRules: Bool,
-            onlyRule: [String],
-            cachePath: String?
+            onlyRule: [String]
         ) throws -> Configuration {
             // Build if needed
             if !isBuilt {
@@ -52,8 +51,7 @@ package extension Configuration {
             return try merged(
                 configurationData: try validate(),
                 enableAllRules: enableAllRules,
-                onlyRule: onlyRule,
-                cachePath: cachePath
+                onlyRule: onlyRule
             )
         }
 
@@ -254,8 +252,7 @@ package extension Configuration {
         private func merged(
             configurationData: [(configurationDict: [String: Any], rootDirectory: URL)],
             enableAllRules: Bool,
-            onlyRule: [String],
-            cachePath: String?
+            onlyRule: [String]
         ) throws -> Configuration {
             // Split into first & remainder; use empty dict for first if the array is empty
             let firstConfigurationData = configurationData.first ?? (configurationDict: [:], rootDirectory: URL.cwd)
@@ -266,8 +263,7 @@ package extension Configuration {
                 dict: firstConfigurationData.configurationDict,
                 location: firstConfigurationData.rootDirectory,
                 enableAllRules: enableAllRules,
-                onlyRule: onlyRule,
-                cachePath: cachePath
+                onlyRule: onlyRule
             )
 
             // Set the config's rootDirectory to rootDirectory (+ adjust included / excluded paths that relate to it).
@@ -283,8 +279,7 @@ package extension Configuration {
                     dict: $1.configurationDict,
                     location: $1.rootDirectory,
                     enableAllRules: enableAllRules,
-                    onlyRule: onlyRule,
-                    cachePath: cachePath
+                    onlyRule: onlyRule
                 )
                 childConfiguration.fileGraph = Self(rootDirectory: $1.rootDirectory)
 
