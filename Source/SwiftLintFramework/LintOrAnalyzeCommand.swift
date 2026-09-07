@@ -48,8 +48,6 @@ package struct LintOrAnalyzeOptions {
     let quiet: Bool
     let output: URL?
     let progress: Bool
-    let cachePath: String?
-    let ignoreCache: Bool
     let enableAllRules: Bool
     let onlyRule: [String]
     let autocorrect: Bool
@@ -77,8 +75,6 @@ package struct LintOrAnalyzeOptions {
                  quiet: Bool,
                  output: URL?,
                  progress: Bool,
-                 cachePath: String?,
-                 ignoreCache: Bool,
                  enableAllRules: Bool,
                  onlyRule: [String],
                  autocorrect: Bool,
@@ -105,8 +101,6 @@ package struct LintOrAnalyzeOptions {
         self.quiet = quiet
         self.output = output
         self.progress = progress
-        self.cachePath = cachePath
-        self.ignoreCache = ignoreCache
         self.enableAllRules = enableAllRules
         self.onlyRule = onlyRule
         self.autocorrect = autocorrect
@@ -165,8 +159,8 @@ package struct LintOrAnalyzeCommand {
         if let baselineOutputPath = options.writeBaseline ?? builder.configuration.writeBaseline {
             try Baseline(violations: builder.unfilteredViolations).write(toPath: baselineOutputPath)
         }
-        let numberOfSeriousViolations = try Signposts.record(name: "LintOrAnalyzeCommand.PostProcessViolations") {
-            try postProcessViolations(files: files, builder: builder)
+        let numberOfSeriousViolations = Signposts.record(name: "LintOrAnalyzeCommand.PostProcessViolations") {
+            postProcessViolations(files: files, builder: builder)
         }
         if options.checkForUpdates || builder.configuration.checkForUpdates {
             await UpdateChecker.checkForUpdates()
@@ -180,7 +174,7 @@ package struct LintOrAnalyzeCommand {
         let options = builder.options
         let visitorMutationQueue = DispatchQueue(label: "io.realm.swiftlint.lintVisitorMutation")
         let baseline = try baseline(options, builder.configuration)
-        return try await builder.configuration.visitLintableFiles(options: options, cache: builder.cache,
+        return try await builder.configuration.visitLintableFiles(options: options,
                                                                   storage: builder.storage) { linter in
             let currentViolations: [StyleViolation]
             if options.benchmark {
@@ -234,7 +228,7 @@ package struct LintOrAnalyzeCommand {
             )
         }
         for file in files {
-            let linter = Linter(file: file, configuration: builder.configuration, cache: builder.cache)
+            let linter = Linter(file: file, configuration: builder.configuration)
             let violations = linter.collect(into: builder.storage).styleViolations(using: builder.storage)
             builder.unfilteredViolations += violations
             builder.violations += violations
@@ -246,7 +240,7 @@ package struct LintOrAnalyzeCommand {
     private static func postProcessViolations(
         files: [SwiftLintFile],
         builder: LintOrAnalyzeResultBuilder
-    ) throws -> Int {
+    ) -> Int {
         let options = builder.options
         let configuration = builder.configuration
         if isWarningThresholdBroken(configuration: configuration, violations: builder.violations), !options.lenient {
@@ -271,7 +265,6 @@ package struct LintOrAnalyzeCommand {
                 queuedPrintError(memoryUsage)
             }
         }
-        try builder.cache?.save()
         return numberOfSeriousViolations
     }
 
@@ -359,7 +352,7 @@ package struct LintOrAnalyzeCommand {
         let configuration = Configuration(options: options)
         let correctionsBuilder = CorrectionsBuilder()
         let files = try await configuration
-            .visitLintableFiles(options: options, cache: nil, storage: storage) { linter in
+            .visitLintableFiles(options: options, storage: storage) { linter in
                 let corrections = linter.correct(using: storage)
                 if !corrections.isEmpty, !options.quiet {
                     if options.useSTDIN {
@@ -496,7 +489,6 @@ class LintOrAnalyzeResultBuilder {
     let storage = RuleStorage()
     let configuration: Configuration
     let reporter: any Reporter.Type
-    let cache: LinterCache?
     let options: LintOrAnalyzeOptions
 
     init(_ options: LintOrAnalyzeOptions) {
@@ -505,10 +497,6 @@ class LintOrAnalyzeResultBuilder {
         }
         configuration = config
         reporter = reporterFrom(identifier: options.reporter ?? config.reporter)
-        // Every run reads the repository as it is now. A rule here can decide by reading files other than
-        // the one being linted, while a persisted result is keyed on that one file's modification date, so a
-        // reused entry answers for a tree that has since changed.
-        cache = nil
         self.options = options
 
         if let outFile = options.output {

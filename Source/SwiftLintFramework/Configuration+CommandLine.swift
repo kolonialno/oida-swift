@@ -147,13 +147,7 @@ extension Configuration {
         var linters = [Linter]()
         linters.reserveCapacity(fileCount)
         for (config, files) in filesPerConfiguration {
-            let newConfig: Configuration
-            if visitor.cache != nil {
-                newConfig = config.withPrecomputedCacheDescription()
-            } else {
-                newConfig = config
-            }
-            linters += files.map { visitor.linter(forFile: $0, configuration: newConfig) }
+            linters += files.map { visitor.linter(forFile: $0, configuration: config) }
         }
         return linters
     }
@@ -275,10 +269,9 @@ extension Configuration {
     }
 
     func visitLintableFiles(options: LintOrAnalyzeOptions,
-                            cache: LinterCache? = nil,
                             storage: RuleStorage,
                             visitorBlock: @escaping (CollectedLinter) async -> Void) async throws -> [SwiftLintFile] {
-        let visitor = try LintableFilesVisitor.create(options, cache: cache,
+        let visitor = try LintableFilesVisitor.create(options,
                                                       allowZeroLintableFiles: allowZeroLintableFiles,
                                                       block: visitorBlock)
         return try await visitLintableFiles(with: visitor, storage: storage)
@@ -290,8 +283,7 @@ extension Configuration {
         self.init(
             configurationFiles: options.configurationFiles,
             enableAllRules: options.enableAllRules,
-            onlyRule: options.onlyRule,
-            cachePath: options.cachePath
+            onlyRule: options.onlyRule
         )
     }
 }

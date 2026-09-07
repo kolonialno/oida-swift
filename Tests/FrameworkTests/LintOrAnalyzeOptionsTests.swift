@@ -60,8 +60,6 @@ private extension LintOrAnalyzeOptions {
                   quiet: false,
                   output: nil,
                   progress: false,
-                  cachePath: nil,
-                  ignoreCache: false,
                   enableAllRules: false,
                   onlyRule: [],
                   autocorrect: false,

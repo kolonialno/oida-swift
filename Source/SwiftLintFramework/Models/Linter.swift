@@ -250,7 +250,6 @@ public struct Linter {
     /// Whether or not this linter will be used to collect information from several files.
     public var isCollecting: Bool
     fileprivate let rules: [any Rule]
-    fileprivate let cache: LinterCache?
     fileprivate let configuration: Configuration
     fileprivate let compilerArguments: [String]
 
@@ -258,14 +257,11 @@ public struct Linter {
     ///
     /// - parameter file:              The file to lint with this linter.
     /// - parameter configuration:     The SwiftLint configuration to apply to this linter.
-    /// - parameter cache:             The persisted cache to use for this linter.
     /// - parameter compilerArguments: The compiler arguments to use for this linter if it is to execute analyzer rules.
     public init(file: SwiftLintFile,
                 configuration: Configuration = Configuration.default,
-                cache: LinterCache? = nil,
                 compilerArguments: [String] = []) {
         self.file = file
-        self.cache = cache
         self.configuration = configuration
         self.compilerArguments = compilerArguments
 
@@ -312,14 +308,12 @@ public struct CollectedLinter {
     /// The file to lint with this linter.
     public let file: SwiftLintFile
     private let rules: [any Rule]
-    private let cache: LinterCache?
     private let configuration: Configuration
     private let compilerArguments: [String]
 
     fileprivate init(from linter: Linter) {
         file = linter.file
         rules = linter.rules
-        cache = linter.cache
         configuration = linter.configuration
         compilerArguments = linter.compilerArguments
     }
@@ -350,10 +344,6 @@ public struct CollectedLinter {
             return ([], [])
         }
 
-        if let cached = cachedStyleViolations(benchmark: benchmark) {
-            return cached
-        }
-
         let regions = file.regions()
         let superfluousDisableCommandRule = rules.first(where: {
             $0 is SuperfluousDisableCommandRule
@@ -376,10 +366,6 @@ public struct CollectedLinter {
             deprecatedToValidIdentifier[key] = value
         }
 
-        if let cache, let path = file.path {
-            cache.cache(violations: violations, forFile: path, configuration: configuration)
-        }
-
         for (deprecatedIdentifier, identifier) in deprecatedToValidIdentifier {
             Issue.renamedIdentifier(old: deprecatedIdentifier, new: identifier).print()
         }
@@ -390,37 +376,12 @@ public struct CollectedLinter {
         return (violations, ruleTimes)
     }
 
-    private func cachedStyleViolations(benchmark: Bool = false) -> ([StyleViolation], [(id: String, time: Double)])? {
-        let start = Date()
-        guard let cache, let file = file.path,
-              let cachedViolations = cache.violations(forFile: file, configuration: configuration) else {
-            return nil
-        }
-
-        var ruleTimes = [(id: String, time: Double)]()
-        if benchmark {
-            // let's assume that all rules should have the same duration and split the duration among them
-            let totalTime = -start.timeIntervalSinceNow
-            let fractionedTime = totalTime / TimeInterval(rules.count)
-            ruleTimes = rules.compactMap { rule in
-                let id = type(of: rule).identifier
-                return (id, fractionedTime)
-            }
-        }
-
-        return (cachedViolations, ruleTimes)
-    }
-
     /// Applies corrections for all rules to this file, returning performed corrections.
     ///
     /// - parameter storage: The storage object containing all collected info.
     ///
     /// - returns: All corrections that were applied.
     public func correct(using storage: RuleStorage) -> [String: Int] {
-        if let violations = cachedStyleViolations()?.0, violations.isEmpty {
-            return [:]
-        }
-
         if file.parserDiagnostics.isNotEmpty {
             queuedPrintError(
                 """

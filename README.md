@@ -118,11 +118,12 @@ file kind reaches only the rules built for it.
 
 ## Every run reads the tree as it is
 
-There is no result cache and no flag to configure one. A rule here can decide by reading files other than the
-one being linted — `document_links_resolve` opens the link's target, `no_single_use_void_functions` resolves
-receivers across the whole run — while a cached verdict is keyed on the linted file's own modification date.
-Prune a cited file and the citing document has not changed, so a reused entry still calls the link resolved.
-Linting a whole repository takes seconds, which was all the cache ever bought.
+There is no result cache, no flag to configure one, and no code left that could keep one. A rule here can
+decide by reading files other than the one being linted — `document_links_resolve` opens the link's target,
+`no_single_use_void_functions` resolves receivers across the whole run — and a stored verdict was keyed on the
+linted file's own modification date. Prune a cited file and the citing document has not changed, so a reused
+entry would still call the link resolved. Linting a whole repository takes seconds, which was all the cache
+ever bought.
 
 ## Releases
 
