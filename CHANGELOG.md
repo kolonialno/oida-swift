@@ -4,6 +4,15 @@
 
 ### Breaking
 
+* The result cache is gone, and with it `--cache-path`, `--no-cache` and the `cache_path` setting. A
+  stored verdict was keyed on the linted file's own modification date, but a rule here can decide by
+  reading files other than the one being linted — `document_links_resolve` opens the link's target,
+  `no_single_use_void_functions` resolves receivers across the whole run. Pruning a cited file left the
+  citing document untouched, so its stored verdict still called the link resolved, and restoring the file
+  left it still calling it missing. Linting 1,830 files takes about two seconds without it, against 0.7
+  with a warm cache, which was the whole of what it bought.  
+  [Elvis Nunez](https://github.com/3lvis)
+
 * `Configuration.IndentationStyle` moved to `SwiftLintCore.IndentationStyle`.
   Rules can now read the global `indentation` setting via `CurrentRule.configuration`.  
   [GandaLF2006](https://github.com/GandaLF2006)
@@ -174,6 +183,12 @@
   [#6839](https://github.com/realm/SwiftLint/issues/6839)
 
 ### Bug Fixes
+
+* `file_header` no longer reads a lint command at the top of a file as part of the header. It asked
+  whether a comment contained `swiftlint:` when deciding whether that comment was a command, which the
+  rename to `oida:` left behind, so an `// oida:disable` line was judged as header text. It asks
+  `Command.prefix` now.  
+  [Elvis Nunez](https://github.com/3lvis)
 
 * Stop `--format` handing a document file to `swift-format`. `oida lint --format` merged the Markdown
   files a document rule covers into the same list it passes to `swift-format check`, which then parsed
