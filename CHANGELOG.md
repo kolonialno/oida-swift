@@ -4,6 +4,12 @@
 
 ### Breaking
 
+* `opening_brace` no longer accepts `allow_multiline_func`. Set
+  `ignore_multiline_function_signatures`, which has meant the same thing for as long as the older name
+  was deprecated. The note to remove it came due in August, and a config key nothing reads is a key
+  someone can still write and be wrong about.  
+  [Elvis Nunez](https://github.com/3lvis)
+
 * The result cache is gone, and with it `--cache-path`, `--no-cache` and the `cache_path` setting. A
   stored verdict was keyed on the linted file's own modification date, but a rule here can decide by
   reading files other than the one being linted — `document_links_resolve` opens the link's target,
