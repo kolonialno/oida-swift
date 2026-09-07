@@ -1,0 +1,4 @@
+parent_config: ../base/.oida.yml
+
+included:
+  - Vendor/Critical

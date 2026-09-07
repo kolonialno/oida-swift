@@ -38,8 +38,8 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
       - name: Build
         run: swift build --product oida
-      - name: Test the rules
-        # Only these two suites. The rest of the suite is not runnable here: `IntegrationTests` corrects the
-        # repository's own source in place, and the tests inherited for disable commands still assert the
-        # column `swiftlint:` sat at, five characters right of `oida:`.
-        run: swift test --filter "GeneratedTests|ResultReuseTests"
+      - name: Test
+        # Everything except `IntegrationTests`, which lints and corrects this repository's own source in
+        # place rather than a fixture, so it reports this checkout's state and edits the tree it runs in.
+        # Named as an exclusion so a new suite is gated by default rather than waiting to be listed.
+        run: swift test --skip IntegrationTests
