@@ -69,6 +69,32 @@ struct DocumentRulesTests {
     }
 
     @Test(.temporaryDirectory)
+    func linksResolveFollowsALinkOutOfASubdirectory() throws {
+        let readme = URL.cwd.appending(path: "README.md")
+        try "".write(to: readme, atomically: true, encoding: .utf8)
+        try FileManager.default.createDirectory(at: URL.cwd.appending(path: "docs"), withIntermediateDirectories: true)
+        let collected = URL.cwd.appending(path: "docs/collected.md")
+        try "[The root document](../README.md)".write(to: collected, atomically: true, encoding: .utf8)
+
+        let rule = DocumentLinksResolveRule()
+        #expect(rule.validate(file: SwiftLintFile(path: collected)!).isEmpty)
+    }
+
+    @Test(.temporaryDirectory)
+    func linksResolveRejectsATargetOnlyTheRootWouldFind() throws {
+        try FileManager.default.createDirectory(at: URL.cwd.appending(path: "docs"), withIntermediateDirectories: true)
+        try "".write(to: URL.cwd.appending(path: "docs/guide.md"), atomically: true, encoding: .utf8)
+        let collected = URL.cwd.appending(path: "docs/collected.md")
+        try "[The guide](docs/guide.md)".write(to: collected, atomically: true, encoding: .utf8)
+
+        let rule = DocumentLinksResolveRule()
+        #expect(
+            rule.validate(file: SwiftLintFile(path: collected)!).map(\.reason)
+                == ["Links to docs/guide.md, which is missing"]
+        )
+    }
+
+    @Test(.temporaryDirectory)
     func linksResolveSkipsExternalAndFragmentLinks() throws {
         let path = URL.cwd.appending(path: "README.md")
         try """
