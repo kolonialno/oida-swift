@@ -129,7 +129,7 @@ private extension FileHeaderRule {
                 let pieceStart = currentPosition
                 currentPosition += piece.sourceLength
 
-                if isSwiftLintCommand(piece: piece) {
+                if isCommand(piece: piece) {
                     continue
                 }
 
@@ -196,9 +196,9 @@ private extension FileHeaderRule {
             ))
         }
 
-        private func isSwiftLintCommand(piece: TriviaPiece) -> Bool {
+        private func isCommand(piece: TriviaPiece) -> Bool {
             guard let text = piece.commentText else { return false }
-            return text.contains("swiftlint:")
+            return text.contains(Command.prefix)
         }
 
         private func forbiddenReason() -> String {
