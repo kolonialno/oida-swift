@@ -39,4 +39,7 @@ jobs:
       - name: Build
         run: swift build --product oida
       - name: Test the rules
-        run: swift test --filter "GeneratedTests"
+        # Only these two suites. The rest of the suite is not runnable here: `IntegrationTests` corrects the
+        # repository's own source in place, and the tests inherited for disable commands still assert the
+        # column `swiftlint:` sat at, five characters right of `oida:`.
+        run: swift test --filter "GeneratedTests|ResultReuseTests"

@@ -486,7 +486,7 @@ enum SwiftFormat {
     }
 }
 
-private class LintOrAnalyzeResultBuilder {
+class LintOrAnalyzeResultBuilder {
     var fileBenchmark = Benchmark(name: "files")
     var ruleBenchmark = Benchmark(name: "rules")
     /// All detected violations, unfiltered by the baseline, if any.
@@ -505,11 +505,10 @@ private class LintOrAnalyzeResultBuilder {
         }
         configuration = config
         reporter = reporterFrom(identifier: options.reporter ?? config.reporter)
-        if options.ignoreCache || ProcessInfo.processInfo.isLikelyXcodeCloudEnvironment {
-            cache = nil
-        } else {
-            cache = LinterCache(configuration: config)
-        }
+        // Every run reads the repository as it is now. A rule here can decide by reading files other than
+        // the one being linted, while a persisted result is keyed on that one file's modification date, so a
+        // reused entry answers for a tree that has since changed.
+        cache = nil
         self.options = options
 
         if let outFile = options.output {
