@@ -1,8 +1,9 @@
 import Foundation
 import SwiftLintCore
 
-/// A relative link in a document is a promise the target still exists. Checked against the repository
-/// root (`URL.cwd`, the directory oida is run from) the same way a reader clicking it would land.
+/// A relative link in a document is a promise the target still exists. Resolved against the directory the
+/// document sits in, which is where following the link lands a reader and how GitHub renders it. A document
+/// with no path on disk falls back to the directory oida runs from, since there is nothing else to go on.
 ///
 /// Ported from tienda-ios's `DocumentationContractTests.testEveryLinkInADocumentResolves`.
 struct DocumentLinksResolveRule: DocumentRule, OptInRule {
@@ -27,7 +28,7 @@ struct DocumentLinksResolveRule: DocumentRule, OptInRule {
             return []
         }
         let text = file.contents
-        let root = URL.cwd
+        let base = file.path?.deletingLastPathComponent() ?? URL.cwd
         let matches = regex("\\]\\(([^)]+)\\)").matches(in: text, range: NSRange(text.startIndex..., in: text))
 
         return matches.compactMap { match -> StyleViolation? in
@@ -39,7 +40,7 @@ struct DocumentLinksResolveRule: DocumentRule, OptInRule {
                 return nil
             }
             let path = target.split(separator: "#").first.map(String.init) ?? target
-            guard !FileManager.default.fileExists(atPath: root.appending(path: path).path) else {
+            guard !FileManager.default.fileExists(atPath: base.appending(path: path).standardized.path) else {
                 return nil
             }
 

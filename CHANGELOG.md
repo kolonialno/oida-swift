@@ -190,6 +190,14 @@
 
 ### Bug Fixes
 
+* `document_links_resolve` resolves a relative link against the directory the document sits in, rather than
+  the directory oida runs from. In a document below the root the two disagree, and the rule was answering
+  for a reader nobody is: `../LEARNINGS.md` from `LEARNINGS/collected.md` reported as missing, while
+  `LEARNINGS.md` passed — the form GitHub renders as a link to `LEARNINGS/LEARNINGS.md`, which is the dead
+  one. The rule had only ever linted documents at the root, where both resolutions give the same answer, so
+  the choice between them went untested until an `included` pattern first reached into a subdirectory.  
+  [Elvis Nunez](https://github.com/3lvis)
+
 * `file_header` no longer reads a lint command at the top of a file as part of the header. It asked
   whether a comment contained `swiftlint:` when deciding whether that comment was a command, which the
   rename to `oida:` left behind, so an `// oida:disable` line was judged as header text. It asks
