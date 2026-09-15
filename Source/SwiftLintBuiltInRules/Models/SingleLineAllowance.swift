@@ -217,6 +217,24 @@ extension SwiftLintFile {
     }
 }
 
+/// Whether a declaration's whole header fits the line the formatter will lay it out on — its indentation,
+/// everything from the first modifier through the end of the signature with the parameters on one line, and
+/// the brace that follows. Measured across the whole header rather than the parameter list's own line,
+/// because it is the return clause the formatter wraps and the brace it then drops below it.
+///
+/// `true` where no `.swift-format` names a width, since a width nobody wrote down is not imposed here.
+func declarationHeaderFitsTheFormatterWidth(
+    _ header: String,
+    indentedBy indentation: Trivia,
+    in file: SwiftLintFile
+) -> Bool {
+    guard let lineLength = file.formatterLineLength else {
+        return true
+    }
+    let onOneLine = header.split(whereSeparator: \.isWhitespace).joined(separator: " ")
+    return indentation.sourceLength.utf8Length + onOneLine.count + " {".count <= lineLength
+}
+
 /// A join wider than the formatter's own width is undone by the next `--format`, leaving the rule to report
 /// the shape the formatter wrote — so the demand is dropped rather than made and taken back.
 ///

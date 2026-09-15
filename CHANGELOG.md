@@ -225,6 +225,21 @@
 
 ### Bug Fixes
 
+* A wrapped signature has a legal shape, closing the cycle where `multiline_parameters` held two parameters
+  on a line swift-format then broke, dropping the brace below a wrapped return clause for `opening_brace` to
+  report. The count allowance now yields where the whole header — indentation, modifiers, signature and
+  brace — is wider than the width the formatter lays the file out to, so those parameters go one per line and
+  the brace stays attached. Both directions read that one measurement, which is what stops the rule splitting
+  a signature and then asking for it back.
+
+* `opening_brace` treats a `catch` clause's items as the statement conditions they are, so
+  `ignore_multiline_statement_conditions` reaches a `catch … where` spanning lines. It covered `for`, `if`
+  and `while` only.
+
+  Together these take `3lvis/Networking` to zero on all four shape rules after one `--fix --format`, and it
+  stays at zero.  
+  [Elvis Nunez](https://github.com/3lvis)
+
 * The shape rules stop asking for a line the formatter will break. `requires_single_line` demanded that a
   short list come back to one line; where that line was wider than the width swift-format lays the file out
   to, the next `--format` broke it again and the rule then reported the formatter's own output. On

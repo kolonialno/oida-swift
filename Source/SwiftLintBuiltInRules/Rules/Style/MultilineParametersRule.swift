@@ -19,35 +19,32 @@ struct MultilineParametersRule: Rule {
 private extension MultilineParametersRule {
     final class Visitor: ViolationsSyntaxVisitor<ConfigurationType> {
         override func visitPost(_ node: FunctionDeclSyntax) {
-            if containsViolation(for: node.signature) || isSplitWithinAllowance(node.signature) {
+            if containsViolation(for: node.signature, of: node) || isSplitWithinAllowance(node.signature, of: node) {
                 violations.append(node.name.positionAfterSkippingLeadingTrivia)
             }
         }
 
         override func visitPost(_ node: InitializerDeclSyntax) {
-            if containsViolation(for: node.signature) || isSplitWithinAllowance(node.signature) {
+            if containsViolation(for: node.signature, of: node) || isSplitWithinAllowance(node.signature, of: node) {
                 violations.append(node.initKeyword.positionAfterSkippingLeadingTrivia)
             }
         }
 
         /// A parameter list within the allowance that is split anyway, which the rewriter brings back to
         /// one line.
-        private func isSplitWithinAllowance(_ signature: FunctionSignatureSyntax) -> Bool {
+        private func isSplitWithinAllowance(
+            _ signature: FunctionSignatureSyntax,
+            of declaration: some SyntaxProtocol
+        ) -> Bool {
             configuration.requiresSingleLine
                 && signature.parameterClause.canRejoinOneLine(within: configuration)
-                && joinedClauseFitsTheFormatterWidth(signature.parameterClause)
+                && declaration.headerFitsTheFormatterWidth(in: file)
         }
 
-        private func joinedClauseFitsTheFormatterWidth(_ clause: FunctionParameterClauseSyntax) -> Bool {
-            joinedListFitsTheFormatterWidth(
-                clause,
-                joinedAs: clause.joinedOnOneLine.trimmedDescription,
-                in: file,
-                locationConverter: locationConverter
-            )
-        }
-
-        private func containsViolation(for signature: FunctionSignatureSyntax) -> Bool {
+        private func containsViolation(
+            for signature: FunctionSignatureSyntax,
+            of declaration: some SyntaxProtocol
+        ) -> Bool {
             let parameterPositions = signature.parameterClause.parameters.map(\.positionAfterSkippingLeadingTrivia)
             guard parameterPositions.isNotEmpty else {
                 return false
@@ -72,11 +69,12 @@ private extension MultilineParametersRule {
                     return numberOfParameters > 1
                 }
 
-                if let maxNumberOfSingleLineParameters = configuration.maxNumberOfSingleLineParameters {
-                    return numberOfParameters > maxNumberOfSingleLineParameters
+                if let maxNumberOfSingleLineParameters = configuration.maxNumberOfSingleLineParameters,
+                   numberOfParameters > maxNumberOfSingleLineParameters {
+                    return true
                 }
 
-                return false
+                return numberOfParameters > 1 && !declaration.headerFitsTheFormatterWidth(in: file)
             }
 
             return hasMultipleParametersOnSameLine
@@ -87,12 +85,12 @@ private extension MultilineParametersRule {
 private extension MultilineParametersRule {
     final class Rewriter: ViolationsSyntaxRewriter<ConfigurationType> {
         override func visit(_ node: FunctionDeclSyntax) -> DeclSyntax {
-            if let split = splitting(node.signature) {
+            if let split = splitting(node.signature, of: node) {
                 return super.visit(node.with(\.signature, split))
             }
             let visited = super.visit(node)
             guard let declaration = visited.as(FunctionDeclSyntax.self),
-                  let joined = joining(declaration.signature)
+                  let joined = joining(declaration.signature, of: declaration)
             else {
                 return visited
             }
@@ -100,12 +98,12 @@ private extension MultilineParametersRule {
         }
 
         override func visit(_ node: InitializerDeclSyntax) -> DeclSyntax {
-            if let split = splitting(node.signature) {
+            if let split = splitting(node.signature, of: node) {
                 return super.visit(node.with(\.signature, split))
             }
             let visited = super.visit(node)
             guard let declaration = visited.as(InitializerDeclSyntax.self),
-                  let joined = joining(declaration.signature)
+                  let joined = joining(declaration.signature, of: declaration)
             else {
                 return visited
             }
@@ -115,7 +113,10 @@ private extension MultilineParametersRule {
         /// The signature with its parameters one per line, or `nil` when they do not need it.
         ///
         /// Decided before descending, so that a nested list can read the line this puts it on.
-        private func splitting(_ signature: FunctionSignatureSyntax) -> FunctionSignatureSyntax? {
+        private func splitting(
+            _ signature: FunctionSignatureSyntax,
+            of declaration: some SyntaxProtocol
+        ) -> FunctionSignatureSyntax? {
             let clause = signature.parameterClause
             let parameters = clause.parameters
             guard !parameters.isEmpty, !parameters.containsComment else {
@@ -123,8 +124,9 @@ private extension MultilineParametersRule {
             }
             let needsSplitting =
                 (parameters.count > 1
-                    && parameters.exceedsSingleLineAllowance(configuration)
-                    && parameters.isOnOneLine)
+                    && parameters.isOnOneLine
+                    && (parameters.exceedsSingleLineAllowance(configuration)
+                        || !declaration.headerFitsTheFormatterWidth(in: file)))
                 // Neither one line nor one per line, which is the shape this rule is named for. A list that
                 // could simply come back to one line does that instead, since splitting it further would be
                 // the opposite of what the allowance asks for — and the visitor reports the join, not a split.
@@ -140,16 +142,14 @@ private extension MultilineParametersRule {
         ///
         /// Decided after descending: a default value coming back to one line is what can make the whole
         /// list joinable, and deciding first would leave that for a second run over the file.
-        private func joining(_ signature: FunctionSignatureSyntax) -> FunctionSignatureSyntax? {
+        private func joining(
+            _ signature: FunctionSignatureSyntax,
+            of declaration: some SyntaxProtocol
+        ) -> FunctionSignatureSyntax? {
             let clause = signature.parameterClause
             guard configuration.requiresSingleLine,
                   clause.canRejoinOneLine(within: configuration),
-                  joinedListFitsTheFormatterWidth(
-                      clause,
-                      joinedAs: clause.joinedOnOneLine.trimmedDescription,
-                      in: file,
-                      locationConverter: locationConverter
-                  )
+                  declaration.headerFitsTheFormatterWidth(in: file)
             else {
                 return nil
             }
@@ -183,5 +183,32 @@ private extension FunctionParameterClauseSyntax {
             && !parameters.exceedsSingleLineAllowance(allowance)
             && !rightParen.leadingTrivia.containsComment
             && parameters.canRejoinOneLine
+    }
+}
+
+private extension SyntaxProtocol {
+    /// Whether this declaration's header fits the formatter's width with its parameters on one line.
+    ///
+    /// The body leaves, the attributes leave — swift-format keeps those on lines of their own — and what
+    /// remains is measured from the line's indentation through the brace.
+    func headerFitsTheFormatterWidth(in file: SwiftLintFile) -> Bool {
+        guard let header = strippedToHeader else {
+            return true
+        }
+        return declarationHeaderFitsTheFormatterWidth(
+            header.trimmedDescription,
+            indentedBy: indentationOfOwnLine,
+            in: file
+        )
+    }
+
+    private var strippedToHeader: (any SyntaxProtocol)? {
+        if let function = `as`(FunctionDeclSyntax.self) {
+            return function.with(\.body, nil).with(\.attributes, AttributeListSyntax([]))
+        }
+        if let initializer = `as`(InitializerDeclSyntax.self) {
+            return initializer.with(\.body, nil).with(\.attributes, AttributeListSyntax([]))
+        }
+        return nil
     }
 }
