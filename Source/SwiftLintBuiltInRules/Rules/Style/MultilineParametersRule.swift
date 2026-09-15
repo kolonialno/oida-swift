@@ -35,16 +35,6 @@ private extension MultilineParametersRule {
         private func isSplitWithinAllowance(_ signature: FunctionSignatureSyntax) -> Bool {
             configuration.requiresSingleLine
                 && signature.parameterClause.canRejoinOneLine(within: configuration)
-                && joinedClauseFitsTheFormatterWidth(signature.parameterClause)
-        }
-
-        private func joinedClauseFitsTheFormatterWidth(_ clause: FunctionParameterClauseSyntax) -> Bool {
-            joinedListFitsTheFormatterWidth(
-                clause,
-                joinedAs: clause.joinedOnOneLine.trimmedDescription,
-                in: file,
-                locationConverter: locationConverter
-            )
         }
 
         private func containsViolation(for signature: FunctionSignatureSyntax) -> Bool {
@@ -142,19 +132,17 @@ private extension MultilineParametersRule {
         /// list joinable, and deciding first would leave that for a second run over the file.
         private func joining(_ signature: FunctionSignatureSyntax) -> FunctionSignatureSyntax? {
             let clause = signature.parameterClause
-            guard configuration.requiresSingleLine,
-                  clause.canRejoinOneLine(within: configuration),
-                  joinedListFitsTheFormatterWidth(
-                      clause,
-                      joinedAs: clause.joinedOnOneLine.trimmedDescription,
-                      in: file,
-                      locationConverter: locationConverter
-                  )
-            else {
+            guard configuration.requiresSingleLine, clause.canRejoinOneLine(within: configuration) else {
                 return nil
             }
             numberOfCorrections += 1
-            return signature.with(\.parameterClause, clause.joinedOnOneLine)
+            return signature.with(
+                \.parameterClause,
+                clause
+                    .with(\.leftParen, clause.leftParen.with(\.trailingTrivia, []))
+                    .with(\.parameters, clause.parameters.joinedOnOneLine(startingWith: []))
+                    .with(\.rightParen, clause.rightParen.with(\.leadingTrivia, []))
+            )
         }
 
         private func split(_ clause: FunctionParameterClauseSyntax) -> FunctionParameterClauseSyntax {
@@ -169,12 +157,6 @@ private extension MultilineParametersRule {
 extension MultilineParametersConfiguration: SingleLineAllowance {}
 
 private extension FunctionParameterClauseSyntax {
-    var joinedOnOneLine: FunctionParameterClauseSyntax {
-        with(\.leftParen, leftParen.with(\.trailingTrivia, []))
-            .with(\.parameters, parameters.joinedOnOneLine(startingWith: []))
-            .with(\.rightParen, rightParen.with(\.leadingTrivia, []))
-    }
-
     /// Whether the parameters can come back to one line. The closing paren is checked here because a comment
     /// before it would be lost.
     func canRejoinOneLine(within allowance: some SingleLineAllowance) -> Bool {

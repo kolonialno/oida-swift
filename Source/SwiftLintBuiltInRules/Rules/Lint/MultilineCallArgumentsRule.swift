@@ -181,13 +181,7 @@ private extension MultilineCallArgumentsRule {
                   let first = node.arguments.first,
                   !node.arguments.isOnOneLine,
                   !node.arguments.exceedsSingleLineAllowance(configuration),
-                  node.argumentsCanRejoinOneLine,
-                  joinedListFitsTheFormatterWidth(
-                      node,
-                      joinedAs: node.joinedOnOneLine.trimmedDescription,
-                      in: file,
-                      locationConverter: locationConverter
-                  )
+                  node.argumentsCanRejoinOneLine
             else {
                 return nil
             }
@@ -241,17 +235,13 @@ private extension MultilineCallArgumentsRule {
             else {
                 return visited
             }
-            let joined = call.joinedOnOneLine
-            guard joinedListFitsTheFormatterWidth(
-                node,
-                joinedAs: joined.trimmedDescription,
-                in: file,
-                locationConverter: locationConverter
-            ) else {
-                return visited
-            }
             numberOfCorrections += 1
-            return ExprSyntax(joined)
+            return ExprSyntax(
+                call
+                    .with(\.leftParen, call.leftParen?.with(\.trailingTrivia, []))
+                    .with(\.arguments, call.arguments.joinedOnOneLine(startingWith: []))
+                    .with(\.rightParen, call.rightParen?.with(\.leadingTrivia, []))
+            )
         }
     }
 }
@@ -259,12 +249,6 @@ private extension MultilineCallArgumentsRule {
 extension MultilineCallArgumentsConfiguration: SingleLineAllowance {}
 
 private extension FunctionCallExprSyntax {
-    var joinedOnOneLine: FunctionCallExprSyntax {
-        with(\.leftParen, leftParen?.with(\.trailingTrivia, []))
-            .with(\.arguments, arguments.joinedOnOneLine(startingWith: []))
-            .with(\.rightParen, rightParen?.with(\.leadingTrivia, []))
-    }
-
     var argumentsCanRejoinOneLine: Bool {
         !arguments.isEmpty
             && rightParen?.leadingTrivia.containsComment != true

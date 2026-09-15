@@ -1,5 +1,3 @@
-import Foundation
-import SourceKittenFramework
 import SwiftBasicFormat
 import SwiftLintCore
 import SwiftSyntax
@@ -206,81 +204,5 @@ extension Trivia {
 private extension String {
     var newlineCount: Int {
         lazy.filter { $0 == "\n" }.count
-    }
-}
-
-extension SwiftLintFile {
-    /// Reads the `.swift-format` the formatter would read — this file's directory, then each above it.
-    /// `nil` where there is none, since a width nobody wrote down is a width this tool does not impose.
-    var formatterLineLength: Int? {
-        FormatterConfiguration.lineLength(forFileAt: path)
-    }
-}
-
-/// A join wider than the formatter's own width is undone by the next `--format`, leaving the rule to report
-/// the shape the formatter wrote — so the demand is dropped rather than made and taken back.
-///
-/// What follows the list on its closing line counts toward the width; what a join would pull up from the
-/// line below, such as a `guard`'s `else`, does not, so the answer errs toward joining.
-func joinedListFitsTheFormatterWidth(
-    _ node: some SyntaxProtocol,
-    joinedAs joined: String,
-    in file: SwiftLintFile,
-    locationConverter: SourceLocationConverter
-) -> Bool {
-    guard !joined.contains(where: \.isNewline) else {
-        return false
-    }
-    let start = locationConverter.location(for: node.positionAfterSkippingLeadingTrivia)
-    let end = locationConverter.location(for: node.endPositionBeforeTrailingTrivia)
-    let lines = file.lines
-    let following = lines.indices.contains(end.line - 1)
-        ? max(0, lines[end.line - 1].content.count - (end.column - 1))
-        : 0
-    guard let lineLength = file.formatterLineLength else {
-        return true
-    }
-    return start.column - 1 + joined.count + following <= lineLength
-}
-
-private enum FormatterConfiguration {
-    private static let lock = NSLock()
-    nonisolated(unsafe) private static var lineLengthByDirectory: [String: Int?] = [:]
-
-    static func lineLength(forFileAt path: URL?) -> Int? {
-        guard let directory = path?.deletingLastPathComponent() else {
-            return nil
-        }
-        lock.lock()
-        defer { lock.unlock() }
-        if let cached = lineLengthByDirectory[directory.filepath] {
-            return cached
-        }
-        let found = searchUpwards(from: directory)
-        lineLengthByDirectory[directory.filepath] = found
-        return found
-    }
-
-    private static func searchUpwards(from directory: URL) -> Int? {
-        var current = directory.standardizedFileURL
-        // Counting components rather than comparing a directory with its own parent: at the root the two
-        // read as different paths, so that comparison walks past `/` into `/..` and never ends.
-        while current.pathComponents.count > 1 {
-            if let lineLength = lineLength(ofConfigurationAt: current.appending(path: ".swift-format")) {
-                return lineLength
-            }
-            current = current.deletingLastPathComponent().standardizedFileURL
-        }
-        return lineLength(ofConfigurationAt: current.appending(path: ".swift-format"))
-    }
-
-    private static func lineLength(ofConfigurationAt url: URL) -> Int? {
-        guard let data = try? Data(contentsOf: url),
-              let object = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-              let lineLength = object["lineLength"] as? Int
-        else {
-            return nil
-        }
-        return lineLength
     }
 }

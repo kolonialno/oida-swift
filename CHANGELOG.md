@@ -4,6 +4,15 @@
 
 ### Breaking
 
+* The width machinery is gone. oida read `lineLength` out of the `.swift-format` covering a file and let the
+  shape rules yield to it; it now reads nothing about width and has no code that reasons about one. Width is
+  the formatter's alone, and a linter that holds an opinion about it is a linter with a second opinion to
+  keep in step.
+
+  This reverts what landed in #25 and takes `joinedListFitsTheFormatterWidth`, `SwiftLintFile
+  .formatterLineLength`, the `.swift-format` reader and their eight call sites with it.  
+  [Elvis Nunez](https://github.com/3lvis)
+
 * `nesting` is gone and `Metrics/` with it. oida gates on no count at all now, which is a sentence with no
   exception in it. The rule looked free — zero violations and zero suppressions in this repository and in
   `3lvis/Networking` — but the only codebase large enough to test it says otherwise: against a 1,868-file
