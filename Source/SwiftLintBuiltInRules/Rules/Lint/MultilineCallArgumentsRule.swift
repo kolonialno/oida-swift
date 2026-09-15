@@ -214,10 +214,7 @@ private extension MultilineCallArgumentsRule {
             guard !node.isInPatternMatchingPatternPosition, node.rightParen != nil else {
                 return super.visit(node)
             }
-            if node.arguments.count > 1,
-               node.arguments.exceedsSingleLineAllowance(configuration),
-               node.arguments.isOnOneLine,
-               !node.arguments.containsComment {
+            if node.arguments.count > 1, node.needsSplittingOnePerLine(within: configuration) {
                 numberOfCorrections += 1
                 let indentation = node.indentationOfOwnLine
                 return super.visit(
@@ -256,6 +253,22 @@ private extension FunctionCallExprSyntax {
         !arguments.isEmpty
             && rightParen?.leadingTrivia.containsComment != true
             && arguments.canRejoinOneLine
+    }
+
+    func needsSplittingOnePerLine(within allowance: some SingleLineAllowance) -> Bool {
+        guard !arguments.containsComment else {
+            return false
+        }
+        if arguments.startsOnOneLine {
+            return arguments.exceedsSingleLineAllowance(allowance)
+        }
+        return arguments.sharesAStartLine && !joinsOneLine(within: allowance)
+    }
+
+    func joinsOneLine(within allowance: some SingleLineAllowance) -> Bool {
+        allowance.requiresSingleLine
+            && !arguments.exceedsSingleLineAllowance(allowance)
+            && argumentsCanRejoinOneLine
     }
 }
 
