@@ -164,6 +164,45 @@ private extension OpeningBraceRule {
             }
         }
 
+        /// swift-format keeps a break it already finds, so a brace moved without the tail stranded above it
+        /// is pushed back down on the next format and the two trade the edit forever.
+        private func strandedSignatureTailCorrection(
+            before leftBrace: TokenSyntax
+        ) -> ReasonedRuleViolation.ViolationCorrection? {
+            guard let parameterClause = leftBrace.parent?.parent?.signatureParameterClause,
+                  line(of: parameterClause.leftParen) != line(of: parameterClause.rightParen),
+                  line(of: parameterClause.rightParen) != line(of: leftBrace)
+            else {
+                return nil
+            }
+            let rightParen = parameterClause.rightParen
+            var tail = ""
+            var token = rightParen.nextToken(viewMode: .sourceAccurate)
+            while let current = token, current != leftBrace {
+                if current.leadingTrivia.containsComments || current.trailingTrivia.containsComments {
+                    return nil
+                }
+                tail += current.description
+                token = current.nextToken(viewMode: .sourceAccurate)
+            }
+            guard !rightParen.trailingTrivia.containsComments,
+                  !leftBrace.leadingTrivia.containsComments,
+                  tail.contains(where: \.isNewline)
+            else {
+                return nil
+            }
+            let joined = tail.split(whereSeparator: \.isWhitespace).joined(separator: " ")
+            return .init(
+                start: rightParen.endPositionBeforeTrailingTrivia,
+                end: leftBrace.positionAfterSkippingLeadingTrivia,
+                replacement: joined.isEmpty ? " " : " \(joined) "
+            )
+        }
+
+        private func line(of token: TokenSyntax) -> Int {
+            locationConverter.location(for: token.positionAfterSkippingLeadingTrivia).line
+        }
+
         private func violationCorrection(_ node: some BracedSyntax) -> ReasonedRuleViolation.ViolationCorrection? {
             let leftBrace = node.leftBrace
             guard let previousToken = leftBrace.previousToken(viewMode: .sourceAccurate) else {
@@ -174,6 +213,9 @@ private extension OpeningBraceRule {
             let previousLocation = previousToken.endLocation(converter: locationConverter)
             let leftBraceLocation = leftBrace.startLocation(converter: locationConverter)
             if previousLocation.line != leftBraceLocation.line {
+                if let strandedTail = strandedSignatureTailCorrection(before: leftBrace) {
+                    return strandedTail
+                }
                 let trailingCommentText = previousToken.trailingTrivia.description.trimmingCharacters(in: .whitespaces)
                 return .init(
                     start: previousToken.endPositionBeforeTrailingTrivia,
@@ -207,5 +249,17 @@ private extension OpeningBraceRule {
 private extension BracedSyntax {
     var openingPosition: AbsolutePosition {
         leftBrace.positionAfterSkippingLeadingTrivia
+    }
+}
+
+private extension SyntaxProtocol {
+    var signatureParameterClause: FunctionParameterClauseSyntax? {
+        if let function = `as`(FunctionDeclSyntax.self) {
+            return function.signature.parameterClause
+        }
+        if let initializer = `as`(InitializerDeclSyntax.self) {
+            return initializer.signature.parameterClause
+        }
+        return nil
     }
 }

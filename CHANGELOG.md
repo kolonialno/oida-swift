@@ -190,6 +190,17 @@
 
 ### Bug Fixes
 
+* `opening_brace` writes a shape the formatter keeps. Its correction moved the brace and left the
+  signature's tail on the lines above it, so `--format` broke the brace back down and the two traded the
+  same edit forever — on [3lvis/Networking](https://github.com/3lvis/Networking), `--fix` cleared all 18
+  and `--format` restored all 18. The correction now brings the tail up to the line the parameter list
+  closes on, which is the shape swift-format leaves alone, and 12 of the 18 settle after one pass and stay
+  settled. A stranded tail is debris: it is what swift-format wrote while the whole signature was one long
+  line, and `respectsExistingLineBreaks` keeps that break once the parameters have gone one per line.
+  Only a declaration whose parameters already span lines is joined, since a tail pulled up beside
+  parameters on one line makes a longer line than the one the formatter broke.  
+  [Elvis Nunez](https://github.com/3lvis)
+
 * `multiline_call_arguments` corrects the shape a formatter leaves behind, where a call is broken after
   its opening paren and the arguments are packed onto the continuation lines. The rewriter asked whether
   the list sat on one line *including* the break before its first argument, so it recognised only a call
