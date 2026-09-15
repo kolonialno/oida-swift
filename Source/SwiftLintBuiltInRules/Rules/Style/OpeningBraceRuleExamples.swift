@@ -222,6 +222,52 @@ struct OpeningBraceRuleExamples {
     ])
 
     static let corrections = #corrections([
+        """
+            func f(a: Int, b: Int) async
+                -> Int
+            {
+                return a
+            }
+            """: """
+                func f(a: Int, b: Int) async
+                    -> Int {
+                    return a
+                }
+                """,
+        """
+            func f(
+                a: Int,
+                b: Int
+            )
+                async throws -> Int
+            {
+                return a
+            }
+            """: """
+                func f(
+                    a: Int,
+                    b: Int
+                ) async throws -> Int {
+                    return a
+                }
+                """,
+        """
+            func f(
+                a: Int,
+                b: Int
+            ) async
+                -> Int
+            {
+                return a
+            }
+            """: """
+                func f(
+                    a: Int,
+                    b: Int
+                ) async -> Int {
+                    return a
+                }
+                """,
         "struct Rule{}": "struct Rule {}",
         "struct Rule\n{\n}": "struct Rule {\n}",
         "struct Rule\n\n\t{\n}": "struct Rule {\n}",
