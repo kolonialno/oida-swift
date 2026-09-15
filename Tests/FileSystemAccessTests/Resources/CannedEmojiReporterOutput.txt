@@ -1,6 +1,6 @@
 ${CURRENT_WORKING_DIRECTORY}/filename
-⛔️ Line 1: Violation Reason 2 (line_length)
-⚠️ Line 1: Violation Reason 1 (line_length)
+⛔️ Line 1: Violation Reason 2 (nesting)
+⚠️ Line 1: Violation Reason 1 (nesting)
 ${CURRENT_WORKING_DIRECTORY}/path/file.swift
 ⛔️ Line 1: Shorthand syntactic sugar should be used, i.e. [Int] instead of Array<Int> (syntactic_sugar)
 Other

@@ -7,7 +7,7 @@ disabled_rules:
   - private_outlet
   - trailing_closure
 
-line_length: 80
+cyclomatic_complexity: 80
 
 identifier_name:
   excluded:

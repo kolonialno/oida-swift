@@ -10,30 +10,6 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
-struct FinalTestCaseRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(FinalTestCaseRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct FirstWhereRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(FirstWhereRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct FlatMapOverMapReduceRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(FlatMapOverMapReduceRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
 struct ForWhereRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -66,14 +42,6 @@ struct ForceUnwrappingRuleGeneratedTests {
 }
 
 @Suite(.rulesRegistered)
-struct FunctionBodyLengthRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(FunctionBodyLengthRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
 struct FunctionDefaultParameterAtEndRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -86,14 +54,6 @@ struct FunctionNameWhitespaceRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(FunctionNameWhitespaceRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct FunctionParameterCountRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(FunctionParameterCountRule.description)
     }
 }
 
@@ -206,5 +166,45 @@ struct InvisibleCharacterRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(InvisibleCharacterRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct IsDisjointRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(IsDisjointRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct JoinedDefaultParameterRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(JoinedDefaultParameterRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct KeyPathOnlyWhereTheAPITakesOneRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(KeyPathOnlyWhereTheAPITakesOneRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct KeychainBuiltOnlyAtTheRootRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(KeychainBuiltOnlyAtTheRootRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct LastWhereRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(LastWhereRule.description)
     }
 }

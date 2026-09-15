@@ -1,7 +1,5 @@
 import SwiftLintCore
 
-// oida:disable file_length
-
 private let detectingTypes = ["actor", "class", "struct", "enum"]
 
 internal struct NestingRuleExamples {

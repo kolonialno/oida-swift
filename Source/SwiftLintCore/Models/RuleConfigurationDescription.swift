@@ -1,7 +1,5 @@
 import Foundation
 
-// oida:disable file_length
-
 /// A type that can be converted into a human-readable representation.
 public protocol Documentable {
     /// Indicate if the item has some content that is useful to document.

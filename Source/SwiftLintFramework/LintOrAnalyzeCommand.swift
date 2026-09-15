@@ -5,8 +5,6 @@ import Dispatch
 import Foundation
 import SourceKittenFramework
 
-// oida:disable file_length
-
 package enum LintOrAnalyzeMode {
     case lint, analyze
 

@@ -2,8 +2,6 @@ import Foundation
 import SourceKittenFramework
 import SwiftLintCore
 
-// oida:disable file_length
-
 private let warnSourceKitFailedOnceImpl: Void = {
     Issue.genericWarning("SourceKit-based rules will be skipped because sourcekitd has failed.").print()
 }()
@@ -96,7 +94,6 @@ private extension Rule {
     }
 
     // As we need the configuration to get custom identifiers.
-    // oida:disable:next function_parameter_count
     func lint(file: SwiftLintFile,
               regions: [Region],
               benchmark: Bool,
@@ -125,7 +122,6 @@ private extension Rule {
         }
     }
 
-    // oida:disable:next function_parameter_count
     private func performLint(file: SwiftLintFile,
                              regions: [Region],
                              benchmark: Bool,

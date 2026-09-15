@@ -10,62 +10,6 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
-struct MultilineArgumentsBracketsRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(MultilineArgumentsBracketsRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct MultilineArgumentsRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(MultilineArgumentsRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct MultilineCallArgumentsRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(MultilineCallArgumentsRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct MultilineConditionsRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(MultilineConditionsRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct MultilineFunctionChainsRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(MultilineFunctionChainsRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct MultilineLiteralBracketsRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(MultilineLiteralBracketsRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct MultilineParametersBracketsRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(MultilineParametersBracketsRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
 struct MultilineParametersRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -206,5 +150,61 @@ struct NoLegacyRouterReadersRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(NoLegacyRouterReadersRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct NoLiveUIKitFrameReadsRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(NoLiveUIKitFrameReadsRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct NoMagicNumbersRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(NoMagicNumbersRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct NoMarkCommentsRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(NoMarkCommentsRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct NoPresentationStateOutsideNavigationRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(NoPresentationStateOutsideNavigationRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct NoPrintInAppCodeRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(NoPrintInAppCodeRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct NoShareLinkRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(NoShareLinkRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct NoSingleUseVoidFunctionsRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(NoSingleUseVoidFunctionsRule.description)
     }
 }

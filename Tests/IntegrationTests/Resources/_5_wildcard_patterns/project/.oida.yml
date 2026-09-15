@@ -5,4 +5,4 @@ excluded:
   - "**/*.generated.swift"
 
 disabled_rules:
-  - line_length
+  - cyclomatic_complexity

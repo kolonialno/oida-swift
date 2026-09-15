@@ -1,4 +1,4 @@
 included:
   - ../project/Sources
 
-line_length: 120
+cyclomatic_complexity: 120

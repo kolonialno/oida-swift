@@ -122,14 +122,6 @@ struct ClosingBraceRuleGeneratedTests {
 }
 
 @Suite(.rulesRegistered)
-struct ClosureBodyLengthRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(ClosureBodyLengthRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
 struct ClosureEndIndentationRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -206,5 +198,13 @@ struct CompilerProtocolInitRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(CompilerProtocolInitRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct ComputedAccessorsOrderRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(ComputedAccessorsOrderRule.description)
     }
 }

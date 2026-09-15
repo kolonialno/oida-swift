@@ -74,12 +74,6 @@ closing_brace:
   meta:
     opt-in: false
     correctable: true
-closure_body_length:
-  warning: 30
-  error: 100
-  meta:
-    opt-in: true
-    correctable: false
 closure_end_indentation:
   severity: warning
   meta:
@@ -326,12 +320,6 @@ empty_xctest_method:
   meta:
     opt-in: true
     correctable: false
-enum_case_associated_values_count:
-  warning: 5
-  error: 6
-  meta:
-    opt-in: true
-    correctable: false
 environment_key_needs_judgement:
   severity: warning
   meta:
@@ -408,13 +396,6 @@ file_header:
   meta:
     opt-in: true
     correctable: false
-file_length:
-  warning: 400
-  error: 1000
-  ignore_comment_only_lines: false
-  meta:
-    opt-in: false
-    correctable: false
 file_name:
   severity: warning
   excluded: ["LinuxMain.swift", "main.swift"]
@@ -476,12 +457,6 @@ force_unwrapping:
   meta:
     opt-in: true
     correctable: false
-function_body_length:
-  warning: 50
-  error: 100
-  meta:
-    opt-in: false
-    correctable: false
 function_default_parameter_at_end:
   severity: warning
   ignore_first_isolation_inheritance_parameter: true
@@ -494,13 +469,6 @@ function_name_whitespace:
   meta:
     opt-in: false
     correctable: true
-function_parameter_count:
-  warning: 5
-  error: 8
-  ignores_default_parameters: true
-  meta:
-    opt-in: false
-    correctable: false
 generic_type_name:
   min_length:
     warning: 1
@@ -622,13 +590,6 @@ keychain_built_only_at_the_root:
   meta:
     opt-in: true
     correctable: false
-large_tuple:
-  warning: 2
-  error: 3
-  ignore_regex: false
-  meta:
-    opt-in: false
-    correctable: false
 last_where:
   severity: warning
   meta:
@@ -694,19 +655,6 @@ let_var_whitespace:
   severity: warning
   meta:
     opt-in: true
-    correctable: false
-line_length:
-  warning: 120
-  error: 200
-  ignores_urls: false
-  ignores_function_declarations: false
-  ignores_comments: false
-  ignores_interpolated_strings: false
-  ignores_multiline_strings: false
-  ignores_regex_literals: false
-  excluded_lines_patterns: []
-  meta:
-    opt-in: false
     correctable: false
 literal_expression_end_indentation:
   severity: warning
@@ -1399,13 +1347,6 @@ trailing_whitespace:
   meta:
     opt-in: false
     correctable: true
-type_body_length:
-  warning: 250
-  error: 350
-  excluded_types: [extension, protocol]
-  meta:
-    opt-in: false
-    correctable: false
 type_contents_order:
   severity: warning
   order: [[case], [type_alias, associated_type], [subtype], [type_property], [instance_property], [ib_inspectable], [ib_outlet], [initializer], [type_method], [view_life_cycle_method], [ib_action, ib_segue_action], [other_method], [subscript], [deinitializer]]

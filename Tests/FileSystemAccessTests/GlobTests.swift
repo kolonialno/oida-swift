@@ -153,7 +153,7 @@ struct GlobTests {
     }
 
     @Test
-    func globstarToleratesUnreadableSubdirectory() throws { // oida:disable:this function_body_length
+    func globstarToleratesUnreadableSubdirectory() throws {
 #if !os(Windows)
         if getuid() == 0 {
             // Permission-bit tests cannot exercise the tolerance fix when running as root.

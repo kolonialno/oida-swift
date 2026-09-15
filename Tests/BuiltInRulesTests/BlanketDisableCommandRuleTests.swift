@@ -12,18 +12,18 @@ struct BlanketDisableCommandRuleTests {
 
     @Test
     func alwaysBlanketDisable() {
-        let nonTriggeringExamples = #examples(["// oida:disable file_length\n// oida:enable file_length"])
+        let nonTriggeringExamples = #examples(["// oida:disable nesting\n// oida:enable nesting"])
         verifyRule(Self.emptyDescription.with(nonTriggeringExamples: nonTriggeringExamples))
 
         let triggeringExamples = #examples([
-            "// oida:disable file_length\n// oida:enable ↓file_length",
-            "// oida:disable:previous ↓file_length",
-            "// oida:disable:this ↓file_length",
-            "// oida:disable:next ↓file_length",
+            "// oida:disable nesting\n// oida:enable ↓nesting",
+            "// oida:disable:previous ↓nesting",
+            "// oida:disable:this ↓nesting",
+            "// oida:disable:next ↓nesting",
         ])
         verifyRule(
             Self.emptyDescription.with(triggeringExamples: triggeringExamples),
-            ruleConfiguration: ["always_blanket_disable": ["file_length"]],
+            ruleConfiguration: ["always_blanket_disable": ["nesting"]],
             skipCommentTests: true, skipDisableCommandTests: true)
     }
 
@@ -39,7 +39,7 @@ struct BlanketDisableCommandRuleTests {
     @Test
     func allowedRules() {
         let nonTriggeringExamples = #examples([
-            "// oida:disable file_length",
+            "// oida:disable file_name",
             "// oida:disable single_test_class",
         ])
         verifyRule(Self.emptyDescription.with(nonTriggeringExamples: nonTriggeringExamples))

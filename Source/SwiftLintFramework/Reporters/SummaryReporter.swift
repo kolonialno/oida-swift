@@ -18,7 +18,6 @@ struct SummaryReporter: Reporter {
 // MARK: - SwiftyTextTable
 
 private extension TextTable {
-    // oida:disable:next function_body_length
     init(violations: [StyleViolation]) {
         let numberOfWarningsHeader = "warnings"
         let numberOfErrorsHeader = "errors"

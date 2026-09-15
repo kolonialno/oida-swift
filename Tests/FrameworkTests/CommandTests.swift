@@ -1,4 +1,3 @@
-// oida:disable file_length
 import Foundation
 import SourceKittenFramework
 import SwiftLintFramework
@@ -17,8 +16,7 @@ private extension Command {
 }
 
 @Suite(.rulesRegistered)
-struct CommandTests { // oida:disable:this type_body_length
-
+struct CommandTests {
     // MARK: Command Creation
 
     @Test

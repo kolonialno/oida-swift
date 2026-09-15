@@ -10,14 +10,6 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
-struct EmptyCollectionLiteralRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(EmptyCollectionLiteralRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
 struct EmptyCountRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -62,14 +54,6 @@ struct EmptyXCTestMethodRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(EmptyXCTestMethodRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct EnumCaseAssociatedValuesLengthRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(EnumCaseAssociatedValuesLengthRule.description)
     }
 }
 
@@ -178,14 +162,6 @@ struct FileHeaderRuleGeneratedTests {
 }
 
 @Suite(.rulesRegistered)
-struct FileLengthRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(FileLengthRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
 struct FileNameNoSpaceRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -206,5 +182,29 @@ struct FileTypesOrderRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(FileTypesOrderRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct FinalTestCaseRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(FinalTestCaseRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct FirstWhereRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(FirstWhereRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct FlatMapOverMapReduceRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(FlatMapOverMapReduceRule.description)
     }
 }

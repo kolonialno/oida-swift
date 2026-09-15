@@ -1,4 +1,3 @@
-// oida:disable file_length type_body_length
 import SwiftLintCore
 
 internal struct MultilineParametersRuleExamples {
@@ -444,4 +443,3 @@ internal struct MultilineParametersRuleExamples {
             """,
     ])
 }
-// oida:enable file_length type_body_length

@@ -20,7 +20,6 @@ struct HTMLReporter: Reporter {
 
     // MARK: - Internal
 
-    // oida:disable:next function_body_length
     internal static func generateReport(_ violations: [StyleViolation],
                                         swiftlintVersion: String,
                                         dateString: String) -> String {

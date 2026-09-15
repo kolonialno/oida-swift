@@ -47,7 +47,6 @@ internal struct DuplicateImportsRuleExamples {
 
     static let triggeringExamples = Array(corrections.keys.sorted())
 
-    // oida:disable:next closure_body_length
     static let corrections: [Example: Example] = {
         var corrections = #corrections([
             """

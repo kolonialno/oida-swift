@@ -14,7 +14,6 @@ struct GitHubActionsLoggingReporter: Reporter {
     // MARK: - Private
 
     private static func generateForSingleViolation(_ violation: StyleViolation) -> String {
-        // oida:disable:next line_length
         // https://help.github.com/en/github/automating-your-workflow-with-github-actions/development-tools-for-github-actions#logging-commands
         // ::(warning|error) file={relative_path_to_file},line={:line},col={:character}::{content}
         [

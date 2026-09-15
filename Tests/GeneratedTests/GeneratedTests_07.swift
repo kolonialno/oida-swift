@@ -10,62 +10,6 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
-struct NoLiveUIKitFrameReadsRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(NoLiveUIKitFrameReadsRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct NoMagicNumbersRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(NoMagicNumbersRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct NoMarkCommentsRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(NoMarkCommentsRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct NoPresentationStateOutsideNavigationRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(NoPresentationStateOutsideNavigationRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct NoPrintInAppCodeRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(NoPrintInAppCodeRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct NoShareLinkRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(NoShareLinkRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct NoSingleUseVoidFunctionsRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(NoSingleUseVoidFunctionsRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
 struct NoSpaceInMethodCallRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -206,5 +150,61 @@ struct PatternMatchingKeywordsRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(PatternMatchingKeywordsRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct PeriodSpacingRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(PeriodSpacingRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct PreferAssetSymbolsRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(PreferAssetSymbolsRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct PreferConditionListRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(PreferConditionListRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct PreferKeyPathRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(PreferKeyPathRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct PreferNimbleRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(PreferNimbleRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct PreferSelfInStaticReferencesRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(PreferSelfInStaticReferencesRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct PreferSelfTypeOverTypeOfSelfRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(PreferSelfTypeOverTypeOfSelfRule.description)
     }
 }

@@ -1,7 +1,6 @@
 import SwiftLintCore
 
-// oida:disable file_length
-// oida:disable:next type_body_length type_name
+// oida:disable:next type_name
 internal struct VerticalWhitespaceBetweenCasesRuleExamples {
     private static let noSeparation = ["separation": "never"]
 

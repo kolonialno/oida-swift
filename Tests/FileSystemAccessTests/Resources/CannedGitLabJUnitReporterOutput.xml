@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <testsuites><testsuite>
-	<testcase name='warning: line_length in filename:1'>
+	<testcase name='warning: nesting in filename:1'>
 		<failure>Severity: warning
-Rule: line_length
+Rule: nesting
 Reason: Violation Reason 1
 
 File: filename
@@ -10,9 +10,9 @@ Line: 1
 Column: 1
 		</failure>
 	</testcase>
-	<testcase name='error: line_length in filename:1'>
+	<testcase name='error: nesting in filename:1'>
 		<failure>Severity: error
-Rule: line_length
+Rule: nesting
 Reason: Violation Reason 2
 
 File: filename

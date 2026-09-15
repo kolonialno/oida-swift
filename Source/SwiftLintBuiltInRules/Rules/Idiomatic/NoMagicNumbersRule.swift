@@ -1,5 +1,3 @@
-// oida:disable file_length
-
 import Foundation
 import SwiftLintCore
 import SwiftSyntax

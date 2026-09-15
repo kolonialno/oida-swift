@@ -1,7 +1,6 @@
 import SwiftLintCore
 
-// oida:disable file_length
-// oida:disable:next type_name type_body_length
+// oida:disable:next type_name
 enum UnneededSynthesizedInitializerRuleExamples {
     static let nonTriggering = #examples([
         """
