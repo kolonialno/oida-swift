@@ -10,14 +10,6 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
-struct ForWhereRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(ForWhereRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
 struct ForceCastRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -206,5 +198,13 @@ struct LastWhereRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(LastWhereRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct LeadingWhitespaceRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(LeadingWhitespaceRule.description)
     }
 }

@@ -4,6 +4,16 @@
 
 ### Breaking
 
+* `cyclomatic_complexity` is gone too, and `nesting` is the last rule in `Metrics/`. Ten branch points is a
+  magic number of exactly the kind the eight count rules were deleted for — it names a symptom and picks a
+  threshold, which is what a count rule always does. Eleven `oida:disable` commands went with it. On
+  `3lvis/Networking` the run reports 155 violations before and after.
+
+  `nesting` stays because it decides nothing by threshold: a type may sit inside one other type, a function
+  two deep, and both are structural facts rather than sizes anyone measures. It has never been silenced once
+  in this repository's own source.  
+  [Elvis Nunez](https://github.com/3lvis)
+
 * Eight rules that gate on a count are gone: `line_length`, `file_length`, `type_body_length`,
   `function_body_length`, `closure_body_length`, `large_tuple`, `function_parameter_count` and
   `enum_case_associated_values_count`. Length is not a defect — a long function is refactored for a reason,

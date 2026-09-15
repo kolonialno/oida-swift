@@ -35,7 +35,6 @@ public let builtInRules: [any Rule.Type] = [
     ContrastedOpeningBraceRule.self,
     ControlStatementRule.self,
     ConvenienceTypeRule.self,
-    CyclomaticComplexityRule.self,
     DeploymentTargetRule.self,
     DirectReturnRule.self,
     DiscardedNotificationCenterObserverRule.self,

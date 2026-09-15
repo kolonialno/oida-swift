@@ -2,4 +2,4 @@ included:
   - ModuleA
 
 disabled_rules:
-  - cyclomatic_complexity
+  - colon

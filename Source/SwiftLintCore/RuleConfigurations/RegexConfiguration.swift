@@ -49,7 +49,6 @@ public struct RegexConfiguration<Parent: Rule>: SeverityBasedRuleConfiguration, 
         self.identifier = identifier
     }
 
-    // oida:disable:next cyclomatic_complexity
     public mutating func apply(configuration: Any) throws(Issue) {
         guard let configurationDict = configuration as? [String: Any],
               let regexString = configurationDict[$regex.key] as? String else {

@@ -158,7 +158,7 @@ private extension StructDeclSyntax {
     }
 
     // Does the body initialize all, and only, the stored properties for the struct?
-    private func initializerBody( // oida:disable:this cyclomatic_complexity
+    private func initializerBody(
         _ initializerBody: CodeBlockSyntax?,
         matches storedProperties: [VariableDeclSyntax]
     ) -> Bool {

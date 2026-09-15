@@ -429,7 +429,6 @@ public func verifyRule(_ ruleDescription: RuleDescription,
     )
 }
 
-// oida:disable:next cyclomatic_complexity
 func verifyLint(_ ruleDescription: RuleDescription,
                 config: Configuration,
                 commentDoesntViolate: Bool = true,

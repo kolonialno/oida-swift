@@ -63,8 +63,6 @@ final class FileCache: @unchecked Sendable {
     /// TODO: [06/05/2028] We can convert the explicit getters and setters to a keypath-based subscript once the Swift
     /// compiler bug https://github.com/swiftlang/swift/issues/69386 is resolved.
     fileprivate func getOrCompute<T>(factory: () -> T, get: () -> Cached<T>, set: (Cached<T>) -> Void) -> T {
-        // oida:disable:previous cyclomatic_complexity
-
         let initialState = queue.sync { () -> CacheLookup<T> in
             switch get() {
             case .computed(let value):

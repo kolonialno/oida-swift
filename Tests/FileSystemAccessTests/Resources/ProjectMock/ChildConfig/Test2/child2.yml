@@ -5,7 +5,7 @@ disabled_rules:
   - trailing_closure
   - empty_count
 
-cyclomatic_complexity: 80
+colon: error
 
 identifier_name:
   excluded:

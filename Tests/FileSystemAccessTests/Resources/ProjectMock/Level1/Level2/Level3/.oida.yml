@@ -5,5 +5,5 @@ included:
   - "everything on level 3"
 excluded:
   - "the place where i committed many coding sins"
-cyclomatic_complexity: 10000000000
+colon: warning
 reporter: "json"

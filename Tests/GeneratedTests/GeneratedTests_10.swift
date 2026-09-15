@@ -10,14 +10,6 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
-struct TestCaseAccessibilityRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(TestCaseAccessibilityRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
 struct TiendaAPIKitIsUIFreeRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -206,5 +198,13 @@ struct UnusedControlFlowLabelRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(UnusedControlFlowLabelRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct UnusedDeclarationRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(UnusedDeclarationRule.description)
     }
 }

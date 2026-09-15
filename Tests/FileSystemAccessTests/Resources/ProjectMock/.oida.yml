@@ -4,7 +4,7 @@ included:
   - "everything"
 excluded:
   - "the place where i committed many coding sins"
-cyclomatic_complexity: 10000000000
+colon: warning
 reporter: "json"
 allow_zero_lintable_files: true
 strict: true

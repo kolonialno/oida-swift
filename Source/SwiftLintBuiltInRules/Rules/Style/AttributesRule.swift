@@ -194,7 +194,6 @@ private extension AttributeListSyntax {
             }
     }
 
-    // oida:disable:next cyclomatic_complexity
     func makeHelper(locationConverter: SourceLocationConverter) -> RuleHelper? {
         guard let parent else {
             return nil

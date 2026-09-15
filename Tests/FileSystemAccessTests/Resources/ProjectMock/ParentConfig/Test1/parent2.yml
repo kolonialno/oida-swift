@@ -6,4 +6,4 @@ excluded:
   - Test/Test1/Test
   - Test/Test2/Test
 
-cyclomatic_complexity: 80
+colon: error
