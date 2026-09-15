@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <testsuites><testsuite>
-	<testcase name='warning: nesting in filename:1'>
+	<testcase name='warning: force_cast in filename:1'>
 		<failure>Severity: warning
-Rule: nesting
+Rule: force_cast
 Reason: Violation Reason 1
 
 File: filename
@@ -10,9 +10,9 @@ Line: 1
 Column: 1
 		</failure>
 	</testcase>
-	<testcase name='error: nesting in filename:1'>
+	<testcase name='error: force_cast in filename:1'>
 		<failure>Severity: error
-Rule: nesting
+Rule: force_cast
 Reason: Violation Reason 2
 
 File: filename

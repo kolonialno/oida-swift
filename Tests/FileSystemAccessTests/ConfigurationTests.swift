@@ -75,7 +75,7 @@ struct ConfigurationTests {
     func onlyRule() throws {
         let configuration = try Configuration(
             dict: [:],
-            onlyRule: ["nesting"]
+            onlyRule: ["colon"]
         )
 
         #expect(configuration.rules.count == 1)
@@ -83,7 +83,7 @@ struct ConfigurationTests {
 
     @Test
     func onlyRuleMultiple() throws {
-        let onlyRuleIdentifiers = ["nesting", "todo"].sorted()
+        let onlyRuleIdentifiers = ["colon", "todo"].sorted()
         let configuration = try Configuration(
             dict: ["only_rules": "colon"],
             onlyRule: onlyRuleIdentifiers
@@ -97,7 +97,7 @@ struct ConfigurationTests {
 
     @Test
     func onlyRules() throws {
-        let only = ["nesting", "todo"]
+        let only = ["colon", "todo"]
 
         let config = try Configuration(dict: ["only_rules": only])
         let configuredIdentifiers = config.rules.map {
@@ -166,7 +166,7 @@ struct ConfigurationTests {
 
     @Test
     func otherRuleConfigurationsAlongsideOnlyRules() {
-        let only = ["nesting", "todo"]
+        let only = ["colon", "todo"]
         let enabledRulesConfigDict = [
             "opt_in_rules": ["colon"],
             "only_rules": only,
@@ -186,11 +186,11 @@ struct ConfigurationTests {
 
     @Test
     func disabledRules() throws {
-        let disabledConfig = try Configuration(dict: ["disabled_rules": ["nesting", "todo"]])
-        #expect(disabledConfig.rulesWrapper.disabledRuleIdentifiers == ["nesting", "todo"],
+        let disabledConfig = try Configuration(dict: ["disabled_rules": ["colon", "todo"]])
+        #expect(disabledConfig.rulesWrapper.disabledRuleIdentifiers == ["colon", "todo"],
                        "initializing Configuration with valid rules in Dictionary should succeed")
         let expectedIdentifiers = Set(RuleRegistry.shared.list.list.keys
-            .filter({ !(["nesting", "todo"] + optInRules).contains($0) }))
+            .filter({ !(["colon", "todo"] + optInRules).contains($0) }))
         let configuredIdentifiers = Set(disabledConfig.rules.map {
             type(of: $0).identifier
         })
@@ -199,7 +199,7 @@ struct ConfigurationTests {
 
     @Test
     func disabledRulesWithUnknownRule() throws {
-        let validRule = "nesting"
+        let validRule = "colon"
         let bogusRule = "no_sprites_with_elf_shoes"
 
         let configuration = try Configuration(dict: ["disabled_rules": [validRule, bogusRule]])

@@ -7,47 +7,6 @@ import Testing
 
 @Suite
 struct RuleConfigurationTests {
-    private let defaultNestingConfiguration = NestingConfiguration(
-        typeLevel: SeverityLevelsConfiguration(warning: 0),
-        functionLevel: SeverityLevelsConfiguration(warning: 0)
-    )
-
-    @Test
-    func nestingConfigurationSetsCorrectly() {
-        let config =
-            [
-                "type_level": [
-                    "warning": 7, "error": 17,
-                ],
-                "function_level": [
-                    "warning": 8, "error": 18,
-                ],
-                "check_nesting_in_closures_and_statements": false,
-                "always_allow_one_type_in_functions": true,
-            ] as [String: any Sendable]
-        var nestingConfig = defaultNestingConfiguration
-        do {
-            try nestingConfig.apply(configuration: config)
-            #expect(nestingConfig.typeLevel.warning == 7)
-            #expect(nestingConfig.functionLevel.warning == 8)
-            #expect(nestingConfig.typeLevel.error == 17)
-            #expect(nestingConfig.functionLevel.error == 18)
-            #expect(nestingConfig.alwaysAllowOneTypeInFunctions)
-            #expect(!nestingConfig.checkNestingInClosuresAndStatements)
-        } catch {
-            Issue.record("Failed to configure nested configurations")
-        }
-    }
-
-    @Test
-    func nestingConfigurationThrowsOnBadConfig() {
-        let config = 17
-        var nestingConfig = defaultNestingConfiguration
-        #expect(throws: Issue.invalidConfiguration(ruleID: NestingRule.identifier)) {
-            try nestingConfig.apply(configuration: config)
-        }
-    }
-
     @Test
     func severityWorksAsOnlyParameter() throws {
         var config = AttributesConfiguration()

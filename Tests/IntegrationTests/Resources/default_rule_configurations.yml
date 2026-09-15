@@ -747,18 +747,6 @@ navigation_destination_only_in_navigation:
   meta:
     opt-in: true
     correctable: false
-nesting:
-  type_level:
-    warning: 1
-  function_level:
-    warning: 2
-  check_nesting_in_closures_and_statements: true
-  always_allow_one_type_in_functions: false
-  ignore_typealiases_and_associatedtypes: false
-  ignore_coding_keys: false
-  meta:
-    opt-in: false
-    correctable: false
 nimble_operator:
   severity: warning
   meta:

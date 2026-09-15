@@ -323,19 +323,19 @@ struct CommandTests {
     @Test
     func superfluousDisableCommands() {
         #expect(
-            violations(Example(code: "// oida:disable nesting\nprint(123)\n")).map(\.ruleIdentifier)
+            violations(Example(code: "// oida:disable colon\nprint(123)\n")).map(\.ruleIdentifier)
                 == ["blanket_disable_command", "superfluous_disable_command"]
         )
         #expect(
-            violations(Example(code: "// oida:disable:next nesting\nprint(123)\n")).map(\.ruleIdentifier)
+            violations(Example(code: "// oida:disable:next colon\nprint(123)\n")).map(\.ruleIdentifier)
                 == ["superfluous_disable_command"]
         )
         #expect(
-            violations(Example(code: "print(123) // oida:disable:this nesting\n")).map(\.ruleIdentifier)
+            violations(Example(code: "print(123) // oida:disable:this colon\n")).map(\.ruleIdentifier)
                 == ["superfluous_disable_command"]
         )
         #expect(
-            violations(Example(code: "print(123)\n// oida:disable:previous nesting\n")).map(\.ruleIdentifier)
+            violations(Example(code: "print(123)\n// oida:disable:previous colon\n")).map(\.ruleIdentifier)
                 == ["superfluous_disable_command"]
         )
     }
@@ -347,9 +347,9 @@ struct CommandTests {
                 Example(code:
                     """
                     // oida:disable all
-                    // oida:disable nesting
+                    // oida:disable colon
                     print(123)
-                    // oida:enable nesting
+                    // oida:enable colon
                     // oida:enable all
                     """)
             ).isEmpty
@@ -359,7 +359,7 @@ struct CommandTests {
                 Example(code:
                     """
                     // oida:disable all
-                    // oida:disable:next nesting
+                    // oida:disable:next colon
                     print(123)
                     // oida:enable all
                     """)
@@ -370,13 +370,13 @@ struct CommandTests {
                 Example(code:
                     """
                     // oida:disable all
-                    // oida:disable:this nesting
+                    // oida:disable:this colon
                     print(123)
                     // oida:enable all
                     """)
             ).isEmpty
         )
-        let example = Example(code: "// oida:disable all\n// oida:disable:previous nesting\nprint(123)\n")
+        let example = Example(code: "// oida:disable all\n// oida:disable:previous colon\nprint(123)\n")
         #expect(violations(example).isEmpty)
     }
 
@@ -385,20 +385,20 @@ struct CommandTests {
         let longComment =
             "Comment with a large number of words that shouldn't register as superfluous"
         #expect(
-            violations(Example(code: "// oida:disable nesting - \(longComment)\nprint(123)\n"))
+            violations(Example(code: "// oida:disable colon - \(longComment)\nprint(123)\n"))
                 .map(\.ruleIdentifier)
                 == ["blanket_disable_command", "superfluous_disable_command"]
         )
         #expect(
-            violations(Example(code: "// oida:disable:next nesting - Comment\nprint(123)\n")).map(\.ruleIdentifier)
+            violations(Example(code: "// oida:disable:next colon - Comment\nprint(123)\n")).map(\.ruleIdentifier)
                 == ["superfluous_disable_command"]
         )
         #expect(
-            violations(Example(code: "print(123) // oida:disable:this nesting - Comment\n")).map(\.ruleIdentifier)
+            violations(Example(code: "print(123) // oida:disable:this colon - Comment\n")).map(\.ruleIdentifier)
                 == ["superfluous_disable_command"]
         )
         #expect(
-            violations(Example(code: "print(123)\n// oida:disable:previous nesting - Comment\n"))
+            violations(Example(code: "print(123)\n// oida:disable:previous colon - Comment\n"))
                 .map(\.ruleIdentifier)
                 == ["superfluous_disable_command"]
         )
@@ -433,7 +433,7 @@ struct CommandTests {
         #expect(violations(Example(code: "print(123)\n// oida:disable:previous nesting_foo \n")).count == 1)
 
         let example = Example(code:
-            "// oida:disable nesting this is a comment\n// oida:enable nesting\n")
+            "// oida:disable colon this is a comment\n// oida:enable colon\n")
         let multipleViolations = violations(example)
         #expect(multipleViolations.filter({ $0.ruleIdentifier == "superfluous_disable_command" }).count == 9)
         #expect(multipleViolations.filter({ $0.ruleIdentifier == "blanket_disable_command" }).count == 4)
@@ -462,9 +462,9 @@ struct CommandTests {
             violations(
                 Example(code:
                     """
-                    // oida:disable superfluous_disable_command nesting
+                    // oida:disable superfluous_disable_command colon
                     print(123)
-                    // oida:enable superfluous_disable_command nesting
+                    // oida:enable superfluous_disable_command colon
 
                     """)
                 ).isEmpty
@@ -474,9 +474,9 @@ struct CommandTests {
                 Example(code:
                     """
                     // oida:disable superfluous_disable_command
-                    // oida:disable nesting
+                    // oida:disable colon
                     print(123)
-                    // oida:enable superfluous_disable_command nesting
+                    // oida:enable superfluous_disable_command colon
 
                     """)
             ).isEmpty
@@ -484,19 +484,19 @@ struct CommandTests {
         #expect(
             violations(
                 Example(code:
-                    "// oida:disable:next superfluous_disable_command nesting\nprint(123)\n")
+                    "// oida:disable:next superfluous_disable_command colon\nprint(123)\n")
                 ).isEmpty
         )
         #expect(
             violations(
                 Example(code:
-                    "print(123) // oida:disable:this superfluous_disable_command nesting\n")
+                    "print(123) // oida:disable:this superfluous_disable_command colon\n")
                 ).isEmpty
         )
         #expect(
             violations(
                 Example(code:
-                    "print(123)\n// oida:disable:previous superfluous_disable_command nesting\n"
+                    "print(123)\n// oida:disable:previous superfluous_disable_command colon\n"
                 )
             ).isEmpty
         )
@@ -513,21 +513,21 @@ struct CommandTests {
             violations(
                 Example(code:
                     """
-                    // oida:disable nesting
+                    // oida:disable colon
                     print(123)
-                    // oida:enable nesting
+                    // oida:enable colon
 
                     """), config: configuration
                 ).isEmpty
         )
         #expect(
-            violations(Example(code: "// oida:disable:next nesting\nprint(123)\n"), config: configuration).isEmpty
+            violations(Example(code: "// oida:disable:next colon\nprint(123)\n"), config: configuration).isEmpty
         )
         #expect(
-            violations(Example(code: "print(123) // oida:disable:this nesting\n"), config: configuration).isEmpty
+            violations(Example(code: "print(123) // oida:disable:this colon\n"), config: configuration).isEmpty
         )
         #expect(
-            violations(Example(code: "print(123)\n// oida:disable:previous nesting\n"), config: configuration)
+            violations(Example(code: "print(123)\n// oida:disable:previous colon\n"), config: configuration)
                 .isEmpty
         )
     }

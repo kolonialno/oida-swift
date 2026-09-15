@@ -12,18 +12,18 @@ struct BlanketDisableCommandRuleTests {
 
     @Test
     func alwaysBlanketDisable() {
-        let nonTriggeringExamples = #examples(["// oida:disable nesting\n// oida:enable nesting"])
+        let nonTriggeringExamples = #examples(["// oida:disable colon\n// oida:enable colon"])
         verifyRule(Self.emptyDescription.with(nonTriggeringExamples: nonTriggeringExamples))
 
         let triggeringExamples = #examples([
-            "// oida:disable nesting\n// oida:enable ↓nesting",
-            "// oida:disable:previous ↓nesting",
-            "// oida:disable:this ↓nesting",
-            "// oida:disable:next ↓nesting",
+            "// oida:disable colon\n// oida:enable ↓colon",
+            "// oida:disable:previous ↓colon",
+            "// oida:disable:this ↓colon",
+            "// oida:disable:next ↓colon",
         ])
         verifyRule(
             Self.emptyDescription.with(triggeringExamples: triggeringExamples),
-            ruleConfiguration: ["always_blanket_disable": ["nesting"]],
+            ruleConfiguration: ["always_blanket_disable": ["colon"]],
             skipCommentTests: true, skipDisableCommandTests: true)
     }
 
