@@ -9,7 +9,7 @@
           "startLine" : 1
         }
       },
-      "ruleId" : "nesting",
+      "ruleId" : "force_cast",
       "severity" : "MINOR",
       "type" : "CODE_SMELL"
     },
@@ -22,7 +22,7 @@
           "startLine" : 1
         }
       },
-      "ruleId" : "nesting",
+      "ruleId" : "force_cast",
       "severity" : "MAJOR",
       "type" : "CODE_SMELL"
     },

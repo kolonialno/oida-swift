@@ -137,7 +137,6 @@ public let builtInRules: [any Rule.Type] = [
     NSNumberInitAsFunctionReferenceRule.self,
     NSObjectPreferIsEqualRule.self,
     NavigationDestinationOnlyInNavigationRule.self,
-    NestingRule.self,
     NimbleOperatorRule.self,
     NoDirectNavigationControllerCallsRule.self,
     NoDirectPresentationRule.self,

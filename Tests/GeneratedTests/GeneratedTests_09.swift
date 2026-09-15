@@ -10,14 +10,6 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
-struct RedundantTypeAnnotationRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(RedundantTypeAnnotationRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
 struct RedundantVoidReturnRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -206,5 +198,13 @@ struct TestCaseAccessibilityRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(TestCaseAccessibilityRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct TiendaAPIKitIsUIFreeRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(TiendaAPIKitIsUIFreeRule.description)
     }
 }

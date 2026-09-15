@@ -66,14 +66,6 @@ struct NavigationDestinationOnlyInNavigationRuleGeneratedTests {
 }
 
 @Suite(.rulesRegistered)
-struct NestingRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(NestingRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
 struct NimbleOperatorRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -206,5 +198,13 @@ struct NoSpaceInMethodCallRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(NoSpaceInMethodCallRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct NoTimingGuessRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(NoTimingGuessRule.description)
     }
 }

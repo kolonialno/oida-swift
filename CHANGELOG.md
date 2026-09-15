@@ -4,6 +4,15 @@
 
 ### Breaking
 
+* `nesting` is gone and `Metrics/` with it. oida gates on no count at all now, which is a sentence with no
+  exception in it. The rule looked free — zero violations and zero suppressions in this repository and in
+  `3lvis/Networking` — but the only codebase large enough to test it says otherwise: against a 1,868-file
+  app it reports 121 first-party violations, every one a type nested more than one level deep. Nobody
+  rewrites 121 types for a nesting rule; that becomes `type_level: 2` in a configuration file, which is what
+  the rules deleted before it all ended up as. `type_level` and `function_level` were thresholds like any
+  other, only smaller.  
+  [Elvis Nunez](https://github.com/3lvis)
+
 * `cyclomatic_complexity` is gone too, and `nesting` is the last rule in `Metrics/`. Ten branch points is a
   magic number of exactly the kind the eight count rules were deleted for — it names a symptom and picks a
   threshold, which is what a count rule always does. Eleven `oida:disable` commands went with it. On

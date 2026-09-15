@@ -229,7 +229,7 @@ struct RuleConfigurationDescriptionTests {
     @Test
     func prefersParameterDescription() {
         struct Config: RuleConfiguration {
-            typealias Parent = MockRule  // oida:disable:this nesting
+            typealias Parent = MockRule
 
             var parameterDescription: RuleConfigurationDescription? {
                 "visible" => .flag(true)

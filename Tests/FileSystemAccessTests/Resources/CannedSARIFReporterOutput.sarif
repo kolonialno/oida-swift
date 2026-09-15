@@ -21,7 +21,7 @@
           "message" : {
             "text" : "Violation Reason 1"
           },
-          "ruleId" : "nesting"
+          "ruleId" : "force_cast"
         },
         {
           "level" : "error",
@@ -41,7 +41,7 @@
           "message" : {
             "text" : "Violation Reason 2"
           },
-          "ruleId" : "nesting"
+          "ruleId" : "force_cast"
         },
         {
           "level" : "error",
@@ -423,16 +423,6 @@
               "id" : "custom_rules",
               "shortDescription" : {
                 "text" : "Custom Rules"
-              }
-            },
-            {
-              "fullDescription" : {
-                "text" : "Complexity of function bodies should be limited."
-              },
-              "helpUri" : "https://realm.github.io/SwiftLint/cyclomatic_complexity.html",
-              "id" : "cyclomatic_complexity",
-              "shortDescription" : {
-                "text" : "Cyclomatic Complexity"
               }
             },
             {
@@ -1413,16 +1403,6 @@
               "id" : "navigation_destination_only_in_navigation",
               "shortDescription" : {
                 "text" : "Navigation Destination Only In Navigation"
-              }
-            },
-            {
-              "fullDescription" : {
-                "text" : "Types should be nested at most 1 level deep, and functions should be nested at most 2 levels deep."
-              },
-              "helpUri" : "https://realm.github.io/SwiftLint/nesting.html",
-              "id" : "nesting",
-              "shortDescription" : {
-                "text" : "Nesting"
               }
             },
             {

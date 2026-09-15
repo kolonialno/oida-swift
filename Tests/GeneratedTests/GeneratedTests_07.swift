@@ -10,14 +10,6 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
-struct NoTimingGuessRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(NoTimingGuessRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
 struct NoUIApplicationSharedRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -206,5 +198,13 @@ struct PreferTypeCheckingRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(PreferTypeCheckingRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct PreferZeroOverExplicitInitRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(PreferZeroOverExplicitInitRule.description)
     }
 }

@@ -10,14 +10,6 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
-struct TiendaAPIKitIsUIFreeRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(TiendaAPIKitIsUIFreeRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
 struct TodoRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -206,5 +198,13 @@ struct UnusedDeclarationRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(UnusedDeclarationRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct UnusedEnumeratedRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(UnusedEnumeratedRule.description)
     }
 }

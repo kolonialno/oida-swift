@@ -1,9 +1,9 @@
 [
   {
-    "check_name" : "Nesting",
+    "check_name" : "Force Cast",
     "description" : "Violation Reason 1",
     "engine_name" : "SwiftLint",
-    "fingerprint" : "d0d93a75df2849c55b9324241f585dc391dc1d6de235c5d0a1d525f12bbc8f19",
+    "fingerprint" : "902baa1a1a5ada73124b91049ec80149058eba9d61dbb1b640c6b31576595b77",
     "location" : {
       "lines" : {
         "begin" : 1,
@@ -15,10 +15,10 @@
     "type" : "issue"
   },
   {
-    "check_name" : "Nesting",
+    "check_name" : "Force Cast",
     "description" : "Violation Reason 2",
     "engine_name" : "SwiftLint",
-    "fingerprint" : "a28e2de8178146cddb40123345a618fa27c83b68ed020ed539aad90cd6bf539b",
+    "fingerprint" : "9b9ba06ff5d65a8f9a036a141841ec1b1c190330ec9343f1e3cdf8e416be8b2d",
     "location" : {
       "lines" : {
         "begin" : 1,

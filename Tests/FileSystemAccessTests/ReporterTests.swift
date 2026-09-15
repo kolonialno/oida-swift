@@ -11,12 +11,12 @@ struct ReporterTests {
     private static var violations: [StyleViolation] {
         [
             StyleViolation(
-                ruleDescription: NestingRule.description,
+                ruleDescription: ForceCastRule.description,
                 location: Location(file: URL.cwd.appending(path: "filename"), line: 1, character: 1),
                 reason: "Violation Reason 1"
             ),
             StyleViolation(
-                ruleDescription: NestingRule.description,
+                ruleDescription: ForceCastRule.description,
                 severity: .error,
                 location: Location(file: URL.cwd.appending(path: "filename"), line: 1),
                 reason: "Violation Reason 2"
@@ -218,7 +218,7 @@ struct ReporterTests {
     func relativePathReporterPaths() {
         let relativePath = "filename".url()
         let location = Location(file: relativePath, line: 1, character: 2)
-        let violation = StyleViolation(ruleDescription: NestingRule.description,
+        let violation = StyleViolation(ruleDescription: ForceCastRule.description,
                                        location: location,
                                        reason: "Violation Reason")
         let result = RelativePathReporter.generateReport([violation])
