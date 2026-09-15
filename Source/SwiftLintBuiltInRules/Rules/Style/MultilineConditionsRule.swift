@@ -60,6 +60,15 @@ private extension MultilineConditionsRule {
             )
         }
 
+        private func joinedConditionsFitTheFormatterWidth(_ conditions: ConditionElementListSyntax) -> Bool {
+            joinedListFitsTheFormatterWidth(
+                conditions,
+                joinedAs: conditions.joinedOnOneLine(startingWith: []).trimmedDescription,
+                in: file,
+                locationConverter: locationConverter
+            )
+        }
+
         private func reason(for conditions: ConditionElementListSyntax) -> String? {
             if conditions.isOnOneLine {
                 guard conditions.count > 1 else {
@@ -76,7 +85,8 @@ private extension MultilineConditionsRule {
             }
             if configuration.requiresSingleLine,
                !conditions.exceedsSingleLineAllowance(configuration),
-               conditions.canRejoinOneLine {
+               conditions.canRejoinOneLine,
+               joinedConditionsFitTheFormatterWidth(conditions) {
                 return Reason.singleLineRequiredWithinAllowance
             }
             // One condition has nothing to align against, and a lone condition that spans lines reads
@@ -151,7 +161,13 @@ private extension MultilineConditionsRule {
                   !conditions.isEmpty,
                   !conditions.exceedsSingleLineAllowance(configuration),
                   !conditions.isOnOneLine,
-                  conditions.canRejoinOneLine
+                  conditions.canRejoinOneLine,
+                  joinedListFitsTheFormatterWidth(
+                      conditions,
+                      joinedAs: conditions.joinedOnOneLine(startingWith: []).trimmedDescription,
+                      in: file,
+                      locationConverter: locationConverter
+                  )
             else {
                 return nil
             }

@@ -190,6 +190,19 @@
 
 ### Bug Fixes
 
+* The shape rules stop asking for a line the formatter will break. `requires_single_line` demanded that a
+  short list come back to one line; where that line was wider than the width swift-format lays the file out
+  to, the next `--format` broke it again and the rule then reported the formatter's own output. On
+  [3lvis/Networking](https://github.com/3lvis/Networking), `multiline_call_arguments` went 88 → 0 and
+  `multiline_conditions` 8 → 0 after one `--fix --format`, and stayed there on a second pass.
+
+  The width comes from the `.swift-format` the formatter itself reads — this file's directory, then each
+  above it. A tree with no `.swift-format` is held to no width at all: the conflict only exists where
+  somebody has written a width down, and a default nobody chose would be this tool inventing one.
+  `multiline_parameters` takes the same yield, so one definition still drives arguments, parameters and
+  conditions.  
+  [Elvis Nunez](https://github.com/3lvis)
+
 * `opening_brace` writes a shape the formatter keeps. Its correction moved the brace and left the
   signature's tail on the lines above it, so `--format` broke the brace back down and the two traded the
   same edit forever — on [3lvis/Networking](https://github.com/3lvis/Networking), `--fix` cleared all 18
