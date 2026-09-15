@@ -5,12 +5,10 @@ import Testing
 
 @testable import SwiftLintFramework
 
-// oida:disable file_length
-
 private let optInRules = RuleRegistry.shared.list.list.filter({ $0.1.init() is any OptInRule }).map(\.0)
 
 @Suite(.rulesRegistered)
-struct ConfigurationTests { // oida:disable:this type_body_length
+struct ConfigurationTests {
     init() {
         Configuration.resetCache()
     }
@@ -87,7 +85,7 @@ struct ConfigurationTests { // oida:disable:this type_body_length
     func onlyRuleMultiple() throws {
         let onlyRuleIdentifiers = ["nesting", "todo"].sorted()
         let configuration = try Configuration(
-            dict: ["only_rules": "line_length"],
+            dict: ["only_rules": "cyclomatic_complexity"],
             onlyRule: onlyRuleIdentifiers
         )
         #expect(onlyRuleIdentifiers == configuration.enabledRuleIdentifiers)
@@ -170,7 +168,7 @@ struct ConfigurationTests { // oida:disable:this type_body_length
     func otherRuleConfigurationsAlongsideOnlyRules() {
         let only = ["nesting", "todo"]
         let enabledRulesConfigDict = [
-            "opt_in_rules": ["line_length"],
+            "opt_in_rules": ["cyclomatic_complexity"],
             "only_rules": only,
         ]
         let disabledRulesConfigDict = [

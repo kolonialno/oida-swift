@@ -5,8 +5,6 @@ import Testing
 @testable import SwiftLintBuiltInRules
 @testable import SwiftLintFramework
 
-// oida:disable file_length
-
 private extension Configuration {
     func contains<T: Rule>(rule _: T.Type) -> Bool {
         rules.contains { $0 is T }
@@ -14,7 +12,7 @@ private extension Configuration {
 }
 
 @Suite(.rulesRegistered)
-struct MultipleConfigurationsTests { // oida:disable:this type_body_length
+struct MultipleConfigurationsTests {
     // MARK: - Rules Merging
     @Test(.workingDirectory(Constants.Dir.level0))
     func merge() {
@@ -338,7 +336,6 @@ struct MultipleConfigurationsTests { // oida:disable:this type_body_length
             }
         }
         let testCases: [TestCase] = [
-            // oida:disable line_length
             TestCase(optedInInParent: false, disabledInParent: false, optedInInChild: false, disabledInChild: false, isEnabled: false),
             TestCase(optedInInParent: true, disabledInParent: false, optedInInChild: false, disabledInChild: false, isEnabled: true),
             TestCase(optedInInParent: false, disabledInParent: true, optedInInChild: false, disabledInChild: false, isEnabled: false),
@@ -355,7 +352,6 @@ struct MultipleConfigurationsTests { // oida:disable:this type_body_length
             TestCase(optedInInParent: true, disabledInParent: false, optedInInChild: true, disabledInChild: true, isEnabled: false),
             TestCase(optedInInParent: false, disabledInParent: true, optedInInChild: true, disabledInChild: true, isEnabled: false),
             TestCase(optedInInParent: true, disabledInParent: true, optedInInChild: true, disabledInChild: true, isEnabled: false),
-            // oida:enable line_length
         ]
         #expect(testCases.unique.count == 4 * 4)
         let ruleType = ImplicitReturnRule.self
@@ -577,7 +573,7 @@ struct MultipleConfigurationsTests { // oida:disable:this type_body_length
               - Test/Test1/Test
               - Test/Test2/Test
 
-            line_length: 80
+            cyclomatic_complexity: 80
             """,
         ]
         let remoteConfig = Configuration.FileGraph.FilePath.$mockedNetworkResults.withValue(mockedNetworkResults) {
@@ -594,7 +590,7 @@ struct MultipleConfigurationsTests { // oida:disable:this type_body_length
         let mockedNetworkResults = [
             "https://www.mock.com":
             """
-            line_length: 60
+            cyclomatic_complexity: 60
 
             child_config: child.yml
             """,

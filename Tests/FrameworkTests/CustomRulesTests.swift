@@ -6,10 +6,8 @@ import Testing
 @testable import SwiftLintCore
 @testable import SwiftLintFramework
 
-// oida:disable file_length
-
 @Suite(.serialized, .rulesRegistered, .sourceKitRequestsWithoutRule)
-struct CustomRulesTests {  // oida:disable:this type_body_length
+struct CustomRulesTests {
     private typealias Configuration = RegexConfiguration<CustomRules>
 
     private var testFile: SwiftLintFile {

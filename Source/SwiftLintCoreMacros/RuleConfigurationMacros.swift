@@ -4,7 +4,6 @@ import SwiftSyntaxBuilder
 import SwiftSyntaxMacros
 
 enum AutoConfigParser: MemberMacro {
-    // oida:disable:next function_body_length
     static func expansion(
         of _: AttributeSyntax,
         providingMembersOf declaration: some DeclGroupSyntax,

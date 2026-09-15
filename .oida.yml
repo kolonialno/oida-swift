@@ -96,9 +96,6 @@ balanced_xctest_lifecycle: &unit_test_configuration
   test_parent_classes:
     - SwiftLintTestCase
     - XCTestCase
-closure_body_length:
-    warning: 50
-    error: 100
 empty_xctest_method: *unit_test_configuration
 file_name:
   excluded:
@@ -122,11 +119,9 @@ file_name:
     - Tests/GeneratedTests/GeneratedTests_\d\d\.swift
     - Tests/FileSystemAccessTests/.+\.swift
 final_test_case: *unit_test_configuration
-function_body_length: 60
 identifier_name:
   excluded:
     - id
-large_tuple: 3
 number_separator:
   minimum_length: 5
 redundant_self:
@@ -137,9 +132,6 @@ redundant_type_annotation:
 single_test_class: *unit_test_configuration
 trailing_comma:
   mandatory_comma: true
-type_body_length:
-  warning: 400
-  excluded_types: []
 unneeded_override:
   affect_initializers: true
 unused_import:

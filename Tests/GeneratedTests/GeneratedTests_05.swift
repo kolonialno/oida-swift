@@ -10,54 +10,6 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
-struct IsDisjointRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(IsDisjointRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct JoinedDefaultParameterRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(JoinedDefaultParameterRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct KeyPathOnlyWhereTheAPITakesOneRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(KeyPathOnlyWhereTheAPITakesOneRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct KeychainBuiltOnlyAtTheRootRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(KeychainBuiltOnlyAtTheRootRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct LargeTupleRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(LargeTupleRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct LastWhereRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(LastWhereRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
 struct LeadingWhitespaceRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -154,14 +106,6 @@ struct LetVarWhitespaceRuleGeneratedTests {
 }
 
 @Suite(.rulesRegistered)
-struct LineLengthRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(LineLengthRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
 struct LiteralExpressionEndIndentationRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -206,5 +150,61 @@ struct ModifierOrderRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(ModifierOrderRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct MultilineArgumentsBracketsRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(MultilineArgumentsBracketsRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct MultilineArgumentsRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(MultilineArgumentsRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct MultilineCallArgumentsRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(MultilineCallArgumentsRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct MultilineConditionsRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(MultilineConditionsRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct MultilineFunctionChainsRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(MultilineFunctionChainsRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct MultilineLiteralBracketsRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(MultilineLiteralBracketsRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct MultilineParametersBracketsRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(MultilineParametersBracketsRule.description)
     }
 }

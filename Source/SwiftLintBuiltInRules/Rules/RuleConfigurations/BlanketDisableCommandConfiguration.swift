@@ -7,7 +7,6 @@ struct BlanketDisableCommandConfiguration: SeverityBasedRuleConfiguration {
     @ConfigurationElement(key: "allowed_rules")
     private(set) var allowedRuleIdentifiers: Set<String> = [
         "file_header",
-        "file_length",
         "file_name",
         "file_name_no_space",
         "single_test_class",

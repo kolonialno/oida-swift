@@ -3,4 +3,4 @@ included:
   - ModuleB
 
 disabled_rules:
-  - line_length
+  - cyclomatic_complexity

@@ -249,7 +249,6 @@ extension Configuration {
         return nil
     }
 
-    // oida:disable:next function_parameter_count
     static func validateConfiguredRuleIsEnabled(
         parentConfiguration: Configuration?,
         enabledInParentRules: Set<String>,

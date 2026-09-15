@@ -10,62 +10,6 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
-struct PeriodSpacingRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(PeriodSpacingRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct PreferAssetSymbolsRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(PreferAssetSymbolsRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct PreferConditionListRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(PreferConditionListRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct PreferKeyPathRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(PreferKeyPathRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct PreferNimbleRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(PreferNimbleRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct PreferSelfInStaticReferencesRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(PreferSelfInStaticReferencesRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct PreferSelfTypeOverTypeOfSelfRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(PreferSelfTypeOverTypeOfSelfRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
 struct PreferTypeCheckingRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -206,5 +150,61 @@ struct ReduceIntoRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(ReduceIntoRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct RedundantDiscardableLetRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(RedundantDiscardableLetRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct RedundantFinalRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(RedundantFinalRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct RedundantNilCoalescingRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(RedundantNilCoalescingRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct RedundantObjcAttributeRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(RedundantObjcAttributeRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct RedundantSelfRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(RedundantSelfRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct RedundantSendableRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(RedundantSendableRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct RedundantSetAccessControlRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(RedundantSetAccessControlRule.description)
     }
 }

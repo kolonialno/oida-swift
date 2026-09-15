@@ -2,10 +2,8 @@
 import TestHelpers
 import Testing
 
-// oida:disable file_length
-
 @Suite
-struct RuleConfigurationDescriptionTests {  // oida:disable:this type_body_length
+struct RuleConfigurationDescriptionTests {
     @AutoConfigParser
     private struct MockConfiguration: RuleConfiguration {
         @ConfigurationElement(key: "flag")
@@ -49,7 +47,7 @@ struct RuleConfigurationDescriptionTests {  // oida:disable:this type_body_lengt
     }
 
     @Test
-    func descriptionFromConfiguration() throws { // oida:disable:this function_body_length
+    func descriptionFromConfiguration() throws {
         var configuration = MockConfiguration()
         try configuration.apply(configuration: Void())  // Configure to set keys.
         let description = RuleConfigurationDescription.from(configuration: configuration)
@@ -323,7 +321,7 @@ struct RuleConfigurationDescriptionTests {  // oida:disable:this type_body_lengt
     }
 
     @Test
-    func basicTypes() { // oida:disable:this function_body_length
+    func basicTypes() {
         let description = description {
             "flag" => .flag(true)
             "string" => .string("value")
@@ -420,7 +418,7 @@ struct RuleConfigurationDescriptionTests {  // oida:disable:this type_body_lengt
     }
 
     @Test
-    func nestedDescription() { // oida:disable:this function_body_length
+    func nestedDescription() {
         let description = description {
             "flag" => .flag(true)
             "nested 1"

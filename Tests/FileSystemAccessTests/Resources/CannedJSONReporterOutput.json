@@ -4,18 +4,18 @@
     "file" : "${CURRENT_WORKING_DIRECTORY}/filename",
     "line" : 1,
     "reason" : "Violation Reason 1",
-    "rule_id" : "line_length",
+    "rule_id" : "nesting",
     "severity" : "Warning",
-    "type" : "Line Length"
+    "type" : "Nesting"
   },
   {
     "character" : null,
     "file" : "${CURRENT_WORKING_DIRECTORY}/filename",
     "line" : 1,
     "reason" : "Violation Reason 2",
-    "rule_id" : "line_length",
+    "rule_id" : "nesting",
     "severity" : "Error",
-    "type" : "Line Length"
+    "type" : "Nesting"
   },
   {
     "character" : 2,

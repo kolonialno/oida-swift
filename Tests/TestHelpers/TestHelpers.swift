@@ -43,8 +43,6 @@ private let info: PlatformInfo = {
 }()
 #endif
 
-// oida:disable file_length
-
 private let violationMarker = "↓"
 private let violationMarkerChar = violationMarker.first!
 
@@ -431,7 +429,7 @@ public func verifyRule(_ ruleDescription: RuleDescription,
     )
 }
 
-// oida:disable:next function_body_length cyclomatic_complexity
+// oida:disable:next cyclomatic_complexity
 func verifyLint(_ ruleDescription: RuleDescription,
                 config: Configuration,
                 commentDoesntViolate: Bool = true,
@@ -559,7 +557,6 @@ func verifyLint(_ ruleDescription: RuleDescription,
     }
 }
 
-// oida:disable:next function_body_length
 private func verifyExamples(triggers: [Example],
                             nonTriggers: [Example],
                             configuration config: Configuration,

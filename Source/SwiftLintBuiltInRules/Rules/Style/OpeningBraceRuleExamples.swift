@@ -1,8 +1,5 @@
 import SwiftLintCore
 
-// oida:disable file_length
-
-// oida:disable:next type_body_length
 struct OpeningBraceRuleExamples {
     static let nonTriggeringExamples = #examples([
         "func abc() {\n}",

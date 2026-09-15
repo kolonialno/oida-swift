@@ -4,10 +4,8 @@ import Testing
 
 @testable import SwiftLintBuiltInRules
 
-// oida:disable file_length
-
 @Suite(.rulesRegistered)
-struct ModifierOrderTests { // oida:disable:this type_body_length
+struct ModifierOrderTests {
     @Test
     func attributeTypeMethod() {
         let descriptionOverride = ModifierOrderRule.description
@@ -81,7 +79,7 @@ struct ModifierOrderTests { // oida:disable:this type_body_length
     }
 
     @Test
-    func atPrefixedGroup() { // oida:disable:this function_body_length
+    func atPrefixedGroup() {
         let descriptionOverride = ModifierOrderRule.description
             .with(nonTriggeringExamples: #examples([
                 #"""
@@ -232,7 +230,7 @@ struct ModifierOrderTests { // oida:disable:this type_body_length
     }
 
     @Test
-    func correctionsAreAppliedCorrectly() { // oida:disable:this function_body_length
+    func correctionsAreAppliedCorrectly() {
         let descriptionOverride = ModifierOrderRule.description
             .with(nonTriggeringExamples: [], triggeringExamples: [])
             .with(corrections: #corrections([
@@ -401,7 +399,7 @@ struct ModifierOrderTests { // oida:disable:this type_body_length
     }
 
     @Test
-    func isolationModifierOrder() { // oida:disable:this function_body_length
+    func isolationModifierOrder() {
         let descriptionOverride = ModifierOrderRule.description
             .with(nonTriggeringExamples: #examples([
                 """

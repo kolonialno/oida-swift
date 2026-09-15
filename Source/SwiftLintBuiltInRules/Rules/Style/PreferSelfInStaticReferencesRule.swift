@@ -1,5 +1,3 @@
-// oida:disable file_length
-
 import SwiftSyntax
 
 @SwiftSyntaxRule(correctable: true, optIn: true)

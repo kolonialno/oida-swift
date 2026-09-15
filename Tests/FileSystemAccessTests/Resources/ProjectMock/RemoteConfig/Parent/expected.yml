@@ -6,4 +6,4 @@ included:
   - Test/Test1/Test/Test
   - Test/Test2/Test/Test
 
-line_length: 80
+cyclomatic_complexity: 80

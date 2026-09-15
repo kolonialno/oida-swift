@@ -15,8 +15,7 @@ GENERATED_TEST_TARGETS = [
     "//Tests:GeneratedTests_08",
     "//Tests:GeneratedTests_09",
     "//Tests:GeneratedTests_10",
-    "//Tests:GeneratedTests_11",
-    "//Tests:GeneratedTests_12"
+    "//Tests:GeneratedTests_11"
 ]
 
 def generated_tests():
@@ -32,7 +31,6 @@ def generated_tests():
     generated_test_shard("09")
     generated_test_shard("10")
     generated_test_shard("11")
-    generated_test_shard("12")
 
     native.test_suite(
         name = "GeneratedTests",

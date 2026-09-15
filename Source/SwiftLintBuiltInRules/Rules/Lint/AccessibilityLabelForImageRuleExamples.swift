@@ -1,8 +1,5 @@
 import SwiftLintCore
 
-// oida:disable file_length
-
-// oida:disable:next type_body_length
 internal struct AccessibilityLabelForImageRuleExamples {
     static let nonTriggeringExamples = #examples([
         """

@@ -9,7 +9,7 @@
           "startLine" : 1
         }
       },
-      "ruleId" : "line_length",
+      "ruleId" : "nesting",
       "severity" : "MINOR",
       "type" : "CODE_SMELL"
     },
@@ -22,7 +22,7 @@
           "startLine" : 1
         }
       },
-      "ruleId" : "line_length",
+      "ruleId" : "nesting",
       "severity" : "MAJOR",
       "type" : "CODE_SMELL"
     },

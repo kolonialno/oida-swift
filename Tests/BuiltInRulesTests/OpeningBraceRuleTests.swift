@@ -122,7 +122,7 @@ struct OpeningBraceRuleTests {
     }
 
     @Test
-    func withIgnoreMultilineFunctionSignaturesTrue() { // oida:disable:this function_body_length
+    func withIgnoreMultilineFunctionSignaturesTrue() {
         let nonTriggeringExamples = #examples([
             """
                 func abc(

@@ -4,6 +4,22 @@
 
 ### Breaking
 
+* Eight rules that gate on a count are gone: `line_length`, `file_length`, `type_body_length`,
+  `function_body_length`, `closure_body_length`, `large_tuple`, `function_parameter_count` and
+  `enum_case_associated_values_count`. Length is not a defect — a long function is refactored for a reason,
+  never for a count — and the measurement says the same: across this repository the eight reported nothing
+  while costing 34 inline `oida:disable` commands in production code and four raised thresholds in
+  `.oida.yml`, all of which this deletes. On `3lvis/Networking` the run reports 155 violations before and
+  155 after.
+
+  `nesting` and `cyclomatic_complexity` stay. Those gate the shape of code rather than its size: a
+  twenty-branch function is a defect where a long file is a decision, and `nesting` has never needed
+  silencing once in this repository's own source.
+
+  Width is the formatter's. `.swift-format`'s `lineLength` is what wraps a long line, and the shape rules
+  already read it to avoid asking for a line it would break.  
+  [Elvis Nunez](https://github.com/3lvis)
+
 * `opening_brace` no longer accepts `allow_multiline_func`. Set
   `ignore_multiline_function_signatures`, which has meant the same thing for as long as the older name
   was deprecated. The note to remove it came due in August, and a config key nothing reads is a key
