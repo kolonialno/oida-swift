@@ -190,6 +190,15 @@
 
 ### Bug Fixes
 
+* `no_single_use_void_functions` leaves a `public`, `package` or `open` declaration alone. Its callers
+  live in projects the run never sees, so a count taken inside the module is a fraction of that
+  declaration's use — on [3lvis/Networking](https://github.com/3lvis/Networking) the rule flagged
+  `public func clearCache()`, which the README documents as the way a consumer empties the cache, and the
+  remedy it proposed would have deleted a documented entry point. The rule already drew this line for
+  tests, where a caller says nothing either way. Nine of that repository's ten violations are internal
+  and still reported.  
+  [Elvis Nunez](https://github.com/3lvis)
+
 * `document_links_resolve` resolves a relative link against the directory the document sits in, rather than
   the directory oida runs from. In a document below the root the two disagree, and the rule was answering
   for a reader nobody is: `../LEARNINGS.md` from `LEARNINGS/collected.md` reported as missing, while
