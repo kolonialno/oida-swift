@@ -31,7 +31,16 @@ public extension URL {
     }
 
     var isSwiftFile: Bool {
-        isFile && pathExtension == "swift"
+        isFile(withExtension: "swift")
+    }
+
+    /// Whether this is a Markdown document oida's document rules can lint.
+    var isMarkdownFile: Bool {
+        isFile(withExtension: "md")
+    }
+
+    func isFile(withExtension extension: String) -> Bool {
+        isFile && pathExtension == `extension`
     }
 
     var isFile: Bool {

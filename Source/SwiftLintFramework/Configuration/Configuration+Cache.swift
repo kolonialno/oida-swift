@@ -1,6 +1,3 @@
-#if canImport(CryptoSwift)
-import CryptoSwift
-#endif
 import Foundation
 
 extension Configuration {
@@ -27,16 +24,6 @@ extension Configuration {
         return cachedConfigurationsByIdentifier[identifier]
     }
 
-    /// Returns a copy of the current `Configuration` with its `computedCacheDescription` property set to the value of
-    /// `cacheDescription`, which is expensive to compute.
-    ///
-    /// - returns: A new `Configuration` value.
-    public func withPrecomputedCacheDescription() -> Configuration {
-        var result = self
-        result.computedCacheDescription = result.cacheDescription
-        return result
-    }
-
     // MARK: Nested Config Is Self Cache
     private static var nestedConfigIsSelfByIdentifier = [String: Bool]()
     private static let nestedConfigIsSelfByIdentifierLock = NSLock()
@@ -51,49 +38,5 @@ extension Configuration {
         Self.nestedConfigIsSelfByIdentifierLock.lock()
         defer { Self.nestedConfigIsSelfByIdentifierLock.unlock() }
         return Self.nestedConfigIsSelfByIdentifier[identifier] ?? false
-    }
-
-    // MARK: SwiftLint Cache (On-Disk)
-    internal var cacheDescription: String {
-        if let computedCacheDescription {
-            return computedCacheDescription
-        }
-
-        let cacheRulesDescriptions = rules
-            .map { rule in [type(of: rule).identifier, rule.cacheDescription] }
-            .sorted { $0[0] < $1[0] }
-        let jsonObject: [Any] = [rootDirectory.filepath, cacheRulesDescriptions]
-        if let jsonData = try? JSONSerialization.data(withJSONObject: jsonObject) {
-            return jsonData.sha256().toHexString()
-        }
-        queuedFatalError("Could not serialize configuration for cache")
-    }
-
-    internal var cacheURL: URL {
-        let baseURL: URL
-        if let path = cachePath {
-            baseURL = URL(filePath: path, directoryHint: .isDirectory)
-        } else {
-#if os(Linux)
-            baseURL = URL(filePath: "/var/tmp/", directoryHint: .isDirectory)
-#else
-            baseURL = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
-#endif
-        }
-
-        var folder = baseURL
-                .appending(path: "SwiftLint", directoryHint: .isDirectory)
-                .appending(path: Version.current.value, directoryHint: .isDirectory)
-        if let buildID = ExecutableInfo.buildID {
-            folder = folder.appending(path: buildID, directoryHint: .isDirectory)
-        }
-
-        do {
-            try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true, attributes: nil)
-        } catch {
-            Issue.genericWarning("Cannot create cache: " + error.localizedDescription).print()
-        }
-
-        return folder
     }
 }

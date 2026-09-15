@@ -10,6 +10,70 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
+struct RedundantDiscardableLetRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(RedundantDiscardableLetRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct RedundantFinalRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(RedundantFinalRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct RedundantNilCoalescingRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(RedundantNilCoalescingRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct RedundantObjcAttributeRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(RedundantObjcAttributeRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct RedundantSelfRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(RedundantSelfRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct RedundantSendableRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(RedundantSendableRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct RedundantSetAccessControlRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(RedundantSetAccessControlRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct RedundantStringEnumValueRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(RedundantStringEnumValueRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
 struct RedundantTypeAnnotationRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -142,69 +206,5 @@ struct StaticOperatorRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(StaticOperatorRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct StaticOverFinalClassRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(StaticOverFinalClassRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct StrictFilePrivateRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(StrictFilePrivateRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct StrongIBOutletRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(StrongIBOutletRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct SuperfluousElseRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(SuperfluousElseRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct SwitchCaseAlignmentRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(SwitchCaseAlignmentRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct SwitchCaseOnNewlineRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(SwitchCaseOnNewlineRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct SyntacticSugarRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(SyntacticSugarRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct TestCaseAccessibilityRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(TestCaseAccessibilityRule.description)
     }
 }

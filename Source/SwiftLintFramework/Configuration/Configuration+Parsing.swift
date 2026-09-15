@@ -3,7 +3,6 @@ import Foundation
 extension Configuration {
     // MARK: - Subtypes
     internal enum Key: String, CaseIterable {
-        case cachePath = "cache_path"
         case disabledRules = "disabled_rules"
         case enabledRules = "enabled_rules" // deprecated in favor of optInRules
         case excluded = "excluded"
@@ -40,7 +39,6 @@ extension Configuration {
     /// - parameter ruleList:               The list of rules to be available to this configuration.
     /// - parameter enableAllRules:         Whether all rules from `ruleList` should be enabled, regardless of the
     ///                                     settings in `dict`.
-    /// - parameter cachePath:              The location of the persisted cache on disk.
     public init(
         parentConfiguration: Configuration? = nil,
         dict: [String: Any],
@@ -48,7 +46,6 @@ extension Configuration {
         ruleList: RuleList = RuleRegistry.shared.list,
         enableAllRules: Bool = false,
         onlyRule: [String] = [],
-        cachePath: String? = nil
     ) throws {
         func defaultStringArray(_ object: Any?) -> [String] { [String].array(of: object) ?? [] }
 
@@ -105,7 +102,6 @@ extension Configuration {
             indentation: Self.getIndentationLogIfInvalid(from: dict),
             warningThreshold: dict[Key.warningThreshold.rawValue] as? Int,
             reporter: dict[Key.reporter.rawValue] as? String ?? XcodeReporter.identifier,
-            cachePath: cachePath ?? dict[Key.cachePath.rawValue] as? String,
             pinnedVersion: dict[Key.swiftlintVersion.rawValue].map { ($0 as? String) ?? String(describing: $0) },
             allowZeroLintableFiles: dict[Key.allowZeroLintableFiles.rawValue] as? Bool ?? false,
             strict: dict[Key.strict.rawValue] as? Bool ?? false,

@@ -1,0 +1,42 @@
+// GENERATED FILE. DO NOT EDIT!
+
+// oida:disable:next blanket_disable_command superfluous_disable_command
+// oida:disable single_test_class type_name
+
+import TestHelpers
+import Testing
+
+@testable import SwiftLintBuiltInRules
+@testable import SwiftLintCore
+
+@Suite(.rulesRegistered)
+struct WeakDelegateRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(WeakDelegateRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct XCTFailMessageRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(XCTFailMessageRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct XCTSpecificMatcherRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(XCTSpecificMatcherRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct YodaConditionRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(YodaConditionRule.description)
+    }
+}

@@ -186,6 +186,14 @@ struct CommaRuleGeneratedTests {
 }
 
 @Suite(.rulesRegistered)
+struct CommentAddsNoWordRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(CommentAddsNoWordRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
 struct CommentSpacingRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -198,13 +206,5 @@ struct CompilerProtocolInitRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(CompilerProtocolInitRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct ComputedAccessorsOrderRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(ComputedAccessorsOrderRule.description)
     }
 }

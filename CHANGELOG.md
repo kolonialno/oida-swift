@@ -4,6 +4,21 @@
 
 ### Breaking
 
+* `opening_brace` no longer accepts `allow_multiline_func`. Set
+  `ignore_multiline_function_signatures`, which has meant the same thing for as long as the older name
+  was deprecated. The note to remove it came due in August, and a config key nothing reads is a key
+  someone can still write and be wrong about.  
+  [Elvis Nunez](https://github.com/3lvis)
+
+* The result cache is gone, and with it `--cache-path`, `--no-cache` and the `cache_path` setting. A
+  stored verdict was keyed on the linted file's own modification date, but a rule here can decide by
+  reading files other than the one being linted — `document_links_resolve` opens the link's target,
+  `no_single_use_void_functions` resolves receivers across the whole run. Pruning a cited file left the
+  citing document untouched, so its stored verdict still called the link resolved, and restoring the file
+  left it still calling it missing. Linting 1,830 files takes about two seconds without it, against 0.7
+  with a warm cache, which was the whole of what it bought.  
+  [Elvis Nunez](https://github.com/3lvis)
+
 * `Configuration.IndentationStyle` moved to `SwiftLintCore.IndentationStyle`.
   Rules can now read the global `indentation` setting via `CurrentRule.configuration`.  
   [GandaLF2006](https://github.com/GandaLF2006)
@@ -13,6 +28,110 @@
 * None.
 
 ### Enhancements
+
+* `no_single_use_void_functions` now counts callers across the whole run by resolving each call's
+  receiver — `screen.resolve(into: error)` is `ScreenNavigator.resolve(into:)` because `screen` came from
+  `navigator.navigator(for:)`, whose return type is declared in another file. Properties typed by their
+  initializer, nested types, protocol witnesses, overloads by label, and Swift's preference for the
+  exact-arity overload are all resolved from the syntax tree alone; a receiver the parser cannot type
+  withholds the verdict rather than guessing. Measured against the compiler's index of tienda-ios: 99.5%
+  of the 619 functions it flags have exactly one production caller, and it finds 91% of them; the misses
+  are overloads told apart only by argument type and `$0` closures. Tests are not counted as callers, so
+  a function whose only other reader is a test is still flagged. Whole-repository run: about 4 seconds.  
+  [Elvis Nunez](https://github.com/3lvis)
+
+* Add an opt-in `no_doc_comments` rule: a doc comment's job is to describe the declaration it sits on,
+  which is restatement by purpose. The ones that carry something the code cannot say read exactly like
+  the ones that do not — same length, same shape, same position — so measuring 45 of them by hand
+  separated them and no parser could. This cuts all of them rather than none, deliberately: better to
+  cut too much than too little. Ordinary `//` comments are untouched, because those are mostly the notes
+  that stop someone deleting code that only looks wrong. Not correctable — 1,200 deletions is a job
+  somebody does on purpose.  
+  [Elvis Nunez](https://github.com/3lvis)
+
+
+
+* `no_mark_comments` is no longer correctable. `--fix` walks the whole repository, so a rule that deletes
+  a line everywhere lands every one of those files in whichever commit runs it first — 88 files arrived
+  in an unrelated two-line change that way, and were noticed only by reading `git status` after
+  committing. Sweeping the banners is a job somebody does on purpose, not a side effect of formatting.  
+  [Elvis Nunez](https://github.com/3lvis)
+
+
+
+* `no_single_use_void_functions` counts callers across the whole run rather than reading one file, and
+  access level has left the rule. What made it true was never `private` — it was that the caller and the
+  callee share a file, so the reader pays a jump. A call from another file is an interface across a
+  layer, and inlining it would push logic the wrong way; a call from a test neither saves a function nor
+  condemns it, so test targets are out of the count (`test_path_fragments` says which paths those are).
+  Measured against a compiler index store on a 1,800-file app: 239 violations, 223 of them known to the
+  index, 223 confirmed. The old shape read 228 of the 627 single-call-site void functions and could be
+  escaped by widening `private` to `internal`, which enlarged a type's API to dodge a readability rule.
+  Widening now changes nothing, because the caller has not moved.  
+  [Elvis Nunez](https://github.com/3lvis)
+
+
+
+* Add an opt-in `comment_adds_no_word` rule: when every word of a comment already appears in the code
+  beneath it, a reader who reads the code learns nothing from having read the comment first. It compares
+  the comment's words against the declaration or statement it sits above, splitting identifiers into
+  words (`UIDevice` is `UI` and `Device`), and fires only when the comment introduces none of its own. It
+  leaves alone anything carrying intent or a pointer — `TODO`, `FIXME`, a lint directive, a bare link, a
+  parameter list — and is deliberately not correctable: the comments it finds are worth a glance before
+  they go.  
+  [Elvis Nunez](https://github.com/3lvis)
+
+* Add an opt-in `no_mark_comments` rule: a `// MARK:` banner names a section the declarations below it
+  already name, and it is maintained by hand while everything around it moves. Xcode's jump bar reads
+  them, so this is a decision rather than a reading of the field — Airbnb's style guide requires a MARK
+  above every type and Google's endorses them for grouping. A file that needs section headers to be
+  navigable is a file to split. Correctable: `--fix` deletes the line.  
+  [Elvis Nunez](https://github.com/3lvis)
+
+* Add an opt-in `no_single_use_void_functions` rule: a function that returns nothing states nothing in
+  its signature about what it touches, so a reader learns what it did by reading it. When it is also
+  reachable from nowhere but its own file and called from one place, the jump buys nothing, and the
+  statements read better where they run. It counts call sites within the file, so it takes the functions
+  the file is guaranteed to hold every caller of: `private` and `fileprivate` ones, and the
+  internal-by-keyword ones inside a private type, a private extension or another function. Functions that
+  return a value are left alone — the name stands for the value, and it survives only as long as the
+  function. So are `@objc`/`@IBAction` targets a selector reaches, overrides, overloaded names, members
+  of a private type that conforms to a protocol, and functions nothing calls at all, which
+  `unused_declaration` reports.  
+  [Elvis Nunez](https://github.com/3lvis)
+
+* Add an opt-in `no_uiapplication_shared` rule: reaching for the shared application instance reaches
+  around whatever injected seam this code was handed instead — the navigator for a window, a
+  link-opener for a URL, the composition root for anything else. That seam is what a preview, a test or
+  a second window can replace; the singleton cannot be.  
+  [Elvis Nunez](https://github.com/3lvis)
+
+* Add an opt-in `no_timing_guess` rule: a fixed delay before mutating state or presenting, dismissing or
+  navigating (`DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { ... }`) is a guess at how long an
+  animation or transition takes, not a signal that it finished, and the guess is what breaks first on
+  another device or a slower run.  
+  [Elvis Nunez](https://github.com/3lvis)
+
+* Lint Markdown documents, not just Swift source. `oida lint` now walks every `.md` file the run covers
+  and runs a new `DocumentRule` category against it, kept on a track structurally separate from
+  Swift-syntax rules — a document rule only ever sees a `.md` file, and a Swift rule never does. Three
+  opt-in rules ship with it: `document_says_what_is` (a negation is a sentence waiting to be turned
+  around into what actually is), `document_avoids_retired_words` (a retired word promises what a plain
+  description already shows), and `document_links_resolve` (a relative link outlives the file it once
+  pointed to).  
+  [Elvis Nunez](https://github.com/3lvis)
+
+* Add an opt-in `no_direct_navigation_controller_calls` rule, and extend `no_direct_presentation` to
+  catch `.alert` and `.confirmationDialog`. A raw `NavigationLink`, a direct
+  push/present/pop/dismiss, or an untracked alert desyncs the navigator's tracked stack the same way an
+  untracked sheet already did.  
+  [Elvis Nunez](https://github.com/3lvis)
+
+* Add an opt-in `no_share_link` rule. `ShareLink` presents its share sheet through Apple's remote-scene
+  sharing bridge, and an interactive (swipe-down) dismissal of that sheet leaves the window's touch
+  delivery dead for the rest of the session — present through the navigator's own share sheet
+  destination instead.  
+  [Elvis Nunez](https://github.com/3lvis)
 
 * Publish a Linux x86_64 build of `oida` alongside the macOS one, and resolve `swift-format` through
   `which` instead of `xcrun` when running on Linux — the official Swift toolchain container ships its
@@ -70,6 +189,42 @@
   [#6839](https://github.com/realm/SwiftLint/issues/6839)
 
 ### Bug Fixes
+
+* `multiline_call_arguments` corrects the shape a formatter leaves behind, where a call is broken after
+  its opening paren and the arguments are packed onto the continuation lines. The rewriter asked whether
+  the list sat on one line *including* the break before its first argument, so it recognised only a call
+  that had never been broken at all — and the visitor, which reads the line each argument starts on, went
+  on reporting the rest. Two of the rule's three reasons were reported and never corrected: on
+  [3lvis/Networking](https://github.com/3lvis/Networking), `--fix` left 38 of "each argument must start on
+  its own line" and 49 of "too many arguments on a single line", and a second pass changed nothing. Both
+  are now zero. Rewriter and visitor count argument start lines the same way, from the list's own trivia
+  rather than from source locations a rewrite above it has already made stale.  
+  [Elvis Nunez](https://github.com/3lvis)
+
+* `document_links_resolve` resolves a relative link against the directory the document sits in, rather than
+  the directory oida runs from. In a document below the root the two disagree, and the rule was answering
+  for a reader nobody is: `../LEARNINGS.md` from `LEARNINGS/collected.md` reported as missing, while
+  `LEARNINGS.md` passed — the form GitHub renders as a link to `LEARNINGS/LEARNINGS.md`, which is the dead
+  one. The rule had only ever linted documents at the root, where both resolutions give the same answer, so
+  the choice between them went untested until an `included` pattern first reached into a subdirectory.  
+  [Elvis Nunez](https://github.com/3lvis)
+
+* `file_header` no longer reads a lint command at the top of a file as part of the header. It asked
+  whether a comment contained `swiftlint:` when deciding whether that comment was a command, which the
+  rename to `oida:` left behind, so an `// oida:disable` line was judged as header text. It asks
+  `Command.prefix` now.  
+  [Elvis Nunez](https://github.com/3lvis)
+
+* Stop `--format` handing a document file to `swift-format`. `oida lint --format` merged the Markdown
+  files a document rule covers into the same list it passes to `swift-format check`, which then parsed
+  each one as Swift source and reported its prose as a wall of syntax errors — real violations were
+  still correct underneath, but `--format`'s own noise buried them.  
+  [Elvis Nunez](https://github.com/3lvis)
+
+* Stop `no_share_link` matching a member access spelled the same as the type, like an `L10n` key named
+  `ShareLink` — it now only flags a `ShareLink(…)` construction or a `ShareLink` type reference, the two
+  forms the real SwiftUI view can actually take.  
+  [Elvis Nunez](https://github.com/3lvis)
 
 * Stop `unhandled_throwing_task` reporting a `try` that belongs to a nested closure literal rather than to
   the task body, so `Task { navigator.navigate(awaiting: { try await resolver.resolve(url) }) }` is quiet.

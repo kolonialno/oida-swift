@@ -10,6 +10,14 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
+struct MultilineArgumentsBracketsRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(MultilineArgumentsBracketsRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
 struct MultilineArgumentsRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -138,10 +146,26 @@ struct NimbleOperatorRuleGeneratedTests {
 }
 
 @Suite(.rulesRegistered)
+struct NoDirectNavigationControllerCallsRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(NoDirectNavigationControllerCallsRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
 struct NoDirectPresentationRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(NoDirectPresentationRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct NoDocCommentsRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(NoDocCommentsRule.description)
     }
 }
 
@@ -182,29 +206,5 @@ struct NoLegacyRouterReadersRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(NoLegacyRouterReadersRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct NoLiveUIKitFrameReadsRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(NoLiveUIKitFrameReadsRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct NoMagicNumbersRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(NoMagicNumbersRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct NoPresentationStateOutsideNavigationRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(NoPresentationStateOutsideNavigationRule.description)
     }
 }

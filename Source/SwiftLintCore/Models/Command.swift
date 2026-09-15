@@ -94,7 +94,7 @@ public struct Command: Equatable {
     /// - parameter range:         The range of the command in the line (0-based).
     public init(commandString: String, line: Int, range: Range<Int>) {
         let scanner = Scanner(string: commandString)
-        _ = scanner.scanString(Command.prefix)
+        _ = scanner.scanString(Self.prefix)
         // (enable|disable)(:previous|:this|:next)
         guard let actionAndModifierString = scanner.scanUpToString(" ") else {
             self.init(action: .invalid, line: line, range: range)

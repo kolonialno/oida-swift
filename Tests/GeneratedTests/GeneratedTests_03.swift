@@ -10,6 +10,14 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
+struct EmptyCollectionLiteralRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(EmptyCollectionLiteralRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
 struct EmptyCountRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -198,13 +206,5 @@ struct FileTypesOrderRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(FileTypesOrderRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct FinalTestCaseRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(FinalTestCaseRule.description)
     }
 }

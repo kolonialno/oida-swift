@@ -11,9 +11,10 @@ public protocol LintableFileManager {
     /// - parameter rootDirectory: The parent directory for the specified path. If none is provided, the current working
     ///                            directory will be used.
     /// - parameter excluder:     The excluder used to filter out files that should not be linted.
+    /// - parameter extension:    The file extension to collect, e.g. `"swift"` or `"md"`.
     ///
     /// - returns: Files to lint.
-    func filesToLint(inPath path: URL, excluder: Excluder) -> [URL]
+    func filesToLint(inPath path: URL, excluder: Excluder, extension: String) -> [URL]
 
     /// Returns the date when the file at the specified path was last modified. Returns `nil` if the file cannot be
     /// found or its last modification date cannot be determined.
@@ -22,6 +23,13 @@ public protocol LintableFileManager {
     ///
     /// - returns: A date, if one was determined.
     func modificationDate(forFileAtPath path: URL) -> Date?
+}
+
+public extension LintableFileManager {
+    /// `filesToLint(inPath:excluder:extension:)`, defaulting to Swift source files.
+    func filesToLint(inPath path: URL, excluder: Excluder) -> [URL] {
+        filesToLint(inPath: path, excluder: excluder, extension: "swift")
+    }
 }
 
 /// An excluder for filtering out files that should not be linted.
@@ -80,9 +88,9 @@ extension FileManager: LintableFileManager {
         .skipsSubdirectoryDescendants,
     ]
 
-    public func filesToLint(inPath path: URL, excluder: Excluder) -> [URL] {
+    public func filesToLint(inPath path: URL, excluder: Excluder, extension: String) -> [URL] {
         // If path is a file, filter and return it directly.
-        if path.isSwiftFile {
+        if path.isFile(withExtension: `extension`) {
             return excluder.excludes(path: path) ? [] : [path]
         }
 
@@ -90,14 +98,14 @@ extension FileManager: LintableFileManager {
         if case .noExclusion = excluder {
             return subpaths(atPath: path.filepath)?.parallelCompactMap { element in
                 let absoluteElementPath = element.url(relativeTo: path)
-                return absoluteElementPath.isSwiftFile ? absoluteElementPath : nil
+                return absoluteElementPath.isFile(withExtension: `extension`) ? absoluteElementPath : nil
             } ?? []
         }
 
-        return collectFiles(atPath: path, excluder: excluder)
+        return collectFiles(atPath: path, excluder: excluder, extension: `extension`)
     }
 
-    private func collectFiles(atPath absolutePath: URL, excluder: Excluder) -> [URL] {
+    private func collectFiles(atPath absolutePath: URL, excluder: Excluder, extension: String) -> [URL] {
         let enumerator = enumerator(
             at: absolutePath,
             includingPropertiesForKeys: Array(Self.enumeratorProperties),
@@ -121,7 +129,7 @@ extension FileManager: LintableFileManager {
                 resourceValues = try? element.resourceValues(forKeys: Self.enumeratorProperties)
             }
             if resourceValues?.isRegularFile == true {
-                if element.pathExtension == "swift", !excluder.excludes(path: element) {
+                if element.pathExtension == `extension`, !excluder.excludes(path: element) {
                     files.append(element)
                 }
             } else if resourceValues != nil, !excluder.excludes(path: element) {
@@ -129,7 +137,9 @@ extension FileManager: LintableFileManager {
             }
         }
 
-        return files + directoriesToWalk.parallelFlatMap { collectFiles(atPath: $0, excluder: excluder) }
+        return files + directoriesToWalk.parallelFlatMap {
+            collectFiles(atPath: $0, excluder: excluder, extension: `extension`)
+        }
     }
 
     public func modificationDate(forFileAtPath path: URL) -> Date? {

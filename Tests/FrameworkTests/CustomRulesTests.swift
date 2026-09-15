@@ -652,15 +652,6 @@ struct CustomRulesTests {  // oida:disable:this type_body_length
     }
 
     @Test
-    func executionModeIncludedInCacheDescription() {
-        var regexConfig = Configuration(identifier: "test_rule")
-        regexConfig.regex = "pattern"
-        regexConfig.executionMode = .swiftsyntax
-
-        #expect(regexConfig.cacheDescription.contains("swiftsyntax"))
-    }
-
-    @Test
     func executionModeAffectsHash() {
         var config1 = Configuration(identifier: "test_rule")
         config1.regex = "pattern"

@@ -118,6 +118,11 @@ comma_inheritance:
   meta:
     opt-in: true
     correctable: true
+comment_adds_no_word:
+  severity: warning
+  meta:
+    opt-in: true
+    correctable: false
 comment_spacing:
   severity: warning
   meta:
@@ -240,6 +245,21 @@ discouraged_optional_boolean:
     opt-in: true
     correctable: false
 discouraged_optional_collection:
+  severity: warning
+  meta:
+    opt-in: true
+    correctable: false
+document_avoids_retired_words:
+  severity: warning
+  meta:
+    opt-in: true
+    correctable: false
+document_links_resolve:
+  severity: warning
+  meta:
+    opt-in: true
+    correctable: false
+document_says_what_is:
   severity: warning
   meta:
     opt-in: true
@@ -803,7 +823,17 @@ nimble_operator:
   meta:
     opt-in: true
     correctable: true
+no_direct_navigation_controller_calls:
+  severity: warning
+  meta:
+    opt-in: true
+    correctable: false
 no_direct_presentation:
+  severity: warning
+  meta:
+    opt-in: true
+    correctable: false
+no_doc_comments:
   severity: warning
   meta:
     opt-in: true
@@ -847,6 +877,11 @@ no_magic_numbers:
   meta:
     opt-in: true
     correctable: false
+no_mark_comments:
+  severity: warning
+  meta:
+    opt-in: true
+    correctable: false
 no_presentation_state_outside_navigation:
   severity: warning
   meta:
@@ -857,11 +892,32 @@ no_print_in_app_code:
   meta:
     opt-in: true
     correctable: false
+no_share_link:
+  severity: warning
+  meta:
+    opt-in: true
+    correctable: false
+no_single_use_void_functions:
+  severity: warning
+  test_path_fragments: ["Tests/", "UITests", "Tests.swift", "TestHelpers/", "Spec.swift"]
+  meta:
+    opt-in: true
+    correctable: false
 no_space_in_method_call:
   severity: warning
   meta:
     opt-in: false
     correctable: true
+no_timing_guess:
+  severity: warning
+  meta:
+    opt-in: true
+    correctable: false
+no_uiapplication_shared:
+  severity: warning
+  meta:
+    opt-in: true
+    correctable: false
 no_user_defaults_in_app_code:
   severity: warning
   meta:
@@ -928,7 +984,6 @@ opening_brace:
   ignore_multiline_type_headers: false
   ignore_multiline_statement_conditions: false
   ignore_multiline_function_signatures: false
-  allow_multiline_func: false
   meta:
     opt-in: false
     correctable: true

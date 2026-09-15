@@ -10,6 +10,70 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
+struct StaticOverFinalClassRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(StaticOverFinalClassRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct StrictFilePrivateRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(StrictFilePrivateRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct StrongIBOutletRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(StrongIBOutletRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct SuperfluousElseRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(SuperfluousElseRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct SwitchCaseAlignmentRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(SwitchCaseAlignmentRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct SwitchCaseOnNewlineRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(SwitchCaseOnNewlineRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct SyntacticSugarRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(SyntacticSugarRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct TestCaseAccessibilityRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(TestCaseAccessibilityRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
 struct TiendaAPIKitIsUIFreeRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -142,69 +206,5 @@ struct UnneededEscapingRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(UnneededEscapingRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct UnneededOverrideRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(UnneededOverrideRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct UnneededParenthesesInClosureArgumentRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(UnneededParenthesesInClosureArgumentRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct UnneededSynthesizedInitializerRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(UnneededSynthesizedInitializerRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct UnneededThrowsRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(UnneededThrowsRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct UnownedVariableCaptureRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(UnownedVariableCaptureRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct UntypedErrorInCatchRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(UntypedErrorInCatchRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct UnusedClosureParameterRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(UnusedClosureParameterRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct UnusedControlFlowLabelRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(UnusedControlFlowLabelRule.description)
     }
 }

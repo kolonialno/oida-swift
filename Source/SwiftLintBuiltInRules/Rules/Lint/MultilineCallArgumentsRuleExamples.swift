@@ -672,6 +672,32 @@ struct MultilineCallArgumentsRuleExamples {
             )
             """,
 
+        // A list the formatter has already broken keeps its arguments packed onto the continuation lines,
+        // which is neither one line nor one per line.
+        """
+        foo(
+            a: x, b: y, c: z)
+        """.asExample(configuration: ["max_number_of_single_line_parameters": 2, "requires_single_line": true]): """
+            foo(
+                a: x,
+                b: y,
+                c: z
+            )
+            """,
+
+        """
+        foo(
+            a: x, b: y,
+            c: z
+        )
+        """.asExample(configuration: ["max_number_of_single_line_parameters": 2, "requires_single_line": true]): """
+            foo(
+                a: x,
+                b: y,
+                c: z
+            )
+            """,
+
         // A multiline string argument means the list already spans lines, so there is no single line to break.
         """
         log(Message(text: \"""

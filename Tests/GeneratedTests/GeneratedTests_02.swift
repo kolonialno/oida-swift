@@ -10,6 +10,14 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
+struct ComputedAccessorsOrderRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(ComputedAccessorsOrderRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
 struct ConditionalReturnsOnNewlineRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -198,13 +206,5 @@ struct DynamicInlineRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(DynamicInlineRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct EmptyCollectionLiteralRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(EmptyCollectionLiteralRule.description)
     }
 }

@@ -43,7 +43,7 @@ struct ConfigPathResolutionTests {
         #expect(
             lintableFilePaths(
                 in: "_2_parent_child_different_dirs",
-                configFile: "project/.swiftlint.yml",
+                configFile: "project/\(Configuration.defaultFileName)",
                 inPath: "project"
             ) == ["project/Sources/Core/Service.swift"]
         )
@@ -54,7 +54,7 @@ struct ConfigPathResolutionTests {
         #expect(
             lintableFilePaths(
                 in: "_3_child_overrides_parent_exclusion",
-                configFile: "project/.swiftlint.yml",
+                configFile: "project/\(Configuration.defaultFileName)",
                 inPath: "project"
             ) == ["project/Vendor/Critical/Important.swift"]
         )
@@ -70,7 +70,7 @@ struct ConfigPathResolutionTests {
     @Test
     func nestedConfigurationBasic() {
         #expect(
-            lintableFilePaths(in: "_4_nested_basic", configFile: ".swiftlint.yml")
+            lintableFilePaths(in: "_4_nested_basic", configFile: Configuration.defaultFileName)
                 == ["ModuleA/File.swift", "ModuleA/Generated/File.swift", "ModuleB/File.swift"]
         )
     }
@@ -80,7 +80,7 @@ struct ConfigPathResolutionTests {
         #expect(
             lintableFilePaths(
                 in: "_5_wildcard_patterns",
-                configFile: "project/.swiftlint.yml",
+                configFile: "project/\(Configuration.defaultFileName)",
                 inPath: "project"
             ) == ["project/Sources/Models/User.swift"]
         )
@@ -91,7 +91,7 @@ struct ConfigPathResolutionTests {
         #expect(
             lintableFilePaths(
                 in: "_2_parent_child_different_dirs",
-                configFile: "project/.swiftlint.yml",
+                configFile: "project/\(Configuration.defaultFileName)",
                 inPath: "project"
             ) == ["project/Sources/Core/Service.swift"]
         )
@@ -122,13 +122,15 @@ struct ConfigPathResolutionTests {
     @Test
     func configFromParentFolder() {
         #expect(
-            lintableFilePaths(in: "_6_wildcards_from_nested_folder", configFile: ".swiftlint.yml")
+            lintableFilePaths(in: "_6_wildcards_from_nested_folder", configFile: Configuration.defaultFileName)
                 == ["MyProject/Sources/App.swift"]
         )
 
         #expect(
-            lintableFilePaths(in: "_6_wildcards_from_nested_folder/MyProject", configFile: "../.swiftlint.yml")
-                == ["Sources/App.swift"]
+            lintableFilePaths(
+                in: "_6_wildcards_from_nested_folder/MyProject",
+                configFile: "../\(Configuration.defaultFileName)"
+            ) == ["Sources/App.swift"]
         )
     }
 
@@ -185,7 +187,7 @@ struct ConfigPathResolutionTests {
         let expectedPaths = ["Real/Folder/Nested.swift", "Real/Target.swift"]
 
         // With symlinks
-        #expect(lintableFilePaths(in: "_9_symlinked_paths", configFile: ".swiftlint.yml") == expectedPaths)
+        #expect(lintableFilePaths(in: "_9_symlinked_paths", configFile: Configuration.defaultFileName) == expectedPaths)
 
         let fixture = fixturePath("_9_symlinked_paths")
         let fileLink = fixture.appending(path: "LinkToFile.swift", directoryHint: .notDirectory)
@@ -206,7 +208,7 @@ struct ConfigPathResolutionTests {
         #expect(folderLink == targetFolder)
 
         // Without symlinks
-        #expect(lintableFilePaths(in: "_9_symlinked_paths", configFile: ".swiftlint.yml") == expectedPaths)
+        #expect(lintableFilePaths(in: "_9_symlinked_paths", configFile: Configuration.defaultFileName) == expectedPaths)
     }
     #endif
 

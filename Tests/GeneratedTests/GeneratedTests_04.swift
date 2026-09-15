@@ -10,6 +10,14 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
+struct FinalTestCaseRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(FinalTestCaseRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
 struct FirstWhereRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -198,13 +206,5 @@ struct InvisibleCharacterRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(InvisibleCharacterRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct IsDisjointRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(IsDisjointRule.description)
     }
 }

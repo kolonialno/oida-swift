@@ -60,18 +60,15 @@ enum LintOrAnalyzeModeWithCompilerArguments {
 
 struct LintableFilesVisitor {
     let options: LintOrAnalyzeOptions
-    let cache: LinterCache?
     let mode: LintOrAnalyzeModeWithCompilerArguments
     let parallel: Bool
     let block: (CollectedLinter) async -> Void
     let allowZeroLintableFiles: Bool
 
     private init(options: LintOrAnalyzeOptions,
-                 cache: LinterCache?,
                  allowZeroLintableFiles: Bool,
                  block: @escaping (CollectedLinter) async -> Void) throws {
         self.options = options
-        self.cache = cache
         if options.mode == .lint {
             self.mode = .lint
             self.parallel = true
@@ -87,13 +84,11 @@ struct LintableFilesVisitor {
     }
 
     static func create(_ options: LintOrAnalyzeOptions,
-                       cache: LinterCache?,
                        allowZeroLintableFiles: Bool,
                        block: @escaping (CollectedLinter) async -> Void) throws -> Self {
         try Signposts.record(name: "LintableFilesVisitor.Create") {
             try Self(
                 options: options,
-                cache: cache,
                 allowZeroLintableFiles: allowZeroLintableFiles,
                 block: block
             )
@@ -113,7 +108,7 @@ struct LintableFilesVisitor {
     func linter(forFile file: SwiftLintFile, configuration: Configuration) -> Linter {
         switch mode {
         case .lint:
-            return Linter(file: file, configuration: configuration, cache: cache)
+            return Linter(file: file, configuration: configuration)
         case let .analyze(compilerInvocations):
             let compilerArguments = compilerInvocations.arguments(forFile: file.path)
             return Linter(file: file, configuration: configuration, compilerArguments: compilerArguments)

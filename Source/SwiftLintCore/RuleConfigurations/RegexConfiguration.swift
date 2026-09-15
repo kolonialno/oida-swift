@@ -3,7 +3,7 @@ import Foundation
 
 /// A rule configuration used for defining custom rules in yaml.
 public struct RegexConfiguration<Parent: Rule>: SeverityBasedRuleConfiguration, Hashable,
-                                                CacheDescriptionProvider, InlinableOptionType {
+                                                InlinableOptionType {
     /// The execution mode for this custom rule.
     public enum ExecutionMode: String, Codable, Sendable {
         /// Uses SwiftSyntax to obtain syntax token kinds.
@@ -35,26 +35,6 @@ public struct RegexConfiguration<Parent: Rule>: SeverityBasedRuleConfiguration, 
     public var captureGroup = 0
     /// The execution mode for this rule.
     public var executionMode: ExecutionMode = .default
-
-    public var cacheDescription: String {
-        let jsonObject: [String] = [
-            identifier,
-            name ?? "",
-            message,
-            regex.pattern,
-            included.map(\.pattern).joined(separator: ","),
-            excluded.map(\.pattern).joined(separator: ","),
-            SyntaxKind.allKinds.subtracting(excludedMatchKinds)
-                .map(\.rawValue).sorted(by: <).joined(separator: ","),
-            severity.rawValue,
-            executionMode.rawValue,
-        ]
-        if let jsonData = try? JSONSerialization.data(withJSONObject: jsonObject),
-           let jsonString = String(data: jsonData, encoding: .utf8) {
-            return jsonString
-        }
-        queuedFatalError("Could not serialize regex configuration for cache")
-    }
 
     /// The `RuleDescription` for the custom rule defined here.
     public var description: RuleDescription {

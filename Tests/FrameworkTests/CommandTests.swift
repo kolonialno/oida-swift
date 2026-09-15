@@ -36,7 +36,7 @@ struct CommandTests { // oida:disable:this type_body_length
     func disable() {
         let input = "// oida:disable rule_id\n"
         let file = SwiftLintFile(contents: input)
-        let expected = Command(action: .disable, ruleIdentifiers: ["rule_id"], line: 1, range: 4..<29)
+        let expected = Command(action: .disable, ruleIdentifiers: ["rule_id"], line: 1, range: 4..<input.count)
         #expect(file.commands() == [expected])
         #expect(Command(string: input) == expected)
     }
@@ -46,7 +46,7 @@ struct CommandTests { // oida:disable:this type_body_length
         let input = "// oida:disable:previous rule_id\n"
         let file = SwiftLintFile(contents: input)
         let expected = Command(
-            action: .disable, ruleIdentifiers: ["rule_id"], line: 1, range: 4..<38,
+            action: .disable, ruleIdentifiers: ["rule_id"], line: 1, range: 4..<input.count,
             modifier: .previous)
         #expect(file.commands() == expected.expand())
         #expect(Command(string: input) == expected)
@@ -60,7 +60,7 @@ struct CommandTests { // oida:disable:this type_body_length
             action: .disable,
             ruleIdentifiers: ["rule_id"],
             line: 1,
-            range: 4..<34,
+            range: 4..<input.count,
             modifier: .this
         )
         #expect(file.commands() == expected.expand())
@@ -75,7 +75,7 @@ struct CommandTests { // oida:disable:this type_body_length
             action: .disable,
             ruleIdentifiers: ["rule_id"],
             line: 1,
-            range: 4..<34,
+            range: 4..<input.count,
             modifier: .next
         )
         #expect(file.commands() == expected.expand())
@@ -90,7 +90,7 @@ struct CommandTests { // oida:disable:this type_body_length
             action: .enable,
             ruleIdentifiers: ["rule_id"],
             line: 1,
-            range: 4..<28
+            range: 4..<input.count
         )
         #expect(file.commands() == [expected])
         #expect(Command(string: input) == expected)
@@ -104,7 +104,7 @@ struct CommandTests { // oida:disable:this type_body_length
             action: .enable,
             ruleIdentifiers: ["rule_id"],
             line: 1,
-            range: 4..<37,
+            range: 4..<input.count,
             modifier: .previous
         )
         #expect(file.commands() == expected.expand())
@@ -119,7 +119,7 @@ struct CommandTests { // oida:disable:this type_body_length
             action: .enable,
             ruleIdentifiers: ["rule_id"],
             line: 1,
-            range: 4..<33,
+            range: 4..<input.count,
             modifier: .this
         )
         #expect(file.commands() == expected.expand())
@@ -134,7 +134,7 @@ struct CommandTests { // oida:disable:this type_body_length
             action: .enable,
             ruleIdentifiers: ["rule_id"],
             line: 1,
-            range: 4..<33,
+            range: 4..<input.count,
             modifier: .next
         )
         #expect(file.commands() == expected.expand())
@@ -149,7 +149,7 @@ struct CommandTests { // oida:disable:this type_body_length
             action: .enable,
             ruleIdentifiers: ["rule_id"],
             line: 1,
-            range: 4..<43,
+            range: 4..<input.count,
             modifier: .next,
             trailingComment: "Comment"
         )
@@ -166,7 +166,7 @@ struct CommandTests { // oida:disable:this type_body_length
             action: .enable,
             ruleIdentifiers: ["rule_id"],
             line: 1,
-            range: 4..<87,
+            range: 4..<input.count,
             modifier: .next,
             trailingComment: "Comment with URL https://github.com/realm/SwiftLint"
         )
@@ -182,7 +182,7 @@ struct CommandTests { // oida:disable:this type_body_length
             action: .enable,
             ruleIdentifiers: ["rule_id"],
             line: 1,
-            range: 4..<70,
+            range: 4..<input.count,
             modifier: .next,
             trailingComment: "https://github.com/realm/SwiftLint"
         )

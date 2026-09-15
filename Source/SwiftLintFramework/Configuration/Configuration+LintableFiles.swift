@@ -20,6 +20,15 @@ extension Configuration {
             .parallelCompactMap { SwiftLintFile(pathDeferringReading: $0) }
     }
 
+    /// Returns the Markdown documents oida's document rules can lint in the specified parent path, following the
+    /// same `included`/`excluded` configuration as `lintableFiles(inPath:forceExclude:excludeByPrefix:)`.
+    public func documentFiles(inPath path: URL,
+                              forceExclude: Bool,
+                              excludeByPrefix: Bool) -> [SwiftLintFile] {
+        lintablePaths(inPath: path, forceExclude: forceExclude, excludeByPrefix: excludeByPrefix, fileExtension: "md")
+            .parallelCompactMap { SwiftLintFile(pathDeferringReading: $0) }
+    }
+
     /// Returns the paths for files that can be linted by SwiftLint in the specified parent path.
     ///
     /// - parameter path:            The parent path in which to search for lintable files. Can be a directory or a
@@ -34,21 +43,24 @@ extension Configuration {
         inPath path: URL,
         forceExclude: Bool,
         excludeByPrefix: Bool,
+        fileExtension: String = "swift",
         fileManager: some LintableFileManager = FileManager.default
     ) -> [URL] {
         let excluder = createExcluder(excludeByPrefix: excludeByPrefix)
 
         // Handle single file path.
-        if path.isSwiftFile {
+        if path.isFile(withExtension: fileExtension) {
             return fileManager.filesToLint(
                 inPath: path,
-                excluder: forceExclude ? excluder : .noExclusion
+                excluder: forceExclude ? excluder : .noExclusion,
+                extension: fileExtension
             )
         }
 
         // With no included paths, we lint everything in the given path.
         if includedPaths.isEmpty {
-            return makeUnique(paths: fileManager.filesToLint(inPath: path, excluder: excluder))
+            let paths = fileManager.filesToLint(inPath: path, excluder: excluder, extension: fileExtension)
+            return makeUnique(paths: paths)
         }
 
         // With included paths, only lint them (after resolving globs).
@@ -57,7 +69,8 @@ extension Configuration {
             .parallelFlatMap {
                 fileManager.filesToLint(
                     inPath: $0,
-                    excluder: excluder
+                    excluder: excluder,
+                    extension: fileExtension
                 )
             }
 

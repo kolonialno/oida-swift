@@ -29,9 +29,6 @@ public struct Configuration {
     /// The identifier for the `Reporter` to use to report style violations.
     public let reporter: String?
 
-    /// The location of the persisted cache to use with this configuration.
-    public let cachePath: String?
-
     /// Allow or disallow SwiftLint to exit successfully when passed only ignored or unlintable files.
     public let allowZeroLintableFiles: Bool
 
@@ -71,7 +68,6 @@ public struct Configuration {
     // MARK: Internal Instance
     internal var fileGraph: FileGraph
     internal private(set) var rulesWrapper: RulesWrapper
-    internal var computedCacheDescription: String?
 
     // MARK: - Initializers: Internal
     /// Initialize with all properties
@@ -83,7 +79,6 @@ public struct Configuration {
         indentation: IndentationStyle,
         warningThreshold: Int?,
         reporter: String?,
-        cachePath: String?,
         allowZeroLintableFiles: Bool,
         strict: Bool,
         lenient: Bool,
@@ -98,7 +93,6 @@ public struct Configuration {
         self.indentation = indentation
         self.warningThreshold = warningThreshold
         self.reporter = reporter
-        self.cachePath = cachePath
         self.allowZeroLintableFiles = allowZeroLintableFiles
         self.strict = strict
         self.lenient = lenient
@@ -119,7 +113,6 @@ public struct Configuration {
         warningThreshold = configuration.warningThreshold
         reporter = configuration.reporter
         basedOnCustomConfigurationFiles = configuration.basedOnCustomConfigurationFiles
-        cachePath = configuration.cachePath
         allowZeroLintableFiles = configuration.allowZeroLintableFiles
         strict = configuration.strict
         lenient = configuration.lenient
@@ -144,7 +137,6 @@ public struct Configuration {
     /// - parameter warningThreshold:       The threshold for the number of warnings to tolerate before treating the
     ///                                     lint as having failed.
     /// - parameter reporter:               The identifier for the `Reporter` to use to report style violations.
-    /// - parameter cachePath:              The location of the persisted cache to use with this configuration.
     /// - parameter pinnedVersion:          The SwiftLint version defined in this configuration.
     /// - parameter allowZeroLintableFiles: Allow SwiftLint to exit successfully when passed ignored or unlintable
     ///                                     files.
@@ -163,7 +155,6 @@ public struct Configuration {
         indentation: IndentationStyle = .default,
         warningThreshold: Int? = nil,
         reporter: String? = nil,
-        cachePath: String? = nil,
         pinnedVersion: String? = nil,
         allowZeroLintableFiles: Bool = false,
         strict: Bool = false,
@@ -194,7 +185,6 @@ public struct Configuration {
             indentation: indentation,
             warningThreshold: warningThreshold,
             reporter: reporter,
-            cachePath: cachePath,
             allowZeroLintableFiles: allowZeroLintableFiles,
             strict: strict,
             lenient: lenient,
@@ -210,7 +200,6 @@ public struct Configuration {
     /// - parameter configurationFiles:         The path on disk to one or multiple configuration files. If this array
     ///                                         is empty, the default `.oida.yml` file will be used.
     /// - parameter enableAllRules:             Enable all available rules.
-    /// - parameter cachePath:                  The location of the persisted cache to use whith this configuration.
     /// - parameter ignoreParentAndChildConfigs:If `true`, child and parent config references will be ignored.
     /// - parameter useDefaultConfigOnFailure:  If this value is specified, it will override the normal behavior.
     ///                                         This is only intended for tests checking whether invalid configs fail.
@@ -218,7 +207,6 @@ public struct Configuration {
         configurationFiles: [URL], // No default value here to avoid ambiguous Configuration() initializer
         enableAllRules: Bool = false,
         onlyRule: [String] = [],
-        cachePath: String? = nil,
         ignoreParentAndChildConfigs: Bool = false,
         useDefaultConfigOnFailure: Bool? = nil // oida:disable:this discouraged_optional_boolean
     ) {
@@ -255,7 +243,6 @@ public struct Configuration {
             let resultingConfiguration = try fileGraph.resultingConfiguration(
                 enableAllRules: enableAllRules,
                 onlyRule: onlyRule,
-                cachePath: cachePath
             )
 
             self.init(copying: resultingConfiguration)
@@ -265,7 +252,7 @@ public struct Configuration {
             if case Issue.initialFileNotFound = error, !hasCustomConfigurationFiles {
                 // The initial configuration file wasn't found, but the user didn't explicitly specify one
                 // Don't handle as error. Instead, silently fall back to default.
-                self.init(rulesMode: rulesMode, cachePath: cachePath)
+                self.init(rulesMode: rulesMode)
                 return
             }
             if useDefaultConfigOnFailure ?? !hasCustomConfigurationFiles {
@@ -273,7 +260,7 @@ public struct Configuration {
                 queuedPrintError(
                     "\(Issue.wrap(error: error).localizedDescription) – Falling back to default configuration"
                 )
-                self.init(rulesMode: rulesMode, cachePath: cachePath)
+                self.init(rulesMode: rulesMode)
             } else {
                 // Files that were explicitly specified could not be loaded -> fail
                 queuedPrintError(Issue.wrap(error: error).asError.localizedDescription)
@@ -304,7 +291,6 @@ extension Configuration: Hashable {
         hasher.combine(writeBaseline)
         hasher.combine(checkForUpdates)
         hasher.combine(basedOnCustomConfigurationFiles)
-        hasher.combine(cachePath)
         hasher.combine(rules.map { type(of: $0).identifier })
         hasher.combine(fileGraph)
     }
@@ -316,7 +302,6 @@ extension Configuration: Hashable {
             lhs.warningThreshold == rhs.warningThreshold &&
             lhs.reporter == rhs.reporter &&
             lhs.basedOnCustomConfigurationFiles == rhs.basedOnCustomConfigurationFiles &&
-            lhs.cachePath == rhs.cachePath &&
             lhs.rules == rhs.rules &&
             lhs.fileGraph == rhs.fileGraph &&
             lhs.allowZeroLintableFiles == rhs.allowZeroLintableFiles &&
@@ -339,8 +324,6 @@ extension Configuration: CustomStringConvertible {
             + "- Warning Threshold: \(warningThreshold as Optional)\n"
             + "- Root Directory: \(rootDirectory as Optional)\n"
             + "- Reporter: \(reporter ?? "default")\n"
-            + "- Cache Path: \(cachePath as Optional)\n"
-            + "- Computed Cache Description: \(computedCacheDescription as Optional)\n"
             + "- Rules: \(rules.map { type(of: $0).identifier })"
     }
 }

@@ -80,6 +80,7 @@ applies to, since a built-in rule takes no path filters from the run.
 | Rule | What it protects |
 |---|---|
 | `no_direct_presentation` | Screens signal through a navigator; SwiftUI's own presentation belongs to the navigation layer |
+| `no_direct_navigation_controller_calls` | A raw `NavigationLink` or a direct push/present/pop/dismiss desyncs the navigator's tracked stack |
 | `navigation_destination_only_in_navigation` | A local routing table is a screen the navigator cannot reach, restore or deep-link to |
 | `no_presentation_state_outside_navigation` | A view reports finishing; it never carries a Bool saying whether it is on screen |
 | `no_legacy_router_readers` | Reading a retired router resolves to a dead default and silently no-ops |
@@ -88,11 +89,41 @@ applies to, since a built-in rule takes no path filters from the run.
 | `keychain_built_only_at_the_root` | A preview or test building its own credential store reads the real device keychain |
 | `value_storage_built_only_at_the_root` | Building storage mid-tree is a global by another name, and splits the table two views watch |
 | `no_print_in_app_code` | Console output is invisible in a shipped build |
+| `no_share_link` | `ShareLink`'s share sheet leaves touch delivery dead for the rest of the session after an interactive dismiss |
+| `no_timing_guess` | A fixed delay before mutating state or presenting/dismissing is a guess about how long an animation takes, and the guess is what breaks first |
+| `comment_adds_no_word` | Every word of the comment is already in the code beneath it, so reading it first teaches the reader nothing |
+| `no_doc_comments` | A doc comment describes the declaration it sits on, and the ones carrying something the code cannot say are indistinguishable from the ones that do not |
+| `no_mark_comments` | A banner names a section the declarations below it already name, and it is kept by hand while they move; reported, never auto-deleted |
+| `no_single_use_void_functions` | A function returning nothing says nothing about what it touches, so one called from exactly one place in the app is a jump that buys the reader nothing; calls are resolved through declared property and return types across the whole run; tests sit outside the count, and so does what the module exports, whose callers are outside the run |
+| `no_uiapplication_shared` | Reaching for the shared application instance reaches around whatever injected seam this code was handed instead — a seam a preview, a test or a second window can replace, and the singleton cannot |
 | `no_live_uikit_frame_reads` | Measuring a live UIKit bar from a body-reachable property wedges the view |
 | `multiline_string_opens_on_its_own_line` | Opening a literal inside a call ties its contents to how the call wraps, so a reformat edits the value |
 | `tienda_api_kit_is_ui_free` | A networking layer imports no UI framework |
 | `environment_key_needs_judgement` | An environment key needs a branch that reads a different value than its parent |
 | `environment_value_reassertion` | Re-injecting a value you already read means it was never context |
+
+## A document is linted too, not just Swift
+
+`oida lint` also walks every `.md` file the run covers and checks it against the same voice a PR or a
+ticket is written in. A document rule reads raw prose through `file.contents`, never a syntax tree — a
+Markdown file has no Swift syntax to have — so it runs on a track of its own: `Linter` hands a `.md` file
+only to rules conforming to `DocumentRule`, and hands every other rule everything but `.md` files — each
+file kind reaches only the rules built for it.
+
+| Rule | What it protects |
+|---|---|
+| `document_says_what_is` | A negation is a sentence waiting to be turned around into what actually is |
+| `document_avoids_retired_words` | A retired word promises what a plain description already shows |
+| `document_links_resolve` | A relative link outlives the file it once pointed to, so a reader follows it into nothing |
+
+## Every run reads the tree as it is
+
+There is no result cache, no flag to configure one, and no code left that could keep one. A rule here can
+decide by reading files other than the one being linted — `document_links_resolve` opens the link's target,
+`no_single_use_void_functions` resolves receivers across the whole run — and a stored verdict was keyed on the
+linted file's own modification date. Prune a cited file and the citing document has not changed, so a reused
+entry would still call the link resolved. Linting a whole repository takes seconds, which was all the cache
+ever bought.
 
 ## Releases
 

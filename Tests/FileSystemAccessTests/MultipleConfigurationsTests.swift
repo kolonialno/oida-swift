@@ -600,7 +600,7 @@ struct MultipleConfigurationsTests { // oida:disable:this type_body_length
             """,
         ]
         let remoteConfig = Configuration.FileGraph.FilePath.$mockedNetworkResults.withValue(mockedNetworkResults) {
-            Configuration(configurationFiles: []) // Not specifying a file means the .swiftlint.yml will be used.
+            Configuration(configurationFiles: []) // Not specifying a file means the .oida.yml will be used.
         }
 
         // If the remote file is not allowed to reference a local file, the config should equal the default config.
@@ -616,7 +616,7 @@ struct MultipleConfigurationsTests { // oida:disable:this type_body_length
             """,
         ]
         let remoteConfig = Configuration.FileGraph.FilePath.$mockedNetworkResults.withValue(mockedNetworkResults) {
-            Configuration(configurationFiles: []) // Not specifying a file means the .swiftlint.yml will be used.
+            Configuration(configurationFiles: []) // Not specifying a file means the .oida.yml will be used.
         }
         // If the cycle is properly detected, the config should equal the default config.
         #expect(remoteConfig == Configuration())

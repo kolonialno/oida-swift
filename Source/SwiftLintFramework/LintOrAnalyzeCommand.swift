@@ -48,8 +48,6 @@ package struct LintOrAnalyzeOptions {
     let quiet: Bool
     let output: URL?
     let progress: Bool
-    let cachePath: String?
-    let ignoreCache: Bool
     let enableAllRules: Bool
     let onlyRule: [String]
     let autocorrect: Bool
@@ -77,8 +75,6 @@ package struct LintOrAnalyzeOptions {
                  quiet: Bool,
                  output: URL?,
                  progress: Bool,
-                 cachePath: String?,
-                 ignoreCache: Bool,
                  enableAllRules: Bool,
                  onlyRule: [String],
                  autocorrect: Bool,
@@ -105,8 +101,6 @@ package struct LintOrAnalyzeOptions {
         self.quiet = quiet
         self.output = output
         self.progress = progress
-        self.cachePath = cachePath
-        self.ignoreCache = ignoreCache
         self.enableAllRules = enableAllRules
         self.onlyRule = onlyRule
         self.autocorrect = autocorrect
@@ -152,16 +146,21 @@ package struct LintOrAnalyzeCommand {
 
     private static func lintOrAnalyze(_ options: LintOrAnalyzeOptions) async throws {
         let builder = LintOrAnalyzeResultBuilder(options)
-        let files = try await collectViolations(builder: builder)
+        let swiftFiles = try await collectViolations(builder: builder)
         if options.format {
             // Linting asks the formatter the same question correcting answers, so one command reports both.
-            try SwiftFormat.check(paths: files.compactMap { $0.path?.path }, quiet: options.quiet)
+            // Document files never reach swift-format — it would parse their Markdown as Swift source.
+            try SwiftFormat.check(paths: swiftFiles.compactMap { $0.path?.path }, quiet: options.quiet)
+        }
+        var files = swiftFiles
+        if options.mode == .lint {
+            files += lintDocuments(builder: builder)
         }
         if let baselineOutputPath = options.writeBaseline ?? builder.configuration.writeBaseline {
             try Baseline(violations: builder.unfilteredViolations).write(toPath: baselineOutputPath)
         }
-        let numberOfSeriousViolations = try Signposts.record(name: "LintOrAnalyzeCommand.PostProcessViolations") {
-            try postProcessViolations(files: files, builder: builder)
+        let numberOfSeriousViolations = Signposts.record(name: "LintOrAnalyzeCommand.PostProcessViolations") {
+            postProcessViolations(files: files, builder: builder)
         }
         if options.checkForUpdates || builder.configuration.checkForUpdates {
             await UpdateChecker.checkForUpdates()
@@ -175,7 +174,7 @@ package struct LintOrAnalyzeCommand {
         let options = builder.options
         let visitorMutationQueue = DispatchQueue(label: "io.realm.swiftlint.lintVisitorMutation")
         let baseline = try baseline(options, builder.configuration)
-        return try await builder.configuration.visitLintableFiles(options: options, cache: builder.cache,
+        return try await builder.configuration.visitLintableFiles(options: options,
                                                                   storage: builder.storage) { linter in
             let currentViolations: [StyleViolation]
             if options.benchmark {
@@ -212,10 +211,36 @@ package struct LintOrAnalyzeCommand {
         }
     }
 
+    /// Lints the Markdown documents `configuration`'s document rules cover, alongside the Swift files
+    /// `collectViolations` already handled. A document rule only ever runs here, against a `.md` file —
+    /// `Linter` filters every other rule out of this pass, and every document rule out of the Swift pass.
+    @discardableResult
+    private static func lintDocuments(builder: LintOrAnalyzeResultBuilder) -> [SwiftLintFile] {
+        let options = builder.options
+        guard builder.configuration.rules.contains(where: { $0 is any DocumentRule }) else {
+            return []
+        }
+        let files = options.paths.flatMap {
+            builder.configuration.documentFiles(
+                inPath: $0,
+                forceExclude: options.forceExclude,
+                excludeByPrefix: options.useExcludingByPrefix
+            )
+        }
+        for file in files {
+            let linter = Linter(file: file, configuration: builder.configuration)
+            let violations = linter.collect(into: builder.storage).styleViolations(using: builder.storage)
+            builder.unfilteredViolations += violations
+            builder.violations += violations
+            builder.report(violations: violations, realtimeCondition: true)
+        }
+        return files
+    }
+
     private static func postProcessViolations(
         files: [SwiftLintFile],
         builder: LintOrAnalyzeResultBuilder
-    ) throws -> Int {
+    ) -> Int {
         let options = builder.options
         let configuration = builder.configuration
         if isWarningThresholdBroken(configuration: configuration, violations: builder.violations), !options.lenient {
@@ -240,7 +265,6 @@ package struct LintOrAnalyzeCommand {
                 queuedPrintError(memoryUsage)
             }
         }
-        try builder.cache?.save()
         return numberOfSeriousViolations
     }
 
@@ -328,7 +352,7 @@ package struct LintOrAnalyzeCommand {
         let configuration = Configuration(options: options)
         let correctionsBuilder = CorrectionsBuilder()
         let files = try await configuration
-            .visitLintableFiles(options: options, cache: nil, storage: storage) { linter in
+            .visitLintableFiles(options: options, storage: storage) { linter in
                 let corrections = linter.correct(using: storage)
                 if !corrections.isEmpty, !options.quiet {
                     if options.useSTDIN {
@@ -455,7 +479,7 @@ enum SwiftFormat {
     }
 }
 
-private class LintOrAnalyzeResultBuilder {
+class LintOrAnalyzeResultBuilder {
     var fileBenchmark = Benchmark(name: "files")
     var ruleBenchmark = Benchmark(name: "rules")
     /// All detected violations, unfiltered by the baseline, if any.
@@ -465,7 +489,6 @@ private class LintOrAnalyzeResultBuilder {
     let storage = RuleStorage()
     let configuration: Configuration
     let reporter: any Reporter.Type
-    let cache: LinterCache?
     let options: LintOrAnalyzeOptions
 
     init(_ options: LintOrAnalyzeOptions) {
@@ -474,11 +497,6 @@ private class LintOrAnalyzeResultBuilder {
         }
         configuration = config
         reporter = reporterFrom(identifier: options.reporter ?? config.reporter)
-        if options.ignoreCache || ProcessInfo.processInfo.isLikelyXcodeCloudEnvironment {
-            cache = nil
-        } else {
-            cache = LinterCache(configuration: config)
-        }
         self.options = options
 
         if let outFile = options.output {
