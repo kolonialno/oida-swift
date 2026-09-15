@@ -14,7 +14,8 @@ struct NoSingleUseVoidFunctionsRule: CollectingRule, OptInRule, SourceKitFreeRul
             A function that returns nothing states nothing in its signature about what it touches, so the \
             reader learns what it did by reading it. Called from exactly one place in the app, it is a jump \
             that buys the reader nothing — put the statements where they run. A call from a test neither \
-            saves a function nor condemns it, so tests are not counted
+            saves a function nor condemns it, so tests are not counted, and what the module exports is \
+            left alone, since its callers are outside the run
             """,
         kind: .lint,
         nonTriggeringExamples: #examples([
@@ -45,6 +46,24 @@ struct NoSingleUseVoidFunctionsRule: CollectingRule, OptInRule, SourceKitFreeRul
             """
             struct Cart {
                 private func neverCalled() {}
+            }
+            """,
+            """
+            public struct Cart {
+                func empty() { removeEverything() }
+                public func removeEverything() { items = [] }
+            }
+            """,
+            """
+            package struct Cart {
+                func empty() { removeEverything() }
+                package func removeEverything() { items = [] }
+            }
+            """,
+            """
+            open class Cart {
+                func empty() { removeEverything() }
+                open func removeEverything() { items = [] }
             }
             """,
             """
