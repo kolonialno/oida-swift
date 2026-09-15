@@ -37,19 +37,21 @@ struct MultilineConditionsRule: Rule {
 private extension MultilineConditionsRule {
     final class Visitor: ViolationsSyntaxVisitor<ConfigurationType> {
         override func visitPost(_ node: IfExprSyntax) {
-            report(node.conditions)
+            report(node.conditions, opener: "if", closer: " {}")
         }
 
         override func visitPost(_ node: GuardStmtSyntax) {
-            report(node.conditions)
+            report(node.conditions, opener: "guard", closer: " else {}")
         }
 
         override func visitPost(_ node: WhileStmtSyntax) {
-            report(node.conditions)
+            report(node.conditions, opener: "while", closer: " {}")
         }
 
-        private func report(_ conditions: ConditionElementListSyntax) {
-            guard let first = conditions.first, let reason = reason(for: conditions) else {
+        private func report(_ conditions: ConditionElementListSyntax, opener: String, closer: String) {
+            guard let first = conditions.first,
+                  let reason = reason(for: conditions, opener: opener, closer: closer)
+            else {
                 return
             }
             violations.append(
@@ -60,7 +62,7 @@ private extension MultilineConditionsRule {
             )
         }
 
-        private func reason(for conditions: ConditionElementListSyntax) -> String? {
+        private func reason(for conditions: ConditionElementListSyntax, opener: String, closer: String) -> String? {
             if conditions.isOnOneLine {
                 guard conditions.count > 1 else {
                     return nil
@@ -76,7 +78,9 @@ private extension MultilineConditionsRule {
             }
             if configuration.requiresSingleLine,
                !conditions.exceedsSingleLineAllowance(configuration),
-               conditions.canRejoinOneLine {
+               conditions.canRejoinOneLine,
+               conditions.joinKeptByFormatter(
+                   opener: opener, closer: closer, positionsFrom: conditions, in: file, locationConverter: locationConverter) {
                 return Reason.singleLineRequiredWithinAllowance
             }
             // One condition has nothing to align against, and a lone condition that spans lines reads
@@ -95,7 +99,7 @@ private extension MultilineConditionsRule {
             }
             let visited = super.visit(node)
             guard let expression = visited.as(IfExprSyntax.self),
-                  let joined = joining(expression.conditions)
+                  let joined = joining(expression.conditions, opener: "if", closer: " {}", positionsFrom: node.conditions)
             else {
                 return visited
             }
@@ -108,7 +112,8 @@ private extension MultilineConditionsRule {
             }
             let visited = super.visit(node)
             guard let statement = visited.as(GuardStmtSyntax.self),
-                  let joined = joining(statement.conditions)
+                  let joined = joining(
+                      statement.conditions, opener: "guard", closer: " else {}", positionsFrom: node.conditions)
             else {
                 return visited
             }
@@ -121,7 +126,7 @@ private extension MultilineConditionsRule {
             }
             let visited = super.visit(node)
             guard let statement = visited.as(WhileStmtSyntax.self),
-                  let joined = joining(statement.conditions)
+                  let joined = joining(statement.conditions, opener: "while", closer: " {}", positionsFrom: node.conditions)
             else {
                 return visited
             }
@@ -146,12 +151,19 @@ private extension MultilineConditionsRule {
 
         /// Decided after descending: a call inside a condition coming back to one line is what can make the
         /// whole list joinable, and deciding first would leave that for a second run over the file.
-        private func joining(_ conditions: ConditionElementListSyntax) -> ConditionElementListSyntax? {
+        private func joining(
+            _ conditions: ConditionElementListSyntax,
+            opener: String,
+            closer: String,
+            positionsFrom original: ConditionElementListSyntax
+        ) -> ConditionElementListSyntax? {
             guard configuration.requiresSingleLine,
                   !conditions.isEmpty,
                   !conditions.exceedsSingleLineAllowance(configuration),
                   !conditions.isOnOneLine,
-                  conditions.canRejoinOneLine
+                  conditions.canRejoinOneLine,
+                  conditions.joinKeptByFormatter(
+                      opener: opener, closer: closer, positionsFrom: original, in: file, locationConverter: locationConverter)
             else {
                 return nil
             }
@@ -209,6 +221,25 @@ private extension CodeBlockSyntax {
                 \.leadingTrivia,
                 conditions.isOnOneLine ? .space : .newline + node.indentationOfOwnLine
             )
+        )
+    }
+}
+
+private extension ConditionElementListSyntax {
+    func joinKeptByFormatter(
+        opener: String,
+        closer: String,
+        positionsFrom original: ConditionElementListSyntax,
+        in file: SwiftLintFile,
+        locationConverter: SourceLocationConverter
+    ) -> Bool {
+        let joined = joinedOnOneLine(startingWith: []).trimmedDescription
+        return formatterKeeps(
+            joined,
+            in: "\(opener) \(joined)\(closer)",
+            indentedLike: original,
+            in: file,
+            locationConverter: locationConverter
         )
     }
 }

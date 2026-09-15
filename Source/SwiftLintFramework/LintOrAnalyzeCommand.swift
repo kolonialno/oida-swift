@@ -148,7 +148,7 @@ package struct LintOrAnalyzeCommand {
         if options.format {
             // Linting asks the formatter the same question correcting answers, so one command reports both.
             // Document files never reach swift-format — it would parse their Markdown as Swift source.
-            try SwiftFormat.check(paths: swiftFiles.compactMap { $0.path?.path }, quiet: options.quiet)
+            try FormatCommand.check(paths: swiftFiles.compactMap { $0.path?.path }, quiet: options.quiet)
         }
         var files = swiftFiles
         if options.mode == .lint {
@@ -389,7 +389,7 @@ package struct LintOrAnalyzeCommand {
         }
 
         if options.format {
-            try SwiftFormat.run(over: files.compactMap { $0.path?.path }, quiet: options.quiet)
+            try FormatCommand.run(over: files.compactMap { $0.path?.path }, quiet: options.quiet)
         }
     }
 }
@@ -399,7 +399,7 @@ package struct LintOrAnalyzeCommand {
 /// Layout is swift-format's to decide — the rules here only choose which lists split and which join — so the
 /// binary that decides it has to be the one Xcode has: found through `xcrun`, never installed separately, or
 /// the tree and the keystroke drift apart.
-enum SwiftFormat {
+enum FormatCommand {
     static func run(over paths: [String], quiet: Bool) throws {
         try invoke(["format", "--in-place", "--parallel"], over: paths, quiet: quiet, verb: "Formatted")
     }
@@ -433,47 +433,17 @@ enum SwiftFormat {
         }
     }
 
-    private static func output(of binary: URL, arguments: [String]) throws -> String {
-        let process = Process()
-        process.executableURL = binary
-        process.arguments = arguments
-        let pipe = Pipe()
-        process.standardOutput = pipe
-        process.standardError = Pipe()
-        try process.run()
-        process.waitUntilExit()
-        let output = pipe.fileHandleForReading.readDataToEndOfFile()
-        return String(bytes: output, encoding: .utf8)?
-            .trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-    }
-
-    /// The swift-format Xcode offers, which is the one Format File runs.
-    ///
-    /// No version is pinned. Pinning was tried and killed: it never changed how anything was formatted, only
-    /// refused to run when the selected Xcode carried a different version, and the premise underneath —
-    /// that two swift-format versions format this code differently — was never measured. If churn ever shows
-    /// up after an Xcode update, that is the measurement, and the answer would be a floor rather than an
-    /// exact match.
-    ///
-    /// Linux has no Xcode to ask, so it asks the Swift toolchain instead: the official toolchain images
-    /// ship their own swift-format on `PATH`, tied to the same version already pinned for everything else
-    /// that builds this binary, which is the closest Linux equivalent of "whatever Xcode has."
     private static func formatter() throws -> URL {
-        #if os(macOS)
-        let found = try output(
-            of: URL(fileURLWithPath: "/usr/bin/xcrun"), arguments: ["--find", "swift-format"])
-        guard found.isNotEmpty else {
+        guard let binary = SwiftFormat.binary else {
+            #if os(macOS)
             throw SwiftLintError.usageError(
                 description: "swift-format not found. It ships inside Xcode, which is what Format File runs.")
-        }
-        #else
-        let found = try output(of: URL(fileURLWithPath: "/usr/bin/which"), arguments: ["swift-format"])
-        guard found.isNotEmpty else {
+            #else
             throw SwiftLintError.usageError(
                 description: "swift-format not found. It ships with the Swift toolchain.")
+            #endif
         }
-        #endif
-        return URL(fileURLWithPath: found)
+        return binary
     }
 }
 

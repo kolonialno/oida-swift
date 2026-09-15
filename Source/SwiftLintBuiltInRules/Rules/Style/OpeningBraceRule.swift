@@ -85,6 +85,15 @@ private extension OpeningBraceRule {
 
         // MARK: - Conditional Statements
 
+        override func visitPost(_ node: CatchClauseSyntax) {
+            if configuration.ignoreMultilineStatementConditions,
+               hasMultilinePredecessors(node.body, keyword: node.catchKeyword) {
+                return
+            }
+
+            super.visitPost(node)
+        }
+
         override func visitPost(_ node: ForStmtSyntax) {
             if configuration.ignoreMultilineStatementConditions,
                hasMultilinePredecessors(node.body, keyword: node.forKeyword) {

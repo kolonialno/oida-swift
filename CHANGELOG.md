@@ -234,6 +234,29 @@
 
 ### Bug Fixes
 
+* The shape rules ask swift-format before demanding a shape, and both directions of the count still hold.
+  `requires_single_line` used to ask for a joined line, `--format` broke it where it was too wide, and the
+  rule then reported the formatter's own output; `multiline_parameters` held two parameters on a line the
+  formatter wrapped, dropping the brace below the return clause for `opening_brace` to report. Now each rule
+  hands the formatter the shape it is about to ask for — the enclosing statement with the list joined, the
+  conditions behind their keyword, the declaration's header through its brace — and asks for it only where
+  the formatter hands it back intact. Where the formatter would break a two-parameter header, the parameters
+  go one per line instead, which is the shape it keeps.
+
+  oida holds no width and reads none: the formatter is asked, through `swift-format format -` with the file's
+  own path assumed so its `.swift-format` applies, and its indentation is learned the same way. A machine
+  with no formatter, or a snippet that does not parse, leaves the rule's own answer standing. Verdicts are
+  memoised per snippet, and linting `3lvis/Networking` costs the same as before to the hundredth of a second.
+
+  On Networking every shape rule reaches zero after one `--fix --format` and stays there: 90 → 0
+  `multiline_call_arguments`, 17 → 0 `opening_brace`, 6 → 0 `multiline_parameters`, 2 → 0
+  `multiline_conditions`. Closes #20.
+
+* `opening_brace` treats a `catch` clause's items as the statement conditions they are, so
+  `ignore_multiline_statement_conditions` reaches a `catch … where` spanning lines. It covered `for`, `if`
+  and `while` only.  
+  [Elvis Nunez](https://github.com/3lvis)
+
 * The shape rules stop asking for a line the formatter will break. `requires_single_line` demanded that a
   short list come back to one line; where that line was wider than the width swift-format lays the file out
   to, the next `--format` broke it again and the rule then reported the formatter's own output. On
