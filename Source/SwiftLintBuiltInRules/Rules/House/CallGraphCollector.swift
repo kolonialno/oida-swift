@@ -117,7 +117,11 @@ final class CallGraphCollector: SyntaxVisitor {
             return ["objc", "IBAction", "IBSegueAction"].contains(name)
         }
         let overrides = node.modifiers.contains { $0.name.tokenKind == .keyword(.override) }
-        if node.body != nil, returnsNothing, !hidden, !overrides, baseName.first?.isLetter == true {
+        // Callers of an exported declaration live outside the run, so its count here is a fraction of its use.
+        let exported = node.modifiers.contains { modifier in
+            [.keyword(.public), .keyword(.package), .keyword(.open)].contains(modifier.name.tokenKind)
+        }
+        if node.body != nil, returnsNothing, !hidden, !overrides, !exported, baseName.first?.isLetter == true {
             candidates.append(Candidate(owner: currentTypeName, baseName: baseName, labels: labels,
                                         position: node.name.positionAfterSkippingLeadingTrivia))
         }
