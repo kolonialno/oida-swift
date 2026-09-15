@@ -89,6 +89,24 @@ extension SyntaxCollection where Element: WithTrailingCommaSyntax {
         !isOnOneLine && dropFirst().contains { !$0.leadingTrivia.containsNewline }
     }
 
+    var startLines: [Int] {
+        var line = 0
+        return map { element in
+            let start = line + element.leadingTrivia.newlineCount
+            line = start + element.trimmedDescription.newlineCount + element.trailingTrivia.newlineCount
+            return start
+        }
+    }
+
+    var startsOnOneLine: Bool {
+        Set(startLines).count == 1
+    }
+
+    var sharesAStartLine: Bool {
+        let lines = startLines
+        return Set(lines).count != lines.count
+    }
+
     /// Whether the first element shares its opener's line while every later element has one of its own,
     /// which is the split shape for a list opened by a keyword rather than by a delimiter.
     var isSplitAfterTheFirst: Bool {
@@ -174,7 +192,17 @@ extension Trivia {
         contains(where: \.isNewline)
     }
 
+    var newlineCount: Int {
+        description.newlineCount
+    }
+
     var containsComment: Bool {
         contains(where: \.isComment)
+    }
+}
+
+private extension String {
+    var newlineCount: Int {
+        lazy.filter { $0 == "\n" }.count
     }
 }

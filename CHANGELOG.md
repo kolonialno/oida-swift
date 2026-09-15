@@ -190,13 +190,15 @@
 
 ### Bug Fixes
 
-* `no_single_use_void_functions` leaves a `public`, `package` or `open` declaration alone. Its callers
-  live in projects the run never sees, so a count taken inside the module is a fraction of that
-  declaration's use — on [3lvis/Networking](https://github.com/3lvis/Networking) the rule flagged
-  `public func clearCache()`, which the README documents as the way a consumer empties the cache, and the
-  remedy it proposed would have deleted a documented entry point. The rule already drew this line for
-  tests, where a caller says nothing either way. Nine of that repository's ten violations are internal
-  and still reported.  
+* `multiline_call_arguments` corrects the shape a formatter leaves behind, where a call is broken after
+  its opening paren and the arguments are packed onto the continuation lines. The rewriter asked whether
+  the list sat on one line *including* the break before its first argument, so it recognised only a call
+  that had never been broken at all — and the visitor, which reads the line each argument starts on, went
+  on reporting the rest. Two of the rule's three reasons were reported and never corrected: on
+  [3lvis/Networking](https://github.com/3lvis/Networking), `--fix` left 38 of "each argument must start on
+  its own line" and 49 of "too many arguments on a single line", and a second pass changed nothing. Both
+  are now zero. Rewriter and visitor count argument start lines the same way, from the list's own trivia
+  rather than from source locations a rewrite above it has already made stale.  
   [Elvis Nunez](https://github.com/3lvis)
 
 * `document_links_resolve` resolves a relative link against the directory the document sits in, rather than
