@@ -49,7 +49,7 @@ balanced_xctest_lifecycle:
     correctable: false
 blanket_disable_command:
   severity: warning
-  allowed_rules: ["file_header", "file_length", "file_name", "file_name_no_space", "single_test_class"]
+  allowed_rules: ["file_header", "file_name", "file_name_no_space", "single_test_class"]
   always_blanket_disable: []
   meta:
     opt-in: false
@@ -173,13 +173,6 @@ convenience_type:
   severity: warning
   meta:
     opt-in: true
-    correctable: false
-cyclomatic_complexity:
-  warning: 10
-  error: 20
-  ignores_case_statements: false
-  meta:
-    opt-in: false
     correctable: false
 deployment_target:
   severity: warning

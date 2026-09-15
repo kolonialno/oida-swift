@@ -10,14 +10,6 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
-struct MultilineParametersRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(MultilineParametersRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
 struct MultilineStringOpensOnItsOwnLineRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -206,5 +198,13 @@ struct NoSingleUseVoidFunctionsRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(NoSingleUseVoidFunctionsRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct NoSpaceInMethodCallRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(NoSpaceInMethodCallRule.description)
     }
 }

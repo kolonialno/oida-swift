@@ -573,7 +573,7 @@ struct MultipleConfigurationsTests {
               - Test/Test1/Test
               - Test/Test2/Test
 
-            cyclomatic_complexity: 80
+            colon: error
             """,
         ]
         let remoteConfig = Configuration.FileGraph.FilePath.$mockedNetworkResults.withValue(mockedNetworkResults) {
@@ -590,7 +590,7 @@ struct MultipleConfigurationsTests {
         let mockedNetworkResults = [
             "https://www.mock.com":
             """
-            cyclomatic_complexity: 60
+            colon: error
 
             child_config: child.yml
             """,

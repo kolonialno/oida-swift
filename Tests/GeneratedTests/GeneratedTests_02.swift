@@ -74,14 +74,6 @@ struct ConvenienceTypeRuleGeneratedTests {
 }
 
 @Suite(.rulesRegistered)
-struct CyclomaticComplexityRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(CyclomaticComplexityRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
 struct DeploymentTargetRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -206,5 +198,13 @@ struct EmptyCollectionLiteralRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(EmptyCollectionLiteralRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct EmptyCountRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(EmptyCountRule.description)
     }
 }

@@ -8,4 +8,4 @@ included:
   - Folder/SomeFile
   - ../SomeFile
 
-cyclomatic_complexity: 80
+colon: error

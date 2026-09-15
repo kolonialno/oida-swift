@@ -85,7 +85,7 @@ struct ConfigurationTests {
     func onlyRuleMultiple() throws {
         let onlyRuleIdentifiers = ["nesting", "todo"].sorted()
         let configuration = try Configuration(
-            dict: ["only_rules": "cyclomatic_complexity"],
+            dict: ["only_rules": "colon"],
             onlyRule: onlyRuleIdentifiers
         )
         #expect(onlyRuleIdentifiers == configuration.enabledRuleIdentifiers)
@@ -168,7 +168,7 @@ struct ConfigurationTests {
     func otherRuleConfigurationsAlongsideOnlyRules() {
         let only = ["nesting", "todo"]
         let enabledRulesConfigDict = [
-            "opt_in_rules": ["cyclomatic_complexity"],
+            "opt_in_rules": ["colon"],
             "only_rules": only,
         ]
         let disabledRulesConfigDict = [

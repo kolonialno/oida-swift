@@ -10,14 +10,6 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
-struct RedundantStringEnumValueRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(RedundantStringEnumValueRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
 struct RedundantTypeAnnotationRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -206,5 +198,13 @@ struct SyntacticSugarRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(SyntacticSugarRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct TestCaseAccessibilityRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(TestCaseAccessibilityRule.description)
     }
 }

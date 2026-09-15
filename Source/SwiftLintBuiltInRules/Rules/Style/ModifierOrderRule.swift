@@ -119,7 +119,7 @@ private extension DeclModifierListSyntax {
 }
 
 private extension SwiftDeclarationAttributeKind.ModifierGroup {
-    init?(modifierKeyword: String) { // oida:disable:this cyclomatic_complexity
+    init?(modifierKeyword: String) {
         switch modifierKeyword {
         case "override":
             self = .override

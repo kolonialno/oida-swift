@@ -10,14 +10,6 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
-struct NoSpaceInMethodCallRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(NoSpaceInMethodCallRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
 struct NoTimingGuessRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -206,5 +198,13 @@ struct PreferSelfTypeOverTypeOfSelfRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(PreferSelfTypeOverTypeOfSelfRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct PreferTypeCheckingRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(PreferTypeCheckingRule.description)
     }
 }

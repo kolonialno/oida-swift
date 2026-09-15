@@ -4,6 +4,6 @@ included:
 excluded:
   - Sources/Generated
 
-cyclomatic_complexity: 100
+colon: warning
 
 child_config: child.yml
