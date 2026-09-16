@@ -10,102 +10,6 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
-struct LegacyCGGeometryFunctionsRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(LegacyCGGeometryFunctionsRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct LegacyConstantRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(LegacyConstantRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct LegacyConstructorRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(LegacyConstructorRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct LegacyHashingRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(LegacyHashingRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct LegacyMultipleRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(LegacyMultipleRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct LegacyNSGeometryFunctionsRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(LegacyNSGeometryFunctionsRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct LegacyObjcTypeRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(LegacyObjcTypeRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct LegacyRandomRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(LegacyRandomRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct LegacySwiftUIAspectRatioRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(LegacySwiftUIAspectRatioRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct LegacyUIGraphicsFunctionRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(LegacyUIGraphicsFunctionRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct LetVarWhitespaceRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(LetVarWhitespaceRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct LiteralExpressionEndIndentationRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(LiteralExpressionEndIndentationRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
 struct LocalDocCommentRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -206,5 +110,101 @@ struct MultilineParametersRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(MultilineParametersRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct MultilineStringOpensOnItsOwnLineRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(MultilineStringOpensOnItsOwnLineRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct MultipleClosuresWithTrailingClosureRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(MultipleClosuresWithTrailingClosureRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct NavigationDestinationOnlyInNavigationRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(NavigationDestinationOnlyInNavigationRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct NimbleOperatorRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(NimbleOperatorRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct NoDirectNavigationControllerCallsRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(NoDirectNavigationControllerCallsRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct NoDirectPresentationRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(NoDirectPresentationRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct NoDocCommentsRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(NoDocCommentsRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct NoEmptyBlockRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(NoEmptyBlockRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct NoExtensionAccessModifierRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(NoExtensionAccessModifierRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct NoFallthroughOnlyRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(NoFallthroughOnlyRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct NoGroupingExtensionRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(NoGroupingExtensionRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct NoLegacyRouterReadersRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(NoLegacyRouterReadersRule.description)
     }
 }

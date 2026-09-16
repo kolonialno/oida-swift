@@ -10,30 +10,6 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
-struct EmptyEnumArgumentsRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(EmptyEnumArgumentsRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct EmptyParametersRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(EmptyParametersRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct EmptyParenthesesWithTrailingClosureRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(EmptyParenthesesWithTrailingClosureRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
 struct EmptyStringRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -206,5 +182,29 @@ struct ForWhereRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(ForWhereRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct ForceCastRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(ForceCastRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct ForceTryRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(ForceTryRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct ForceUnwrappingRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(ForceUnwrappingRule.description)
     }
 }

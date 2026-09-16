@@ -1,7 +1,5 @@
 import SwiftLintCore
 
-typealias DiscouragedObjectLiteralConfiguration = ObjectLiteralConfiguration<DiscouragedObjectLiteralRule>
-
 @AutoConfigParser
 struct ObjectLiteralConfiguration<Parent: Rule>: SeverityBasedRuleConfiguration {
     @ConfigurationElement(key: "severity")

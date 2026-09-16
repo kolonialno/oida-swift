@@ -10,134 +10,6 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
-struct NoUIApplicationSharedRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(NoUIApplicationSharedRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct NoUserDefaultsInAppCodeRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(NoUserDefaultsInAppCodeRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct NonOptionalStringDataConversionRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(NonOptionalStringDataConversionRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct NonOverridableClassDeclarationRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(NonOverridableClassDeclarationRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct NotificationCenterDetachmentRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(NotificationCenterDetachmentRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct NumberSeparatorRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(NumberSeparatorRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct ObjectLiteralRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(ObjectLiteralRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct OneDeclarationPerFileRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(OneDeclarationPerFileRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct OpeningBraceRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(OpeningBraceRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct OperatorUsageWhitespaceRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(OperatorUsageWhitespaceRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct OptionalDataStringConversionRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(OptionalDataStringConversionRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct OptionalEnumCaseMatchingRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(OptionalEnumCaseMatchingRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct OrphanedDocCommentRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(OrphanedDocCommentRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct OverriddenSuperCallRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(OverriddenSuperCallRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct OverrideInExtensionRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(OverrideInExtensionRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct PatternMatchingKeywordsRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(PatternMatchingKeywordsRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
 struct PeriodSpacingRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -206,5 +78,133 @@ struct PreferZeroOverExplicitInitRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(PreferZeroOverExplicitInitRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct PrefixedTopLevelConstantRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(PrefixedTopLevelConstantRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct PrivateActionRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(PrivateActionRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct PrivateOutletRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(PrivateOutletRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct PrivateOverFilePrivateRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(PrivateOverFilePrivateRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct PrivateSubjectRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(PrivateSubjectRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct PrivateSwiftUIStatePropertyRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(PrivateSwiftUIStatePropertyRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct ProhibitedInterfaceBuilderRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(ProhibitedInterfaceBuilderRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct ProtocolPropertyAccessorsOrderRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(ProtocolPropertyAccessorsOrderRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct RawValueForCamelCasedCodableEnumRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(RawValueForCamelCasedCodableEnumRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct ReduceBooleanRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(ReduceBooleanRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct ReduceIntoRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(ReduceIntoRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct RedundantDiscardableLetRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(RedundantDiscardableLetRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct RedundantFinalRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(RedundantFinalRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct RedundantNilCoalescingRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(RedundantNilCoalescingRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct RedundantSelfRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(RedundantSelfRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct RedundantSendableRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(RedundantSendableRule.description)
     }
 }

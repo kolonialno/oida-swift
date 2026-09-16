@@ -10,30 +10,6 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
-struct ForceCastRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(ForceCastRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct ForceTryRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(ForceTryRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct ForceUnwrappingRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(ForceUnwrappingRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
 struct FunctionDefaultParameterAtEndRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -62,14 +38,6 @@ struct GroupedImportsRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(GroupedImportsRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct IBInspectableInExtensionRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(IBInspectableInExtensionRule.description)
     }
 }
 
@@ -206,5 +174,37 @@ struct LeadingWhitespaceRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(LeadingWhitespaceRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct LegacyMultipleRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(LegacyMultipleRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct LegacyObjcTypeRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(LegacyObjcTypeRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct LetVarWhitespaceRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(LetVarWhitespaceRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct LiteralExpressionEndIndentationRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(LiteralExpressionEndIndentationRule.description)
     }
 }

@@ -18,7 +18,7 @@ struct ParserDiagnosticsTests {
 			""".asExample()
         #expect(SwiftLintFile(contents: contents.code).parserDiagnostics == ["unexpected code \')\' in source file"])
 
-        let ruleDescription = LegacyConstantRule.description
+        let ruleDescription = ColonRule.description
             .with(corrections: #corrections([contents: contents]))
 
         verifyCorrections(

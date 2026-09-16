@@ -90,14 +90,6 @@ struct BlanketDisableCommandRuleGeneratedTests {
 }
 
 @Suite(.rulesRegistered)
-struct BlockBasedKVORuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(BlockBasedKVORule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
 struct CaptureVariableRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -206,5 +198,13 @@ struct ComputedAccessorsOrderRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(ComputedAccessorsOrderRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct ConditionalReturnsOnNewlineRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(ConditionalReturnsOnNewlineRule.description)
     }
 }

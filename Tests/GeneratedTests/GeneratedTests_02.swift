@@ -10,14 +10,6 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
-struct ConditionalReturnsOnNewlineRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(ConditionalReturnsOnNewlineRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
 struct ContainsOverFilterCountRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -130,14 +122,6 @@ struct DiscouragedNoneNameRuleGeneratedTests {
 }
 
 @Suite(.rulesRegistered)
-struct DiscouragedObjectLiteralRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(DiscouragedObjectLiteralRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
 struct DiscouragedOptionalBooleanRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -186,14 +170,6 @@ struct DuplicatedKeyInDictionaryLiteralRuleGeneratedTests {
 }
 
 @Suite(.rulesRegistered)
-struct DynamicInlineRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(DynamicInlineRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
 struct EmptyCollectionLiteralRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -206,5 +182,29 @@ struct EmptyCountRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(EmptyCountRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct EmptyEnumArgumentsRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(EmptyEnumArgumentsRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct EmptyParametersRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(EmptyParametersRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct EmptyParenthesesWithTrailingClosureRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(EmptyParenthesesWithTrailingClosureRule.description)
     }
 }

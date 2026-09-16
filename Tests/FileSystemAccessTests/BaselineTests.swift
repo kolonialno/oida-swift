@@ -37,7 +37,7 @@ struct BaselineTests {
 
     private static let ruleDescriptions = [
         ArrayInitRule.description,
-        BlockBasedKVORule.description,
+        ColonRule.description,
         ClosingBraceRule.description,
         DirectReturnRule.description,
     ]
@@ -116,7 +116,7 @@ struct BaselineTests {
         .temporaryDirectory,
         arguments: [
             ArrayInitRule.description,
-            BlockBasedKVORule.description,
+            ColonRule.description,
             ClosingBraceRule.description,
             DirectReturnRule.description,
         ]
@@ -124,12 +124,12 @@ struct BaselineTests {
     func violationDetection(_ ruleDescription: RuleDescription) throws {
         let violationRuleDescriptions = [
             ArrayInitRule.description,
-            BlockBasedKVORule.description,
+            ColonRule.description,
             ArrayInitRule.description,
             ClosingBraceRule.description,
             ClosingBraceRule.description,
             ClosingBraceRule.description,
-            BlockBasedKVORule.description,
+            ColonRule.description,
             DirectReturnRule.description,
             ArrayInitRule.description,
             ClosingBraceRule.description,

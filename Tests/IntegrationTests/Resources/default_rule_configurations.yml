@@ -54,11 +54,6 @@ blanket_disable_command:
   meta:
     opt-in: false
     correctable: false
-block_based_kvo:
-  severity: warning
-  meta:
-    opt-in: false
-    correctable: false
 capture_variable:
   severity: warning
   meta:
@@ -219,13 +214,6 @@ discouraged_none_name:
   meta:
     opt-in: true
     correctable: false
-discouraged_object_literal:
-  severity: warning
-  image_literal: true
-  color_literal: true
-  meta:
-    opt-in: true
-    correctable: false
 discouraged_optional_boolean:
   severity: warning
   meta:
@@ -268,11 +256,6 @@ duplicate_imports:
     correctable: true
 duplicated_key_in_dictionary_literal:
   severity: warning
-  meta:
-    opt-in: false
-    correctable: false
-dynamic_inline:
-  severity: error
   meta:
     opt-in: false
     correctable: false
@@ -482,11 +465,6 @@ grouped_imports:
   meta:
     opt-in: true
     correctable: true
-ibinspectable_in_extension:
-  severity: warning
-  meta:
-    opt-in: true
-    correctable: false
 identical_operands:
   severity: warning
   meta:
@@ -593,54 +571,14 @@ leading_whitespace:
   meta:
     opt-in: false
     correctable: true
-legacy_cggeometry_functions:
-  severity: warning
-  meta:
-    opt-in: false
-    correctable: true
-legacy_constant:
-  severity: warning
-  meta:
-    opt-in: false
-    correctable: true
-legacy_constructor:
-  severity: warning
-  meta:
-    opt-in: false
-    correctable: true
-legacy_hashing:
-  severity: warning
-  meta:
-    opt-in: false
-    correctable: false
 legacy_multiple:
   severity: warning
   meta:
     opt-in: true
     correctable: false
-legacy_nsgeometry_functions:
-  severity: warning
-  meta:
-    opt-in: false
-    correctable: true
 legacy_objc_type:
   severity: warning
   allowed_types: []
-  meta:
-    opt-in: true
-    correctable: false
-legacy_random:
-  severity: warning
-  meta:
-    opt-in: false
-    correctable: false
-legacy_swiftui_aspect_ratio:
-  severity: warning
-  meta:
-    opt-in: false
-    correctable: true
-legacy_uigraphics_function:
-  severity: warning
   meta:
     opt-in: true
     correctable: false
@@ -866,26 +804,6 @@ notification_center_detachment:
   meta:
     opt-in: false
     correctable: false
-ns_number_init_as_function_reference:
-  severity: warning
-  meta:
-    opt-in: false
-    correctable: false
-nslocalizedstring_key:
-  severity: warning
-  meta:
-    opt-in: true
-    correctable: false
-nslocalizedstring_require_bundle:
-  severity: warning
-  meta:
-    opt-in: true
-    correctable: false
-nsobject_prefer_isequal:
-  severity: warning
-  meta:
-    opt-in: false
-    correctable: false
 number_separator:
   severity: warning
   minimum_length: 0
@@ -1035,21 +953,8 @@ private_swiftui_state:
   meta:
     opt-in: true
     correctable: true
-private_unit_test:
-  severity: warning
-  test_parent_classes: ["QuickSpec", "XCTestCase"]
-  meta:
-    opt-in: false
-    correctable: true
 prohibited_interface_builder:
   severity: warning
-  meta:
-    opt-in: true
-    correctable: false
-prohibited_super_call:
-  severity: warning
-  excluded: []
-  included: ["*"]
   meta:
     opt-in: true
     correctable: false
@@ -1058,21 +963,6 @@ protocol_property_accessors_order:
   meta:
     opt-in: false
     correctable: true
-quick_discouraged_call:
-  severity: warning
-  meta:
-    opt-in: true
-    correctable: false
-quick_discouraged_focused_test:
-  severity: warning
-  meta:
-    opt-in: true
-    correctable: false
-quick_discouraged_pending_test:
-  severity: warning
-  meta:
-    opt-in: true
-    correctable: false
 raw_value_for_camel_cased_codable_enum:
   severity: warning
   meta:
@@ -1103,11 +993,6 @@ redundant_nil_coalescing:
   severity: warning
   meta:
     opt-in: true
-    correctable: true
-redundant_objc_attribute:
-  severity: warning
-  meta:
-    opt-in: false
     correctable: true
 redundant_self:
   severity: warning
@@ -1446,11 +1331,6 @@ unused_parameter:
     opt-in: true
     correctable: true
 unused_setter_value:
-  severity: warning
-  meta:
-    opt-in: false
-    correctable: false
-valid_ibinspectable:
   severity: warning
   meta:
     opt-in: false
