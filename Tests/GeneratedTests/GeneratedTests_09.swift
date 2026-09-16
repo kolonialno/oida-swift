@@ -10,201 +10,49 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
-struct TypeNameRuleGeneratedTests {
+struct VerticalWhitespaceOpeningBracesRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(TypeNameRule.description)
+        verifyRule(VerticalWhitespaceOpeningBracesRule.description)
     }
 }
 
 @Suite(.rulesRegistered)
-struct TypesafeArrayInitRuleGeneratedTests {
+struct VoidReturnRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(TypesafeArrayInitRule.description)
+        verifyRule(VoidReturnRule.description)
     }
 }
 
 @Suite(.rulesRegistered)
-struct UnavailableConditionRuleGeneratedTests {
+struct WeakDelegateRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(UnavailableConditionRule.description)
+        verifyRule(WeakDelegateRule.description)
     }
 }
 
 @Suite(.rulesRegistered)
-struct UnavailableFunctionRuleGeneratedTests {
+struct XCTFailMessageRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(UnavailableFunctionRule.description)
+        verifyRule(XCTFailMessageRule.description)
     }
 }
 
 @Suite(.rulesRegistered)
-struct UnhandledThrowingTaskRuleGeneratedTests {
+struct XCTSpecificMatcherRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(UnhandledThrowingTaskRule.description)
+        verifyRule(XCTSpecificMatcherRule.description)
     }
 }
 
 @Suite(.rulesRegistered)
-struct UnneededBreakInSwitchRuleGeneratedTests {
+struct YodaConditionRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(UnneededBreakInSwitchRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct UnneededEscapingRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(UnneededEscapingRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct UnneededOverrideRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(UnneededOverrideRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct UnneededParenthesesInClosureArgumentRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(UnneededParenthesesInClosureArgumentRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct UnneededSynthesizedInitializerRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(UnneededSynthesizedInitializerRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct UnneededThrowsRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(UnneededThrowsRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct UnownedVariableCaptureRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(UnownedVariableCaptureRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct UntypedErrorInCatchRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(UntypedErrorInCatchRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct UnusedClosureParameterRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(UnusedClosureParameterRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct UnusedControlFlowLabelRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(UnusedControlFlowLabelRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct UnusedDeclarationRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(UnusedDeclarationRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct UnusedEnumeratedRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(UnusedEnumeratedRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct UnusedImportRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(UnusedImportRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct UnusedOptionalBindingRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(UnusedOptionalBindingRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct UnusedParameterRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(UnusedParameterRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct UnusedSetterValueRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(UnusedSetterValueRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct ValueStorageBuiltOnlyAtTheRootRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(ValueStorageBuiltOnlyAtTheRootRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct VariableShadowingRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(VariableShadowingRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct VerticalParameterAlignmentOnCallRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(VerticalParameterAlignmentOnCallRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct VerticalParameterAlignmentRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(VerticalParameterAlignmentRule.description)
+        verifyRule(YodaConditionRule.description)
     }
 }

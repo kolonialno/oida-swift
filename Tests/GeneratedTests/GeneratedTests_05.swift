@@ -10,126 +10,6 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
-struct MultilineArgumentsBracketsRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(MultilineArgumentsBracketsRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct MultilineArgumentsRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(MultilineArgumentsRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct MultilineCallArgumentsRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(MultilineCallArgumentsRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct MultilineConditionsRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(MultilineConditionsRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct MultilineFunctionChainsRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(MultilineFunctionChainsRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct MultilineLiteralBracketsRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(MultilineLiteralBracketsRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct MultilineParametersBracketsRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(MultilineParametersBracketsRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct MultilineParametersRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(MultilineParametersRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct MultilineStringOpensOnItsOwnLineRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(MultilineStringOpensOnItsOwnLineRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct MultipleClosuresWithTrailingClosureRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(MultipleClosuresWithTrailingClosureRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct NavigationDestinationOnlyInNavigationRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(NavigationDestinationOnlyInNavigationRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct NimbleOperatorRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(NimbleOperatorRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct NoDirectNavigationControllerCallsRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(NoDirectNavigationControllerCallsRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct NoDirectPresentationRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(NoDirectPresentationRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct NoDocCommentsRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(NoDocCommentsRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
 struct NoEmptyBlockRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -206,5 +86,125 @@ struct NoPrintInAppCodeRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(NoPrintInAppCodeRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct NoShareLinkRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(NoShareLinkRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct NoSingleUseVoidFunctionsRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(NoSingleUseVoidFunctionsRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct NoTimingGuessRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(NoTimingGuessRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct NoUIApplicationSharedRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(NoUIApplicationSharedRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct NoUserDefaultsInAppCodeRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(NoUserDefaultsInAppCodeRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct NonOptionalStringDataConversionRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(NonOptionalStringDataConversionRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct NonOverridableClassDeclarationRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(NonOverridableClassDeclarationRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct NotificationCenterDetachmentRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(NotificationCenterDetachmentRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct NumberSeparatorRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(NumberSeparatorRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct ObjectLiteralRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(ObjectLiteralRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct OneDeclarationPerFileRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(OneDeclarationPerFileRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct OpeningBraceRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(OpeningBraceRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct OptionalDataStringConversionRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(OptionalDataStringConversionRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct OrphanedDocCommentRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(OrphanedDocCommentRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct OverriddenSuperCallRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(OverriddenSuperCallRule.description)
     }
 }

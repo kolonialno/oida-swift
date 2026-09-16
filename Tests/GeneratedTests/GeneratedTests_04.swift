@@ -10,102 +10,6 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
-struct IdenticalOperandsRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(IdenticalOperandsRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct IdentifierNameRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(IdentifierNameRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct ImplicitGetterRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(ImplicitGetterRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct ImplicitOptionalInitializationRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(ImplicitOptionalInitializationRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct ImplicitReturnRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(ImplicitReturnRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct ImplicitlyUnwrappedOptionalRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(ImplicitlyUnwrappedOptionalRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct InclusiveLanguageRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(InclusiveLanguageRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct IncompatibleConcurrencyAnnotationRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(IncompatibleConcurrencyAnnotationRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct IndentationWidthRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(IndentationWidthRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct InvalidOidaCommandRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(InvalidOidaCommandRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct InvisibleCharacterRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(InvisibleCharacterRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct IsDisjointRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(IsDisjointRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
 struct JoinedDefaultParameterRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -126,14 +30,6 @@ struct KeychainBuiltOnlyAtTheRootRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(KeychainBuiltOnlyAtTheRootRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct LastWhereRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(LastWhereRule.description)
     }
 }
 
@@ -206,5 +102,109 @@ struct ModifierOrderRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(ModifierOrderRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct MultilineArgumentsBracketsRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(MultilineArgumentsBracketsRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct MultilineArgumentsRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(MultilineArgumentsRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct MultilineCallArgumentsRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(MultilineCallArgumentsRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct MultilineConditionsRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(MultilineConditionsRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct MultilineFunctionChainsRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(MultilineFunctionChainsRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct MultilineLiteralBracketsRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(MultilineLiteralBracketsRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct MultilineParametersBracketsRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(MultilineParametersBracketsRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct MultilineParametersRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(MultilineParametersRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct MultilineStringOpensOnItsOwnLineRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(MultilineStringOpensOnItsOwnLineRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct NavigationDestinationOnlyInNavigationRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(NavigationDestinationOnlyInNavigationRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct NoDirectNavigationControllerCallsRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(NoDirectNavigationControllerCallsRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct NoDirectPresentationRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(NoDirectPresentationRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct NoDocCommentsRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(NoDocCommentsRule.description)
     }
 }

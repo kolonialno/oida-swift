@@ -117,17 +117,7 @@ contains_over_filter_count:
   meta:
     opt-in: true
     correctable: false
-contains_over_filter_is_empty:
-  severity: warning
-  meta:
-    opt-in: true
-    correctable: false
 contains_over_first_not_nil:
-  severity: warning
-  meta:
-    opt-in: true
-    correctable: false
-contains_over_range_nil_comparison:
   severity: warning
   meta:
     opt-in: true
@@ -147,30 +137,12 @@ convenience_type:
   meta:
     opt-in: true
     correctable: false
-deployment_target:
-  severity: warning
-  iOSApplicationExtension_deployment_target: 7.0
-  iOS_deployment_target: 7.0
-  macOSApplicationExtension_deployment_target: 10.9
-  macOS_deployment_target: 10.9
-  tvOSApplicationExtension_deployment_target: 9.0
-  tvOS_deployment_target: 9.0
-  watchOSApplicationExtension_deployment_target: 1.0
-  watchOS_deployment_target: 1.0
-  meta:
-    opt-in: false
-    correctable: false
 direct_return:
   severity: warning
   meta:
     opt-in: true
     correctable: true
 discarded_notification_center_observer:
-  severity: warning
-  meta:
-    opt-in: true
-    correctable: false
-discouraged_assert:
   severity: warning
   meta:
     opt-in: true
@@ -253,11 +225,6 @@ empty_enum_arguments:
   meta:
     opt-in: false
     correctable: true
-empty_parameters:
-  severity: warning
-  meta:
-    opt-in: false
-    correctable: true
 empty_parentheses_with_trailing_closure:
   severity: warning
   meta:
@@ -284,19 +251,6 @@ environment_value_reassertion:
   meta:
     opt-in: true
     correctable: false
-expiring_todo:
-  approaching_expiry_severity: warning
-  expired_severity: error
-  bad_formatting_severity: error
-  approaching_expiry_threshold: 15
-  date_delimiters:
-    opening: "["
-    closing: "]"
-  date_format: "MM/dd/yyyy"
-  date_separator: "/"
-  meta:
-    opt-in: true
-    correctable: false
 explicit_acl:
   severity: warning
   meta:
@@ -310,11 +264,6 @@ explicit_enum_raw_value:
 explicit_init:
   severity: warning
   include_bare_init: false
-  meta:
-    opt-in: true
-    correctable: true
-explicit_self:
-  severity: warning
   meta:
     opt-in: true
     correctable: true
@@ -361,12 +310,6 @@ file_name:
   meta:
     opt-in: true
     correctable: false
-file_name_no_space:
-  severity: warning
-  excluded: []
-  meta:
-    opt-in: true
-    correctable: false
 file_types_order:
   severity: warning
   order: [[supporting_type], [main_type], [extension], [preview_provider], [library_content_provider]]
@@ -380,11 +323,6 @@ final_test_case:
     opt-in: true
     correctable: true
 first_where:
-  severity: warning
-  meta:
-    opt-in: true
-    correctable: false
-flatmap_over_map_reduce:
   severity: warning
   meta:
     opt-in: true
@@ -423,20 +361,6 @@ function_name_whitespace:
   meta:
     opt-in: false
     correctable: true
-generic_type_name:
-  min_length:
-    warning: 1
-    error: 0
-  max_length:
-    warning: 20
-    error: 1000
-  excluded: []
-  allowed_symbols: []
-  unallowed_symbols_severity: error
-  validates_start_with_lowercase: error
-  meta:
-    opt-in: false
-    correctable: false
 grouped_imports:
   severity: warning
   our_modules: []
@@ -487,11 +411,6 @@ implicitly_unwrapped_optional:
   meta:
     opt-in: true
     correctable: false
-inclusive_language:
-  severity: warning
-  meta:
-    opt-in: false
-    correctable: false
 incompatible_concurrency_annotation:
   severity: warning
   global_actors: ["MainActor"]
@@ -519,11 +438,6 @@ invisible_character:
   meta:
     opt-in: false
     correctable: true
-is_disjoint:
-  severity: warning
-  meta:
-    opt-in: false
-    correctable: false
 joined_default_parameter:
   severity: warning
   meta:
@@ -535,11 +449,6 @@ key_path_only_where_the_api_takes_one:
     opt-in: true
     correctable: true
 keychain_built_only_at_the_root:
-  severity: warning
-  meta:
-    opt-in: true
-    correctable: false
-last_where:
   severity: warning
   meta:
     opt-in: true
@@ -645,21 +554,11 @@ multiline_string_opens_on_its_own_line:
   meta:
     opt-in: true
     correctable: false
-multiple_closures_with_trailing_closure:
-  severity: warning
-  meta:
-    opt-in: false
-    correctable: false
 navigation_destination_only_in_navigation:
   severity: warning
   meta:
     opt-in: true
     correctable: false
-nimble_operator:
-  severity: warning
-  meta:
-    opt-in: true
-    correctable: true
 no_direct_navigation_controller_calls:
   severity: warning
   meta:
@@ -806,11 +705,6 @@ optional_data_string_conversion:
   meta:
     opt-in: false
     correctable: false
-optional_enum_case_matching:
-  severity: warning
-  meta:
-    opt-in: true
-    correctable: true
 orphaned_doc_comment:
   severity: warning
   meta:
@@ -865,20 +759,10 @@ prefer_self_in_static_references:
   meta:
     opt-in: true
     correctable: true
-prefer_self_type_over_type_of_self:
-  severity: warning
-  meta:
-    opt-in: true
-    correctable: true
 prefer_type_checking:
   severity: warning
   meta:
     opt-in: false
-    correctable: true
-prefer_zero_over_explicit_init:
-  severity: warning
-  meta:
-    opt-in: true
     correctable: true
 prefixed_toplevel_constant:
   severity: warning
@@ -918,20 +802,10 @@ prohibited_interface_builder:
   meta:
     opt-in: true
     correctable: false
-protocol_property_accessors_order:
-  severity: warning
-  meta:
-    opt-in: false
-    correctable: true
 raw_value_for_camel_cased_codable_enum:
   severity: warning
   meta:
     opt-in: true
-    correctable: false
-reduce_boolean:
-  severity: warning
-  meta:
-    opt-in: false
     correctable: false
 reduce_into:
   severity: warning
@@ -943,16 +817,6 @@ redundant_discardable_let:
   ignore_swiftui_view_bodies: false
   meta:
     opt-in: false
-    correctable: true
-redundant_final:
-  severity: warning
-  meta:
-    opt-in: true
-    correctable: true
-redundant_nil_coalescing:
-  severity: warning
-  meta:
-    opt-in: true
     correctable: true
 redundant_self:
   severity: warning
@@ -967,11 +831,6 @@ redundant_sendable:
   meta:
     opt-in: false
     correctable: true
-redundant_set_access_control:
-  severity: warning
-  meta:
-    opt-in: false
-    correctable: false
 redundant_string_enum_value:
   severity: warning
   meta:
@@ -1064,11 +923,6 @@ static_operator:
   meta:
     opt-in: true
     correctable: false
-static_over_final_class:
-  severity: warning
-  meta:
-    opt-in: false
-    correctable: false
 strict_fileprivate:
   severity: warning
   meta:
@@ -1124,11 +978,6 @@ todo:
   meta:
     opt-in: false
     correctable: false
-toggle_bool:
-  severity: warning
-  meta:
-    opt-in: true
-    correctable: true
 trailing_closure:
   severity: warning
   only_single_muted_parameter: false
@@ -1166,11 +1015,6 @@ type_name:
   meta:
     opt-in: false
     correctable: false
-typesafe_array_init:
-  severity: warning
-  meta:
-    opt-in: true
-    correctable: false
 unavailable_condition:
   severity: warning
   meta:
@@ -1207,11 +1051,6 @@ unneeded_parentheses_in_closure_argument:
   severity: warning
   meta:
     opt-in: true
-    correctable: true
-unneeded_synthesized_initializer:
-  severity: warning
-  meta:
-    opt-in: false
     correctable: true
 unneeded_throws_rethrows:
   severity: warning
@@ -1314,11 +1153,6 @@ vertical_whitespace_opening_braces:
   meta:
     opt-in: true
     correctable: true
-void_function_in_ternary:
-  severity: warning
-  meta:
-    opt-in: false
-    correctable: false
 void_return:
   severity: warning
   meta:
