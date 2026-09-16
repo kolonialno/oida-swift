@@ -4,7 +4,19 @@
 
 ### Breaking
 
-* None.
+* `trailing_comma` is gone. A comma at the end of a collection literal is layout, and layout is
+  swift-format's — the same reasoning that took the width machinery out in 0.15.0.
+
+  The two tools disagreed in both directions and no default on this side could settle it. Against
+  `3lvis/Networking` with nothing set: leaving `mandatory_comma` at `false` let the formatter add fifteen
+  commas the rule then condemned, and `--fix` wrote a tree `--check` rejected, stably. Setting it `true`
+  inverted the fight — oida's own `--fix` reached zero and the formatter stripped seven of them back out,
+  on the nested closers it will not write a comma after. Whichever way the key went, one of the two tools
+  was overruling the other on every run.
+
+  So oida stops holding the opinion and `multiElementCollectionTrailingCommas` decides, which is one
+  setting rather than two that have to agree. Adopting oida needs no key for this; delete
+  `trailing_comma` from `.oida.yml` if it is there. Closes #34.
 
 ### Experimental
 
