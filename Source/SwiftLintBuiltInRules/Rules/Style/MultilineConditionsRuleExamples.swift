@@ -25,13 +25,6 @@ internal struct MultilineConditionsRuleExamples {
             return
         }
         """.asExample(configuration: ["max_number_of_single_line_parameters": 2]),
-        """
-        guard a,
-            b
-        else {
-            return
-        }
-        """.asExample(configuration: ["max_number_of_single_line_parameters": 2]),
         // A lone condition that spans lines has nothing to align against, so the keyword keeps its own line.
         """
         guard
@@ -68,7 +61,7 @@ internal struct MultilineConditionsRuleExamples {
         else {
             return
         }
-        """.asExample(configuration: ["max_number_of_single_line_parameters": 2, "requires_single_line": true]),
+        """.asExample(configuration: ["max_number_of_single_line_parameters": 2]),
     ])
 
     static let corrections: [Example: Example] = #corrections([
@@ -137,7 +130,7 @@ internal struct MultilineConditionsRuleExamples {
         else {
             return
         }
-        """.asExample(configuration: ["max_number_of_single_line_parameters": 2, "requires_single_line": true]): """
+        """.asExample(configuration: ["max_number_of_single_line_parameters": 2]): """
             guard a, b else {
                 return
             }
@@ -151,7 +144,7 @@ internal struct MultilineConditionsRuleExamples {
         else {
             return
         }
-        """.asExample(configuration: ["max_number_of_single_line_parameters": 2, "requires_single_line": true]): """
+        """.asExample(configuration: ["max_number_of_single_line_parameters": 2]): """
             guard a,
                 // why b
                 b
