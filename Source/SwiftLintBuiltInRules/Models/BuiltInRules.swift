@@ -233,7 +233,6 @@ public let builtInRules: [any Rule.Type] = [
     TodoRule.self,
     ToggleBoolRule.self,
     TrailingClosureRule.self,
-    TrailingCommaRule.self,
     TrailingNewlineRule.self,
     TrailingSemicolonRule.self,
     TrailingWhitespaceRule.self,

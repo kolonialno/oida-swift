@@ -10,14 +10,6 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
-struct UnusedImportRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(UnusedImportRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
 struct UnusedOptionalBindingRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {

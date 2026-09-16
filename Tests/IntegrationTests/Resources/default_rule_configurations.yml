@@ -699,14 +699,12 @@ multiline_arguments_brackets:
 multiline_call_arguments:
   severity: warning
   allows_single_line: true
-  requires_single_line: false
   meta:
     opt-in: true
     correctable: true
 multiline_conditions:
   severity: warning
   allows_single_line: true
-  requires_single_line: false
   meta:
     opt-in: true
     correctable: true
@@ -723,7 +721,6 @@ multiline_literal_brackets:
 multiline_parameters:
   severity: warning
   allows_single_line: true
-  requires_single_line: false
   meta:
     opt-in: true
     correctable: true
@@ -1303,12 +1300,6 @@ trailing_closure:
   only_single_muted_parameter: false
   meta:
     opt-in: true
-    correctable: true
-trailing_comma:
-  severity: warning
-  mandatory_comma: false
-  meta:
-    opt-in: false
     correctable: true
 trailing_newline:
   severity: warning

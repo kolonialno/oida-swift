@@ -34,14 +34,6 @@ struct TrailingClosureRuleGeneratedTests {
 }
 
 @Suite(.rulesRegistered)
-struct TrailingCommaRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(TrailingCommaRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
 struct TrailingNewlineRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -206,5 +198,13 @@ struct UnusedEnumeratedRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(UnusedEnumeratedRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct UnusedImportRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(UnusedImportRule.description)
     }
 }
