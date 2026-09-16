@@ -4,6 +4,24 @@
 
 ### Breaking
 
+* None.
+
+### Experimental
+
+* None.
+
+### Enhancements
+
+* None.
+
+### Bug Fixes
+
+* None.
+
+## 0.15.0: Nothing Decided By Counting
+
+### Breaking
+
 * `requires_single_line` is gone from `multiline_call_arguments`, `multiline_parameters` and
   `multiline_conditions`. Both directions of the count are not a switch: setting
   `max_number_of_single_line_parameters` is what asks for the shape, and the shape has always been that
