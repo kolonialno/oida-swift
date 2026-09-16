@@ -38,6 +38,11 @@ struct Candidate: Hashable {
     let baseName: String
     let labels: [String]
     let position: AbsolutePosition
+    /// The isolation the body runs in — `actor:Name`, `global:MainActor`, or empty for none. A caller in a
+    /// different one reaches it by hopping, which is not an edit that can be undone by moving statements.
+    let isolation: String
+    /// An `async` member needs `await` from its own isolation too, so awaiting one proves nothing.
+    let isAsync: Bool
 
     var signature: String { "\(baseName)(\(labels.map { $0 + ":" }.joined()))" }
 }
@@ -50,6 +55,10 @@ struct CallFacts: Hashable {
     let receiver: Receiver
     let enclosingType: String
     let enclosingSignature: String?
+    /// The isolation the calling function runs in, in `Candidate.isolation`'s spelling.
+    let callerIsolation: String
+    /// Whether the caller had to `await` the call.
+    let isAwaited: Bool
 }
 
 indirect enum Receiver: Hashable {

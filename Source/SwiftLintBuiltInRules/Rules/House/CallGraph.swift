@@ -44,9 +44,22 @@ final class CallGraph {
     private var callers: [String: Int] = [:]
     private var poisonedByName: [String: [(labels: [String]?, trailing: Int, reason: String)]] = [:]
     private var staticsByName: [String: [(owner: String, method: MethodFacts)]] = [:]
+    private var recursive: Set<String> = []
+    private var reachedByHop: Set<String> = []
+    private var calleeIsolation: [String: String] = [:]
+    private var synchronousCallees: Set<String> = []
 
     init(files: [FileFacts]) {
         let production = files.filter { !$0.isTest }
+        for file in production {
+            for candidate in file.candidates {
+                let key = "\(candidate.owner).\(candidate.signature)"
+                calleeIsolation[key] = candidate.isolation
+                if !candidate.isAsync {
+                    synchronousCallees.insert(key)
+                }
+            }
+        }
         merge(production)
         index()
         attribute(production)
@@ -106,8 +119,16 @@ final class CallGraph {
                 }
                 switch attribution {
                 case let .target(owner, signature):
-                    if call.enclosingType == owner, call.enclosingSignature == signature { continue }   // recursion
-                    callers["\(owner).\(signature)", default: 0] += 1
+                    let key = "\(owner).\(signature)"
+                    if call.enclosingType == owner, call.enclosingSignature == signature {
+                        recursive.insert(key)
+                        continue
+                    }
+                    let callee = calleeIsolation[key] ?? ""
+                    if !callee.isEmpty, hops(call, to: key, isolatedAs: callee) {
+                        reachedByHop.insert(key)
+                    }
+                    callers[key, default: 0] += 1
                 case let .ambiguous(reason):
                     poisonedByName[call.baseName, default: []].append((call.labels, call.trailingClosures, reason))
                 case .outside:
@@ -115,6 +136,16 @@ final class CallGraph {
                 }
             }
         }
+    }
+
+    /// Awaiting a member that is not `async` is only possible from outside its isolation, which the syntax
+    /// says even where a closure's own isolation does not show — the caller may have left the actor without
+    /// saying so. Otherwise two known and different isolations are the crossing.
+    private func hops(_ call: CallFacts, to key: String, isolatedAs callee: String) -> Bool {
+        if call.isAwaited, synchronousCallees.contains(key) {
+            return true
+        }
+        return !call.callerIsolation.isEmpty && call.callerIsolation != callee
     }
 
     func verdict(for candidate: Candidate) -> Verdict {
@@ -127,7 +158,17 @@ final class CallGraph {
             .first(where: { labelsCompatible(call: $0.labels, declared: candidate.labels) }) {
             return .poisoned(poison.reason)
         }
-        return .callers(callers["\(candidate.owner).\(candidate.signature)"] ?? 0)
+        let key = "\(candidate.owner).\(candidate.signature)"
+        // Inlining a function into its own caller leaves the self-call behind, so there is no edit to make.
+        if recursive.contains(key) {
+            return .poisoned("recursive")
+        }
+        // The call is the hop onto the actor. Moving the body to the caller moves isolated work into a
+        // context that cannot do it, which the compiler refuses.
+        if !candidate.isolation.isEmpty, reachedByHop.contains(key) {
+            return .poisoned("isolation hop")
+        }
+        return .callers(callers[key] ?? 0)
     }
 
     func isSingleUse(_ candidate: Candidate) -> Bool { verdict(for: candidate).isSingleUse }
