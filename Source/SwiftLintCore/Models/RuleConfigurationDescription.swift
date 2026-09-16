@@ -524,7 +524,6 @@ public struct ConfigurationElement<T: AcceptableByConfigurationElement & Equatab
                 deprecationNotice: DeprecationNotice? = nil,
                 documentPostprocessedValue: Bool = true,
                 postprocessor: @escaping @Sendable (inout T) -> Void = { _ in }) {
-        // oida:disable:previous no_empty_block
         self.init(
             wrappedValue: value,
             key: key,
@@ -580,7 +579,6 @@ public struct ConfigurationElement<T: AcceptableByConfigurationElement & Equatab
                  deprecationNotice: DeprecationNotice? = nil,
                  documentPostprocessedValue: Bool = true,
                  postprocessor: @escaping @Sendable (inout T) -> Void = { _ in }) {
-        // oida:disable:previous no_empty_block
         self.rawWrappedValue = wrappedValue
         self.wrappedValue = wrappedValue
         self.key = key

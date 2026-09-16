@@ -1,7 +1,7 @@
 // GENERATED FILE. DO NOT EDIT!
 
 // oida:disable:next blanket_disable_command superfluous_disable_command
-// oida:disable single_test_class type_name
+// oida:disable type_name
 
 import TestHelpers
 import Testing
@@ -10,201 +10,73 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
-struct JoinedDefaultParameterRuleGeneratedTests {
+struct UnusedDeclarationRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(JoinedDefaultParameterRule.description)
+        verifyRule(UnusedDeclarationRule.description)
     }
 }
 
 @Suite(.rulesRegistered)
-struct KeyPathOnlyWhereTheAPITakesOneRuleGeneratedTests {
+struct UnusedEnumeratedRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(KeyPathOnlyWhereTheAPITakesOneRule.description)
+        verifyRule(UnusedEnumeratedRule.description)
     }
 }
 
 @Suite(.rulesRegistered)
-struct KeychainBuiltOnlyAtTheRootRuleGeneratedTests {
+struct UnusedImportRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(KeychainBuiltOnlyAtTheRootRule.description)
+        verifyRule(UnusedImportRule.description)
     }
 }
 
 @Suite(.rulesRegistered)
-struct LegacyMultipleRuleGeneratedTests {
+struct UnusedOptionalBindingRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(LegacyMultipleRule.description)
+        verifyRule(UnusedOptionalBindingRule.description)
     }
 }
 
 @Suite(.rulesRegistered)
-struct LegacyObjcTypeRuleGeneratedTests {
+struct UnusedSetterValueRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(LegacyObjcTypeRule.description)
+        verifyRule(UnusedSetterValueRule.description)
     }
 }
 
 @Suite(.rulesRegistered)
-struct LetVarWhitespaceRuleGeneratedTests {
+struct ValueStorageBuiltOnlyAtTheRootRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(LetVarWhitespaceRule.description)
+        verifyRule(ValueStorageBuiltOnlyAtTheRootRule.description)
     }
 }
 
 @Suite(.rulesRegistered)
-struct LiteralExpressionEndIndentationRuleGeneratedTests {
+struct VerticalParameterAlignmentRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(LiteralExpressionEndIndentationRule.description)
+        verifyRule(VerticalParameterAlignmentRule.description)
     }
 }
 
 @Suite(.rulesRegistered)
-struct LocalDocCommentRuleGeneratedTests {
+struct VoidReturnRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(LocalDocCommentRule.description)
+        verifyRule(VoidReturnRule.description)
     }
 }
 
 @Suite(.rulesRegistered)
-struct LowerACLThanParentRuleGeneratedTests {
+struct XCTFailMessageRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(LowerACLThanParentRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct MarkRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(MarkRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct MissingDocsRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(MissingDocsRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct ModifierOrderRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(ModifierOrderRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct MultilineArgumentsBracketsRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(MultilineArgumentsBracketsRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct MultilineArgumentsRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(MultilineArgumentsRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct MultilineCallArgumentsRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(MultilineCallArgumentsRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct MultilineConditionsRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(MultilineConditionsRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct MultilineFunctionChainsRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(MultilineFunctionChainsRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct MultilineLiteralBracketsRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(MultilineLiteralBracketsRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct MultilineParametersBracketsRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(MultilineParametersBracketsRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct MultilineParametersRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(MultilineParametersRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct MultilineStringOpensOnItsOwnLineRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(MultilineStringOpensOnItsOwnLineRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct NavigationDestinationOnlyInNavigationRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(NavigationDestinationOnlyInNavigationRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct NoDirectNavigationControllerCallsRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(NoDirectNavigationControllerCallsRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct NoDirectPresentationRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(NoDirectPresentationRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct NoDocCommentsRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(NoDocCommentsRule.description)
+        verifyRule(XCTFailMessageRule.description)
     }
 }

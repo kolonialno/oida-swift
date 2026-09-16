@@ -5,12 +5,8 @@ struct BlanketDisableCommandConfiguration: SeverityBasedRuleConfiguration {
     @ConfigurationElement(key: "severity")
     private(set) var severityConfiguration = SeverityConfiguration<Parent>(.warning)
     @ConfigurationElement(key: "allowed_rules")
-    private(set) var allowedRuleIdentifiers: Set<String> = [
-        "file_header",
-        "file_name",
-        "file_name_no_space",
-        "single_test_class",
-    ]
+    /// Empty: a blanket disable suits a rule that judges the whole file, and oida no longer has one.
+    private(set) var allowedRuleIdentifiers: Set<String> = []
     @ConfigurationElement(key: "always_blanket_disable")
     private(set) var alwaysBlanketDisableRuleIdentifiers: Set<String> = []
 }

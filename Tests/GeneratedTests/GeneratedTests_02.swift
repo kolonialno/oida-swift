@@ -1,7 +1,7 @@
 // GENERATED FILE. DO NOT EDIT!
 
 // oida:disable:next blanket_disable_command superfluous_disable_command
-// oida:disable single_test_class type_name
+// oida:disable type_name
 
 import TestHelpers
 import Testing
@@ -10,201 +10,201 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
-struct ConvenienceTypeRuleGeneratedTests {
+struct ImplicitOptionalInitializationRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(ConvenienceTypeRule.description)
+        verifyRule(ImplicitOptionalInitializationRule.description)
     }
 }
 
 @Suite(.rulesRegistered)
-struct DirectReturnRuleGeneratedTests {
+struct InvalidOidaCommandRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(DirectReturnRule.description)
+        verifyRule(InvalidOidaCommandRule.description)
     }
 }
 
 @Suite(.rulesRegistered)
-struct DiscardedNotificationCenterObserverRuleGeneratedTests {
+struct InvisibleCharacterRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(DiscardedNotificationCenterObserverRule.description)
+        verifyRule(InvisibleCharacterRule.description)
     }
 }
 
 @Suite(.rulesRegistered)
-struct DiscouragedDefaultParameterRuleGeneratedTests {
+struct KeyPathOnlyWhereTheAPITakesOneRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(DiscouragedDefaultParameterRule.description)
+        verifyRule(KeyPathOnlyWhereTheAPITakesOneRule.description)
     }
 }
 
 @Suite(.rulesRegistered)
-struct DiscouragedDirectInitRuleGeneratedTests {
+struct KeychainBuiltOnlyAtTheRootRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(DiscouragedDirectInitRule.description)
+        verifyRule(KeychainBuiltOnlyAtTheRootRule.description)
     }
 }
 
 @Suite(.rulesRegistered)
-struct DiscouragedNoneNameRuleGeneratedTests {
+struct MarkRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(DiscouragedNoneNameRule.description)
+        verifyRule(MarkRule.description)
     }
 }
 
 @Suite(.rulesRegistered)
-struct DiscouragedOptionalBooleanRuleGeneratedTests {
+struct MultilineCallArgumentsRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(DiscouragedOptionalBooleanRule.description)
+        verifyRule(MultilineCallArgumentsRule.description)
     }
 }
 
 @Suite(.rulesRegistered)
-struct DiscouragedOptionalCollectionRuleGeneratedTests {
+struct MultilineConditionsRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(DiscouragedOptionalCollectionRule.description)
+        verifyRule(MultilineConditionsRule.description)
     }
 }
 
 @Suite(.rulesRegistered)
-struct DuplicateConditionsRuleGeneratedTests {
+struct MultilineParametersRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(DuplicateConditionsRule.description)
+        verifyRule(MultilineParametersRule.description)
     }
 }
 
 @Suite(.rulesRegistered)
-struct DuplicateEnumCasesRuleGeneratedTests {
+struct MultilineStringOpensOnItsOwnLineRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(DuplicateEnumCasesRule.description)
+        verifyRule(MultilineStringOpensOnItsOwnLineRule.description)
     }
 }
 
 @Suite(.rulesRegistered)
-struct DuplicateImportsRuleGeneratedTests {
+struct NavigationDestinationOnlyInNavigationRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(DuplicateImportsRule.description)
+        verifyRule(NavigationDestinationOnlyInNavigationRule.description)
     }
 }
 
 @Suite(.rulesRegistered)
-struct DuplicatedKeyInDictionaryLiteralRuleGeneratedTests {
+struct NoDirectNavigationControllerCallsRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(DuplicatedKeyInDictionaryLiteralRule.description)
+        verifyRule(NoDirectNavigationControllerCallsRule.description)
     }
 }
 
 @Suite(.rulesRegistered)
-struct EmptyCollectionLiteralRuleGeneratedTests {
+struct NoDirectPresentationRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(EmptyCollectionLiteralRule.description)
+        verifyRule(NoDirectPresentationRule.description)
     }
 }
 
 @Suite(.rulesRegistered)
-struct EmptyCountRuleGeneratedTests {
+struct NoDocCommentsRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(EmptyCountRule.description)
+        verifyRule(NoDocCommentsRule.description)
     }
 }
 
 @Suite(.rulesRegistered)
-struct EmptyEnumArgumentsRuleGeneratedTests {
+struct NoFallthroughOnlyRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(EmptyEnumArgumentsRule.description)
+        verifyRule(NoFallthroughOnlyRule.description)
     }
 }
 
 @Suite(.rulesRegistered)
-struct EmptyParenthesesWithTrailingClosureRuleGeneratedTests {
+struct NoLegacyRouterReadersRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(EmptyParenthesesWithTrailingClosureRule.description)
+        verifyRule(NoLegacyRouterReadersRule.description)
     }
 }
 
 @Suite(.rulesRegistered)
-struct EmptyStringRuleGeneratedTests {
+struct NoLiveUIKitFrameReadsRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(EmptyStringRule.description)
+        verifyRule(NoLiveUIKitFrameReadsRule.description)
     }
 }
 
 @Suite(.rulesRegistered)
-struct EmptyXCTestMethodRuleGeneratedTests {
+struct NoMarkCommentsRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(EmptyXCTestMethodRule.description)
+        verifyRule(NoMarkCommentsRule.description)
     }
 }
 
 @Suite(.rulesRegistered)
-struct EnvironmentKeyNeedsJudgementRuleGeneratedTests {
+struct NoPresentationStateOutsideNavigationRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(EnvironmentKeyNeedsJudgementRule.description)
+        verifyRule(NoPresentationStateOutsideNavigationRule.description)
     }
 }
 
 @Suite(.rulesRegistered)
-struct EnvironmentValueReassertionRuleGeneratedTests {
+struct NoPrintInAppCodeRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(EnvironmentValueReassertionRule.description)
+        verifyRule(NoPrintInAppCodeRule.description)
     }
 }
 
 @Suite(.rulesRegistered)
-struct ExplicitACLRuleGeneratedTests {
+struct NoShareLinkRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(ExplicitACLRule.description)
+        verifyRule(NoShareLinkRule.description)
     }
 }
 
 @Suite(.rulesRegistered)
-struct ExplicitEnumRawValueRuleGeneratedTests {
+struct NoSingleUseVoidFunctionsRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(ExplicitEnumRawValueRule.description)
+        verifyRule(NoSingleUseVoidFunctionsRule.description)
     }
 }
 
 @Suite(.rulesRegistered)
-struct ExplicitInitRuleGeneratedTests {
+struct NoTimingGuessRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(ExplicitInitRule.description)
+        verifyRule(NoTimingGuessRule.description)
     }
 }
 
 @Suite(.rulesRegistered)
-struct ExplicitTopLevelACLRuleGeneratedTests {
+struct NoUIApplicationSharedRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(ExplicitTopLevelACLRule.description)
+        verifyRule(NoUIApplicationSharedRule.description)
     }
 }
 
 @Suite(.rulesRegistered)
-struct ExplicitTypeInterfaceRuleGeneratedTests {
+struct NoUserDefaultsInAppCodeRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(ExplicitTypeInterfaceRule.description)
+        verifyRule(NoUserDefaultsInAppCodeRule.description)
     }
 }

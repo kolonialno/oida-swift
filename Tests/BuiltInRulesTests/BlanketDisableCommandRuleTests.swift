@@ -39,9 +39,11 @@ struct BlanketDisableCommandRuleTests {
     @Test
     func allowedRules() {
         let nonTriggeringExamples = #examples([
-            "// oida:disable file_name",
-            "// oida:disable single_test_class",
+            "// oida:disable force_cast",
         ])
-        verifyRule(Self.emptyDescription.with(nonTriggeringExamples: nonTriggeringExamples))
+        verifyRule(
+            Self.emptyDescription.with(nonTriggeringExamples: nonTriggeringExamples),
+            ruleConfiguration: ["allowed_rules": ["force_cast"]]
+        )
     }
 }

@@ -34,10 +34,10 @@ struct BaselineTests {
         """
 
     private static let ruleDescriptions = [
-        ArrayInitRule.description,
+        ForceTryRule.description,
         ForceCastRule.description,
         ForceCastRule.description,
-        DirectReturnRule.description,
+        ForceCastRule.description,
     ]
 
     private static func violations(for filePath: URL?) -> [StyleViolation] {
@@ -105,7 +105,7 @@ struct BaselineTests {
     func newViolation() throws {
         try testViolationDetection(
             violationRuleDescriptions: Self.ruleDescriptions,
-            newViolationRuleDescription: EmptyCollectionLiteralRule.description,
+            newViolationRuleDescription: RedundantVoidReturnRule.description,
             insertionIndex: 2
         )
     }
@@ -113,23 +113,23 @@ struct BaselineTests {
     @Test(
         .temporaryDirectory,
         arguments: [
-            ArrayInitRule.description,
+            ForceTryRule.description,
             ForceCastRule.description,
             ForceCastRule.description,
-            DirectReturnRule.description,
+            ForceCastRule.description,
         ]
     )
     func violationDetection(_ ruleDescription: RuleDescription) throws {
         let violationRuleDescriptions = [
-            ArrayInitRule.description,
+            ForceTryRule.description,
             ForceCastRule.description,
-            ArrayInitRule.description,
-            ForceCastRule.description,
-            ForceCastRule.description,
+            ForceTryRule.description,
             ForceCastRule.description,
             ForceCastRule.description,
-            DirectReturnRule.description,
-            ArrayInitRule.description,
+            ForceCastRule.description,
+            ForceCastRule.description,
+            ForceCastRule.description,
+            ForceTryRule.description,
             ForceCastRule.description,
         ]
 

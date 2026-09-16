@@ -21,7 +21,7 @@ public struct RegexConfiguration<Parent: Rule>: SeverityBasedRuleConfiguration, 
     public var message = "Regex matched"
     /// The regular expression to apply to trigger violations for this custom rule.
     @ConfigurationElement(key: "regex")
-    package var regex: RegularExpression! // oida:disable:this implicitly_unwrapped_optional
+    package var regex: RegularExpression!
     /// Regular expressions to include when matching the file path.
     public var included: [RegularExpression] = []
     /// Regular expressions to exclude when matching the file path.

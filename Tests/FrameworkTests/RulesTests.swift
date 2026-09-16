@@ -19,12 +19,6 @@ struct RulesTests {
     }
 
     @Test
-    func requiredEnumCase() {
-        let configuration = ["NetworkResponsable": ["notConnected": "error"]]
-        verifyRule(RequiredEnumCaseRule.description, ruleConfiguration: configuration)
-    }
-
-    @Test
     func trailingNewline() {
         verifyRule(
             TrailingNewlineRule.description, commentDoesntViolate: false,

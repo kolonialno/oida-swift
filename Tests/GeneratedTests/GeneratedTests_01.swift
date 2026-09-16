@@ -1,7 +1,7 @@
 // GENERATED FILE. DO NOT EDIT!
 
 // oida:disable:next blanket_disable_command superfluous_disable_command
-// oida:disable single_test_class type_name
+// oida:disable type_name
 
 import TestHelpers
 import Testing
@@ -10,66 +10,10 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
-struct AccessibilityLabelForImageRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(AccessibilityLabelForImageRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct AccessibilityTraitForButtonRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(AccessibilityTraitForButtonRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct AnonymousArgumentInMultilineClosureRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(AnonymousArgumentInMultilineClosureRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct ArrayInitRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(ArrayInitRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
 struct AssetsComeFromTheGeneratedEnumRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(AssetsComeFromTheGeneratedEnumRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct AsyncWithoutAwaitRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(AsyncWithoutAwaitRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct AttributesRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(AttributesRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct BalancedXCTestLifecycleRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(BalancedXCTestLifecycleRule.description)
     }
 }
 
@@ -82,14 +26,6 @@ struct BlanketDisableCommandRuleGeneratedTests {
 }
 
 @Suite(.rulesRegistered)
-struct CaptureVariableRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(CaptureVariableRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
 struct ClassDelegateProtocolRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -98,42 +34,10 @@ struct ClassDelegateProtocolRuleGeneratedTests {
 }
 
 @Suite(.rulesRegistered)
-struct ClosureEndIndentationRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(ClosureEndIndentationRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
 struct ClosureParameterPositionRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(ClosureParameterPositionRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct ClosureSpacingRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(ClosureSpacingRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct CollectionAlignmentRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(CollectionAlignmentRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct CommaInheritanceRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(CommaInheritanceRule.description)
     }
 }
 
@@ -170,41 +74,137 @@ struct ComputedAccessorsOrderRuleGeneratedTests {
 }
 
 @Suite(.rulesRegistered)
-struct ConditionalReturnsOnNewlineRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(ConditionalReturnsOnNewlineRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct ContainsOverFilterCountRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(ContainsOverFilterCountRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct ContainsOverFirstNotNilRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(ContainsOverFirstNotNilRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct ContrastedOpeningBraceRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(ContrastedOpeningBraceRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
 struct ControlStatementRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(ControlStatementRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct DiscouragedDirectInitRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(DiscouragedDirectInitRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct DuplicateConditionsRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(DuplicateConditionsRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct DuplicateEnumCasesRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(DuplicateEnumCasesRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct DuplicateImportsRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(DuplicateImportsRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct DuplicatedKeyInDictionaryLiteralRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(DuplicatedKeyInDictionaryLiteralRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct EmptyEnumArgumentsRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(EmptyEnumArgumentsRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct EmptyParenthesesWithTrailingClosureRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(EmptyParenthesesWithTrailingClosureRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct EnvironmentKeyNeedsJudgementRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(EnvironmentKeyNeedsJudgementRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct EnvironmentValueReassertionRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(EnvironmentValueReassertionRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct ForWhereRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(ForWhereRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct ForceCastRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(ForceCastRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct ForceTryRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(ForceTryRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct FunctionNameWhitespaceRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(FunctionNameWhitespaceRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct GroupedImportsRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(GroupedImportsRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct IdentifierNameRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(IdentifierNameRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct ImplicitGetterRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(ImplicitGetterRule.description)
     }
 }

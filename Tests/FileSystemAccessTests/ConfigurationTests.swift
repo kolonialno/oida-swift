@@ -413,7 +413,7 @@ struct ConfigurationTests {
 
     @Test
     func isEqualTo() {
-        #expect(Constants.Config._0 == Constants.Config._0) // oida:disable:this identical_operands
+        #expect(Constants.Config._0 == Constants.Config._0)
     }
 
     @Test

@@ -1,4 +1,4 @@
-import Foundation // oida:disable:this file_name
+import Foundation
 import SourceKittenFramework
 
 internal extension Configuration.FileGraph {
@@ -99,10 +99,8 @@ internal extension Configuration.FileGraph {
 
     // MARK: - Edge
     struct Edge: Hashable {
-        // oida:disable implicitly_unwrapped_optional
         var parent: Vertex!
         var child: Vertex!
-        // oida:enable implicitly_unwrapped_optional
     }
 
     // MARK: - EdgeType

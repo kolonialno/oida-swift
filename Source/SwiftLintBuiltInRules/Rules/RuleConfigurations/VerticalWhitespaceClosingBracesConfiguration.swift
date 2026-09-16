@@ -1,9 +1,0 @@
-import SwiftLintCore
-
-@AutoConfigParser // oida:disable:next type_name
-struct VerticalWhitespaceClosingBracesConfiguration: SeverityBasedRuleConfiguration {
-    @ConfigurationElement(key: "severity")
-    private(set) var severityConfiguration = SeverityConfiguration<Parent>(.warning)
-    @ConfigurationElement(key: "only_enforce_before_trivial_lines")
-    private(set) var onlyEnforceBeforeTrivialLines = false
-}
