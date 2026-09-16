@@ -10,34 +10,10 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
-struct ContrastedOpeningBraceRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(ContrastedOpeningBraceRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct ControlStatementRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(ControlStatementRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
 struct ConvenienceTypeRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(ConvenienceTypeRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct DeploymentTargetRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(DeploymentTargetRule.description)
     }
 }
 
@@ -54,14 +30,6 @@ struct DiscardedNotificationCenterObserverRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(DiscardedNotificationCenterObserverRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct DiscouragedAssertRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(DiscouragedAssertRule.description)
     }
 }
 
@@ -162,14 +130,6 @@ struct EmptyEnumArgumentsRuleGeneratedTests {
 }
 
 @Suite(.rulesRegistered)
-struct EmptyParametersRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(EmptyParametersRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
 struct EmptyParenthesesWithTrailingClosureRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -206,5 +166,45 @@ struct EnvironmentValueReassertionRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(EnvironmentValueReassertionRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct ExplicitACLRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(ExplicitACLRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct ExplicitEnumRawValueRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(ExplicitEnumRawValueRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct ExplicitInitRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(ExplicitInitRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct ExplicitTopLevelACLRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(ExplicitTopLevelACLRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct ExplicitTypeInterfaceRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(ExplicitTypeInterfaceRule.description)
     }
 }

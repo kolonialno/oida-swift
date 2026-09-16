@@ -10,62 +10,6 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
-struct ExpiringTodoRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(ExpiringTodoRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct ExplicitACLRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(ExplicitACLRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct ExplicitEnumRawValueRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(ExplicitEnumRawValueRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct ExplicitInitRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(ExplicitInitRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct ExplicitSelfRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(ExplicitSelfRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct ExplicitTopLevelACLRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(ExplicitTopLevelACLRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct ExplicitTypeInterfaceRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(ExplicitTypeInterfaceRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
 struct ExtensionAccessModifierRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -98,14 +42,6 @@ struct FileHeaderRuleGeneratedTests {
 }
 
 @Suite(.rulesRegistered)
-struct FileNameNoSpaceRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(FileNameNoSpaceRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
 struct FileNameRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -134,14 +70,6 @@ struct FirstWhereRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(FirstWhereRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct FlatMapOverMapReduceRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(FlatMapOverMapReduceRule.description)
     }
 }
 
@@ -194,17 +122,89 @@ struct FunctionNameWhitespaceRuleGeneratedTests {
 }
 
 @Suite(.rulesRegistered)
-struct GenericTypeNameRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(GenericTypeNameRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
 struct GroupedImportsRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(GroupedImportsRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct IdenticalOperandsRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(IdenticalOperandsRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct IdentifierNameRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(IdentifierNameRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct ImplicitGetterRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(ImplicitGetterRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct ImplicitOptionalInitializationRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(ImplicitOptionalInitializationRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct ImplicitReturnRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(ImplicitReturnRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct ImplicitlyUnwrappedOptionalRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(ImplicitlyUnwrappedOptionalRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct IncompatibleConcurrencyAnnotationRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(IncompatibleConcurrencyAnnotationRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct IndentationWidthRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(IndentationWidthRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct InvalidOidaCommandRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(InvalidOidaCommandRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct InvisibleCharacterRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(InvisibleCharacterRule.description)
     }
 }

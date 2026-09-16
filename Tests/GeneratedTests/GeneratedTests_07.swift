@@ -10,190 +10,6 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
-struct PreferTypeCheckingRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(PreferTypeCheckingRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct PreferZeroOverExplicitInitRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(PreferZeroOverExplicitInitRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct PrefixedTopLevelConstantRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(PrefixedTopLevelConstantRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct PrivateActionRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(PrivateActionRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct PrivateOutletRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(PrivateOutletRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct PrivateOverFilePrivateRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(PrivateOverFilePrivateRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct PrivateSubjectRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(PrivateSubjectRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct PrivateSwiftUIStatePropertyRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(PrivateSwiftUIStatePropertyRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct ProhibitedInterfaceBuilderRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(ProhibitedInterfaceBuilderRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct ProtocolPropertyAccessorsOrderRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(ProtocolPropertyAccessorsOrderRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct RawValueForCamelCasedCodableEnumRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(RawValueForCamelCasedCodableEnumRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct ReduceBooleanRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(ReduceBooleanRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct ReduceIntoRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(ReduceIntoRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct RedundantDiscardableLetRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(RedundantDiscardableLetRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct RedundantFinalRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(RedundantFinalRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct RedundantNilCoalescingRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(RedundantNilCoalescingRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct RedundantSelfRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(RedundantSelfRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct RedundantSendableRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(RedundantSendableRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct RedundantSetAccessControlRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(RedundantSetAccessControlRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct RedundantStringEnumValueRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(RedundantStringEnumValueRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct RedundantTypeAnnotationRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(RedundantTypeAnnotationRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct RedundantVoidReturnRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(RedundantVoidReturnRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct RequiredDeinitRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(RequiredDeinitRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
 struct RequiredEnumCaseRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -206,5 +22,189 @@ struct ReturnValueFromVoidFunctionRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(ReturnValueFromVoidFunctionRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct SelfBindingRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(SelfBindingRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct SelfInPropertyInitializationRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(SelfInPropertyInitializationRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct ShorthandArgumentRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(ShorthandArgumentRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct ShorthandOperatorRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(ShorthandOperatorRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct ShorthandOptionalBindingRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(ShorthandOptionalBindingRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct SingleTestClassRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(SingleTestClassRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct SortedEnumCasesRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(SortedEnumCasesRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct SortedFirstLastRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(SortedFirstLastRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct SortedImportsRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(SortedImportsRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct StaticOperatorRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(StaticOperatorRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct StrictFilePrivateRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(StrictFilePrivateRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct StrongIBOutletRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(StrongIBOutletRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct SuperfluousElseRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(SuperfluousElseRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct SwitchCaseAlignmentRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(SwitchCaseAlignmentRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct SwitchCaseOnNewlineRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(SwitchCaseOnNewlineRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct SyntacticSugarRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(SyntacticSugarRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct TestCaseAccessibilityRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(TestCaseAccessibilityRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct TiendaAPIKitIsUIFreeRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(TiendaAPIKitIsUIFreeRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct TodoRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(TodoRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct TrailingClosureRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(TrailingClosureRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct TrailingNewlineRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(TrailingNewlineRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct TrailingSemicolonRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(TrailingSemicolonRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct TypeContentsOrderRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(TypeContentsOrderRule.description)
     }
 }

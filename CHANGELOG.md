@@ -4,6 +4,22 @@
 
 ### Breaking
 
+* Twenty-eight inherited rules that name a preference rather than a defect are gone — 237 becomes 209:
+
+  `contains_over_filter_is_empty`, `contains_over_range_nil_comparison`, `deployment_target`, `discouraged_assert`, `empty_parameters`, `expiring_todo`, `explicit_self`, `file_name_no_space`, `flatmap_over_map_reduce`, `generic_type_name`, `inclusive_language`, `is_disjoint`, `last_where`, `multiple_closures_with_trailing_closure`, `nimble_operator`, `optional_enum_case_matching`, `prefer_self_type_over_type_of_self`, `prefer_zero_over_explicit_init`, `protocol_property_accessors_order`, `reduce_boolean`, `redundant_final`, `redundant_nil_coalescing`, `redundant_set_access_control`, `static_over_final_class`, `toggle_bool`, `typesafe_array_init`, `unneeded_synthesized_initializer`, `void_function_in_ternary`.
+
+  Each of them picks one of two correct spellings — `contains` over `filter().isEmpty`, `last(where:)` over
+  `filter().last`, `toggle()` over `= !`. SwiftLint offers them as a menu because it serves every codebase;
+  this one serves ours and already carries the preferences it chose. None reported anything across 1,868
+  files of `tienda-ios` with every rule switched on.
+
+  What stays from the same measurement are the rules that name a defect and happen to be quiet — an
+  unowned capture that will crash, a notification observer never detached, a duplicated `if` condition, a
+  setter whose value is dropped. A rule that has caught nothing yet still earns its place when the thing it
+  catches is a bug rather than a second opinion.
+
+  `tienda-ios` and `3lvis/Networking` both report exactly what they reported before.
+
 * Eleven whitespace rules are gone — 248 becomes 237: `attribute_name_spacing`, `closing_brace`, `colon`, `comma`, `leading_whitespace`, `no_space_in_method_call`, `operator_usage_whitespace`, `return_arrow_whitespace`, `statement_position`, `trailing_whitespace`, `vertical_whitespace`.
 
   swift-format both writes and reports every one of them. `oida lint --fix --format` hands it the file and

@@ -186,14 +186,6 @@ struct ContainsOverFilterCountRuleGeneratedTests {
 }
 
 @Suite(.rulesRegistered)
-struct ContainsOverFilterIsEmptyRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(ContainsOverFilterIsEmptyRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
 struct ContainsOverFirstNotNilRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -202,9 +194,17 @@ struct ContainsOverFirstNotNilRuleGeneratedTests {
 }
 
 @Suite(.rulesRegistered)
-struct ContainsOverRangeNilComparisonRuleGeneratedTests {
+struct ContrastedOpeningBraceRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(ContainsOverRangeNilComparisonRule.description)
+        verifyRule(ContrastedOpeningBraceRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct ControlStatementRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(ControlStatementRule.description)
     }
 }
