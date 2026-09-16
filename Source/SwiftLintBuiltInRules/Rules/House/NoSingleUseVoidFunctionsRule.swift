@@ -89,6 +89,35 @@ struct NoSingleUseVoidFunctionsRule: CollectingRule, OptInRule, SourceKitFreeRul
                 func reload() {}
             }
             """,
+            """
+            struct Exporter {
+                func export(_ value: Any, path: [String]) { write(value, path: path, into: &target) }
+                private func write(_ value: Any, path: [String], into target: inout [String: Any]) {
+                    guard let head = path.first else { return }
+                    write(value, path: Array(path.dropFirst()), into: &target)
+                }
+            }
+            """,
+            """
+            actor Serializer {
+                private var isHeld = false
+                nonisolated func begin() async { await acquire() }
+                private func acquire() { isHeld = true }
+            }
+            """,
+            """
+            actor Container {
+                func sync() async { await syncIntoMainContext() }
+                @MainActor private func syncIntoMainContext() { context.save() }
+            }
+            """,
+            """
+            actor Networking {
+                private var streamContinuations: [UUID: Continuation] = [:]
+                nonisolated func finish(_ id: UUID) { Task { await removeContinuation(id) } }
+                private func removeContinuation(_ id: UUID) { streamContinuations[id] = nil }
+            }
+            """,
         ]),
         triggeringExamples: #examples([
             """
@@ -133,6 +162,18 @@ struct NoSingleUseVoidFunctionsRule: CollectingRule, OptInRule, SourceKitFreeRul
                     func ↓resetToggles() { isOn = false }
                     resetToggles()
                 }
+            }
+            """,
+            """
+            @MainActor final class Store {
+                func reload() { clear() }
+                private func ↓clear() { items = [] }
+            }
+            """,
+            """
+            actor Cache {
+                func empty() async { await drop() }
+                private func ↓drop() async { entries = [:] }
             }
             """,
         ])

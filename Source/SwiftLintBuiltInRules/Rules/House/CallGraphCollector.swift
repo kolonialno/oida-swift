@@ -4,6 +4,7 @@ import SwiftSyntax
 final class CallGraphCollector: SyntaxVisitor {
     private struct TypeBuilder {
         let name: String
+        let isolation: String
         let isProtocol: Bool
         let isDeclaration: Bool
         let supertypes: [String]
@@ -21,8 +22,11 @@ final class CallGraphCollector: SyntaxVisitor {
     private(set) var calls: [CallFacts] = []
 
     private var typeStack: [TypeBuilder] = []
-    private var globals = TypeBuilder(name: globalScope, isProtocol: false, isDeclaration: true, supertypes: [])
+    private var globals = TypeBuilder(name: globalScope, isolation: "", isProtocol: false, isDeclaration: true,
+                                      supertypes: [])
     private var functionStack: [String] = []
+    private var isolationStack: [String] = []
+    private var awaitDepth = 0
     private var scopes: [[String: Binding]] = []
 
     func finish() -> (types: [TypeFacts], candidates: [Candidate], calls: [CallFacts]) {
@@ -33,23 +37,27 @@ final class CallGraphCollector: SyntaxVisitor {
     // Types
 
     override func visit(_ node: StructDeclSyntax) -> SyntaxVisitorContinueKind {
-        pushType(node.name.text, isProtocol: false, isDeclaration: true, inheriting: node.inheritanceClause)
+        pushType(node.name.text, isProtocol: false, isDeclaration: true,
+                 isolatedBy: node.attributes.globalActorName, inheriting: node.inheritanceClause)
     }
     override func visit(_ node: ClassDeclSyntax) -> SyntaxVisitorContinueKind {
-        pushType(node.name.text, isProtocol: false, isDeclaration: true, inheriting: node.inheritanceClause)
+        pushType(node.name.text, isProtocol: false, isDeclaration: true,
+                 isolatedBy: node.attributes.globalActorName, inheriting: node.inheritanceClause)
     }
     override func visit(_ node: EnumDeclSyntax) -> SyntaxVisitorContinueKind {
-        pushType(node.name.text, isProtocol: false, isDeclaration: true, inheriting: node.inheritanceClause)
+        pushType(node.name.text, isProtocol: false, isDeclaration: true,
+                 isolatedBy: node.attributes.globalActorName, inheriting: node.inheritanceClause)
     }
     override func visit(_ node: ActorDeclSyntax) -> SyntaxVisitorContinueKind {
-        pushType(node.name.text, isProtocol: false, isDeclaration: true, inheriting: node.inheritanceClause)
+        pushType(node.name.text, isActor: true, isProtocol: false, isDeclaration: true,
+                 inheriting: node.inheritanceClause)
     }
     override func visit(_ node: ProtocolDeclSyntax) -> SyntaxVisitorContinueKind {
         pushType(node.name.text, isProtocol: true, isDeclaration: true, inheriting: node.inheritanceClause)
     }
     override func visit(_ node: ExtensionDeclSyntax) -> SyntaxVisitorContinueKind {
         pushType(node.extendedType.simpleName, isProtocol: false, isDeclaration: false,
-                 inheriting: node.inheritanceClause)
+                 isolatedBy: node.attributes.globalActorName, inheriting: node.inheritanceClause)
     }
     override func visitPost(_: StructDeclSyntax) { popType() }
     override func visitPost(_: ClassDeclSyntax) { popType() }
@@ -60,16 +68,19 @@ final class CallGraphCollector: SyntaxVisitor {
 
     private func pushType(
         _ name: String,
+        isActor: Bool = false,
         isProtocol: Bool,
         isDeclaration: Bool,
+        isolatedBy globalActor: String? = nil,
         inheriting clause: InheritanceClauseSyntax?
     )
         -> SyntaxVisitorContinueKind {
         let supertypes = clause?.inheritedTypes.map(\.type.simpleName) ?? []
         // A nested type is named through its parents, so two `ViewModel`s in two views stay two types.
         let qualified = name.contains(".") || typeStack.isEmpty ? name : "\(typeStack.last!.name).\(name)"
-        typeStack.append(TypeBuilder(name: qualified, isProtocol: isProtocol, isDeclaration: isDeclaration,
-                                     supertypes: supertypes))
+        let isolation = isActor ? "actor:\(qualified)" : globalActor.map { "global:\($0)" } ?? ""
+        typeStack.append(TypeBuilder(name: qualified, isolation: isolation, isProtocol: isProtocol,
+                                     isDeclaration: isDeclaration, supertypes: supertypes))
         return .visitChildren
     }
 
@@ -121,9 +132,12 @@ final class CallGraphCollector: SyntaxVisitor {
         let exported = node.modifiers.contains { modifier in
             [.keyword(.public), .keyword(.package), .keyword(.open)].contains(modifier.name.tokenKind)
         }
+        let isolation = node.isolation(inheriting: typeStack.last?.isolation ?? "")
         if node.body != nil, returnsNothing, !hidden, !overrides, !exported, baseName.first?.isLetter == true {
             candidates.append(Candidate(owner: currentTypeName, baseName: baseName, labels: labels,
-                                        position: node.name.positionAfterSkippingLeadingTrivia))
+                                        position: node.name.positionAfterSkippingLeadingTrivia,
+                                        isolation: isolation,
+                                        isAsync: node.signature.effectSpecifiers?.asyncSpecifier != nil))
         }
 
         var scope: [String: Binding] = [:]
@@ -133,12 +147,18 @@ final class CallGraphCollector: SyntaxVisitor {
         }
         scopes.append(scope)
         functionStack.append(method.signature)
+        isolationStack.append(isolation)
         return .visitChildren
     }
 
     override func visitPost(_: FunctionDeclSyntax) {
         scopes.removeLast()
         functionStack.removeLast()
+        isolationStack.removeLast()
+    }
+
+    private var currentIsolation: String {
+        isolationStack.last ?? typeStack.last?.isolation ?? ""
     }
 
     override func visit(_ node: InitializerDeclSyntax) -> SyntaxVisitorContinueKind {
@@ -260,9 +280,19 @@ final class CallGraphCollector: SyntaxVisitor {
         record(baseName: name, labels: nil, trailing: 0, receiver: .chain(root: .selfInstance, steps: []))
     }
 
+    override func visit(_: AwaitExprSyntax) -> SyntaxVisitorContinueKind {
+        awaitDepth += 1
+        return .visitChildren
+    }
+
+    override func visitPost(_: AwaitExprSyntax) {
+        awaitDepth -= 1
+    }
+
     private func record(baseName: String, labels: [String]?, trailing: Int, receiver: Receiver) {
         calls.append(CallFacts(baseName: baseName, labels: labels, trailingClosures: trailing, receiver: receiver,
-                               enclosingType: currentTypeName, enclosingSignature: functionStack.last))
+                               enclosingType: currentTypeName, enclosingSignature: functionStack.last,
+                               callerIsolation: currentIsolation, isAwaited: awaitDepth > 0))
     }
 
     private func lookup(_ name: String) -> Binding? {
@@ -371,5 +401,39 @@ extension TypeSyntax {
             return base.isEmpty ? member.name.text : "\(base).\(member.name.text)"
         }
         return ""
+    }
+}
+
+private extension AttributeListSyntax {
+    /// `@MainActor` and its kin: an attribute whose name ends in `Actor` is a global actor by convention,
+    /// which is as far as syntax alone can see.
+    var globalActorName: String? {
+        for element in self {
+            guard case let .attribute(attribute) = element,
+                  let name = attribute.attributeName.as(IdentifierTypeSyntax.self)?.name.text else {
+                continue
+            }
+            if name.hasSuffix("Actor") {
+                return name
+            }
+        }
+        return nil
+    }
+}
+
+private extension FunctionDeclSyntax {
+    /// `nonisolated` opts out, a global actor on the declaration wins, and otherwise the body runs wherever
+    /// the type it sits in runs.
+    ///
+    /// Empty means unknown rather than unisolated: a `View`'s body is on the main actor with nothing in the
+    /// syntax saying so, so an unmarked context is never read as being somewhere else.
+    func isolation(inheriting enclosing: String) -> String {
+        if modifiers.contains(where: { $0.name.tokenKind == .keyword(.nonisolated) }) {
+            return "none"
+        }
+        if let named = attributes.globalActorName {
+            return "global:\(named)"
+        }
+        return enclosing
     }
 }

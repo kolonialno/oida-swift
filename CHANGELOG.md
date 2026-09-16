@@ -16,6 +16,22 @@
 
 ### Bug Fixes
 
+* `no_single_use_void_functions` withholds its verdict where inlining is impossible rather than unwanted.
+
+  Two shapes it flagged have no edit to make. A function whose body calls itself cannot be put where it
+  runs — inlining it once leaves the recursive call behind. And a function that exists to hop onto an
+  actor or a global actor cannot move into its caller, which is a different isolation; taking the advice
+  produces `actor-isolated property 'x' can not be mutated from a nonisolated context`.
+
+  The hop is read from `await` on a member that is not `async`, since that can only happen from outside
+  the member's isolation, and from two isolations that are both stated and different. An unmarked context
+  stays unknown rather than counting as a boundary — a `View`'s body is on the main actor with nothing in
+  the syntax saying so — so a `@MainActor` helper called from its own type is still reported.
+
+  Measured over `tienda-ios`: 664 violations become 650, eight of them recursive and six of them hops.
+
+  [#43](https://github.com/kolonialno/oida-swift/issues/43)
+
 * `--format` no longer lets swift-format sort the imports `grouped_imports` just grouped.
 
   `grouped_imports` orders imports by origin; swift-format's `OrderedImports` sorts them alphabetically,
