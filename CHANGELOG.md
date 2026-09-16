@@ -4,6 +4,24 @@
 
 ### Breaking
 
+* None.
+
+### Experimental
+
+* None.
+
+### Enhancements
+
+* None.
+
+### Bug Fixes
+
+* None.
+
+## 0.16.0: Eighty-Nine Rules
+
+### Breaking
+
 * SwiftLint's opt-in menu is gone — 209 rules become 89.
 
   With every rule switched on, `tienda-ios` reports 229,807 violations and **221,757 of them come from
