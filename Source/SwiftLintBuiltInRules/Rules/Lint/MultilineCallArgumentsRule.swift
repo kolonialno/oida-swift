@@ -181,7 +181,13 @@ private extension MultilineCallArgumentsRule {
                   let first = node.arguments.first,
                   !node.arguments.isOnOneLine,
                   !node.arguments.exceedsSingleLineAllowance(configuration),
-                  node.argumentsCanRejoinOneLine
+                  node.argumentsCanRejoinOneLine,
+                  formatterKeepsStatement(
+                      around: node,
+                      replacedBy: node.joinedOnOneLine.trimmedDescription,
+                      in: file,
+                      locationConverter: locationConverter
+                  )
             else {
                 return nil
             }
@@ -235,13 +241,19 @@ private extension MultilineCallArgumentsRule {
             else {
                 return visited
             }
+            // Positions come from `node`, the tree as read; `call` has been rewritten underneath and its
+            // positions describe nothing the file contains.
+            let joined = call.joinedOnOneLine
+            guard formatterKeepsStatement(
+                around: node,
+                replacedBy: joined.trimmedDescription,
+                in: file,
+                locationConverter: locationConverter
+            ) else {
+                return visited
+            }
             numberOfCorrections += 1
-            return ExprSyntax(
-                call
-                    .with(\.leftParen, call.leftParen?.with(\.trailingTrivia, []))
-                    .with(\.arguments, call.arguments.joinedOnOneLine(startingWith: []))
-                    .with(\.rightParen, call.rightParen?.with(\.leadingTrivia, []))
-            )
+            return ExprSyntax(joined)
         }
     }
 }
@@ -249,6 +261,12 @@ private extension MultilineCallArgumentsRule {
 extension MultilineCallArgumentsConfiguration: SingleLineAllowance {}
 
 private extension FunctionCallExprSyntax {
+    var joinedOnOneLine: FunctionCallExprSyntax {
+        with(\.leftParen, leftParen?.with(\.trailingTrivia, []))
+            .with(\.arguments, arguments.joinedOnOneLine(startingWith: []))
+            .with(\.rightParen, rightParen?.with(\.leadingTrivia, []))
+    }
+
     var argumentsCanRejoinOneLine: Bool {
         !arguments.isEmpty
             && rightParen?.leadingTrivia.containsComment != true

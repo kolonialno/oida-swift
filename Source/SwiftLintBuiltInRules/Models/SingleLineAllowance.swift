@@ -1,3 +1,5 @@
+import Foundation
+import SourceKittenFramework
 import SwiftBasicFormat
 import SwiftLintCore
 import SwiftSyntax
@@ -204,5 +206,64 @@ extension Trivia {
 private extension String {
     var newlineCount: Int {
         lazy.filter { $0 == "\n" }.count
+    }
+}
+
+/// Asked before a shape is demanded, so a demand the next `--format` would undo is never made.
+func formatterKeeps(
+    _ line: String,
+    in snippet: String,
+    indentedLike node: some SyntaxProtocol,
+    in file: SwiftLintFile,
+    locationConverter: SourceLocationConverter
+) -> Bool {
+    let start = locationConverter.location(for: node.positionAfterSkippingLeadingTrivia)
+    let indentation = file.lines.indices.contains(start.line - 1)
+        ? file.lines[start.line - 1].content.prefix(while: \.isWhitespace).count
+        : 0
+    return SwiftFormat.keeps(line, in: snippet, indentedBy: indentation, at: file.path)
+}
+
+/// The formatter is handed the statement rather than the line, because a line need not parse:
+/// `…(for: url))` carries a paren from the call outside it, and `if let x = f(…)` has no body.
+func formatterKeepsStatement(
+    around node: some SyntaxProtocol,
+    replacedBy joined: String,
+    in file: SwiftLintFile,
+    locationConverter: SourceLocationConverter
+) -> Bool {
+    let statement = node.enclosingStatement
+    let source = Array(file.contents.utf8)
+    let statementStart = statement.positionAfterSkippingLeadingTrivia.utf8Offset
+    let statementEnd = statement.endPositionBeforeTrailingTrivia.utf8Offset
+    let nodeStart = node.positionAfterSkippingLeadingTrivia.utf8Offset
+    let nodeEnd = node.endPositionBeforeTrailingTrivia.utf8Offset
+    guard statementStart <= nodeStart, nodeStart <= nodeEnd, nodeEnd <= statementEnd, statementEnd <= source.count else {
+        return true
+    }
+    guard let before = String(bytes: source[statementStart..<nodeStart], encoding: .utf8),
+          let after = String(bytes: source[nodeEnd..<statementEnd], encoding: .utf8)
+    else {
+        return true
+    }
+    return formatterKeeps(
+        joined,
+        in: before + joined + after,
+        indentedLike: statement,
+        in: file,
+        locationConverter: locationConverter
+    )
+}
+
+private extension SyntaxProtocol {
+    var enclosingStatement: Syntax {
+        var current = Syntax(self)
+        while let parent = current.parent {
+            if parent.is(CodeBlockItemSyntax.self) || parent.is(MemberBlockItemSyntax.self) {
+                return parent
+            }
+            current = parent
+        }
+        return Syntax(self)
     }
 }

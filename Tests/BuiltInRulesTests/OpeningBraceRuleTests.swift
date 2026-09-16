@@ -86,6 +86,11 @@ struct OpeningBraceRuleTests {
                     let var1 = var1
                 {}
                 """,
+            """
+                do {} catch let error as URLError
+                    where error.code == .timedOut
+                {}
+                """,
         ])
 
         let triggeringExamples = #examples([
