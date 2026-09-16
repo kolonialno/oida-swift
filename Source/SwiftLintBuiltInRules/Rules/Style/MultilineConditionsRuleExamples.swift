@@ -37,6 +37,21 @@ internal struct MultilineConditionsRuleExamples {
             return
         }
         """.asExample(configuration: ["max_number_of_single_line_parameters": 2]),
+        // A first condition that spans lines has nothing to align against either, and the formatter puts the
+        // keyword on its own line above it whatever shape it is handed.
+        """
+        guard
+            isDigit(
+                bytes,
+                0,
+                4
+            ),
+            bytes[safe: 4] == asciiMinus,
+            bytes[safe: 7] == asciiMinus
+        else {
+            return nil
+        }
+        """.asExample(configuration: ["max_number_of_single_line_parameters": 2]),
     ])
 
     static let triggeringExamples: [Example] = #examples([
