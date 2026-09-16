@@ -85,7 +85,6 @@ struct FormatterVerdictTests {
             "only_rules": [rule],
             rule: [
                 "max_number_of_single_line_parameters": 2,
-                "requires_single_line": true,
             ],
         ])
         let storage = RuleStorage()

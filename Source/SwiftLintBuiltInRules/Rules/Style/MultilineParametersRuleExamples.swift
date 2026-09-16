@@ -201,11 +201,6 @@ internal struct MultilineParametersRuleExamples {
             .asExample(configuration: ["max_number_of_single_line_parameters": 3]),
         "func foo(param1: Int, param2: Bool) { }".asExample(configuration: ["max_number_of_single_line_parameters": 2]),
         """
-        func foo(param1: Int,
-                 param2: Bool,
-                 param3: [String]) { }
-        """.asExample(configuration: ["max_number_of_single_line_parameters": 3]),
-        """
         func foo(
             param1: Int,
             param2: Bool,
@@ -362,6 +357,14 @@ internal struct MultilineParametersRuleExamples {
     ])
 
     static let corrections: [Example: Example] = #corrections([
+        """
+        func foo(param1: Int,
+                 param2: Bool,
+                 param3: [String]) { }
+        """.asExample(configuration: ["max_number_of_single_line_parameters": 3]): """
+            func foo(param1: Int, param2: Bool, param3: [String]) { }
+            """,
+
         """
         func foo(param1: Int, param2: Bool, param3: [String]) {}
         """.asExample(configuration: ["max_number_of_single_line_parameters": 2]): """

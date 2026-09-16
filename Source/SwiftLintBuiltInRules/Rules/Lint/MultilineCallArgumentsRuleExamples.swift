@@ -10,7 +10,7 @@ struct MultilineCallArgumentsRuleExamples {
                 blue: CGFloat(hex & 0xFF) / 255,
                 alpha: 1
             )
-            """.asExample(configuration: ["max_number_of_single_line_parameters": 2, "requires_single_line": true]),
+            """.asExample(configuration: ["max_number_of_single_line_parameters": 2]),
         // Nor is an empty array, so a stub stays split rather than being made comfortable.
         """
             make(
@@ -18,7 +18,7 @@ struct MultilineCallArgumentsRuleExamples {
                 groups: [],
                 selected: 0
             )
-            """.asExample(configuration: ["max_number_of_single_line_parameters": 2, "requires_single_line": true]),
+            """.asExample(configuration: ["max_number_of_single_line_parameters": 2]),
         // A list of bare numbers is one value spelled out, so it stays on one line at any length.
         """
             CGRect(x: 0, y: 0, width: 24, height: 24)
@@ -165,12 +165,7 @@ struct MultilineCallArgumentsRuleExamples {
             enum EnumCase {
                 case caseOne(Int, Int, Int, Int)
             }
-            let enumCase: EnumCase = .caseOne(
-                1,
-                2,
-                3,
-                4
-            )
+            let enumCase: EnumCase = .caseOne(1, 2, 3, 4)
             if case let .caseOne(_, _, three, _) = enumCase {
             }
             """.asExample(configuration: ["max_number_of_single_line_parameters": 2]),
@@ -191,12 +186,7 @@ struct MultilineCallArgumentsRuleExamples {
         """
             enum EnumCase { case caseOne(Int, Int, Int, Int) }
             let array: [EnumCase] = [
-                .caseOne(
-                    1,
-                    2,
-                    3,
-                    4
-                )
+                .caseOne(1, 2, 3, 4)
             ]
             for case let .caseOne(_, _, three, _) in array {
             }
@@ -205,24 +195,14 @@ struct MultilineCallArgumentsRuleExamples {
             enum EnumCase {
                 case caseOne(Int, Int, Int, Int)
             }
-            let enumCase: EnumCase = .caseOne(
-                1,
-                2,
-                3,
-                4
-            )
+            let enumCase: EnumCase = .caseOne(1, 2, 3, 4)
             guard case let .caseOne(_, _, three, _) = enumCase else { return }
             """.asExample(configuration: ["max_number_of_single_line_parameters": 2]),
         """
             enum EnumCase {
                 case caseOne(Int, Int, Int, Int)
             }
-            let enumCase: EnumCase = .caseOne(
-                1,
-                2,
-                3,
-                4
-            )
+            let enumCase: EnumCase = .caseOne(1, 2, 3, 4)
             while case let .caseOne(_, _, three, _) = enumCase {
             }
             """.asExample(configuration: ["max_number_of_single_line_parameters": 2]),
@@ -260,12 +240,7 @@ struct MultilineCallArgumentsRuleExamples {
             func foo(a: Int, b: Int, c: Int) -> Int { a + b + c }
             enum EnumCase { case caseOne(Int, Int, Int, Int) }
 
-            if case let .caseOne(_, _, _, _) = EnumCase.caseOne(
-                1,
-                2,
-                3,
-                4
-            ) {
+            if case let .caseOne(_, _, _, _) = EnumCase.caseOne(1, 2, 3, 4) {
                 _ = foo(
                     a: x,
                     b: y,
@@ -279,13 +254,7 @@ struct MultilineCallArgumentsRuleExamples {
                 case caseOne(Int, Int, Int, Int)
             }
 
-            // Real call is written multi-line to avoid noise for max=2
-            let enumCase: EnumCase = .caseOne(
-                0,
-                0,
-                0,
-                0
-            )
+            let enumCase: EnumCase = .caseOne(0, 0, 0, 0)
 
             // This is a PATTERN, not a call, and must be ignored even though it looks like `.caseOne(x,y,z,w)`
             if case .caseOne(x, y, z, w) = enumCase {
@@ -332,19 +301,13 @@ struct MultilineCallArgumentsRuleExamples {
                 a: x,
                 b: y
             )
-            """.asExample(configuration: ["max_number_of_single_line_parameters": 2, "requires_single_line": true]),
+            """.asExample(configuration: ["max_number_of_single_line_parameters": 2]),
         """
             foo(
                 a: x,
                 action: {
                     bar()
                 }
-            )
-            """.asExample(configuration: ["max_number_of_single_line_parameters": 2, "requires_single_line": true]),
-        """
-            foo(
-                a: x,
-                b: y
             )
             """.asExample(configuration: ["max_number_of_single_line_parameters": 2]),
     ])
@@ -441,12 +404,7 @@ struct MultilineCallArgumentsRuleExamples {
         """
             func foo(a: Int, b: Int, c: Int) -> Int { a + b + c }
             enum EnumCase { case caseOne(Int, Int, Int, Int) }
-            let enumCase: EnumCase = .caseOne(
-                1,
-                2,
-                3,
-                4
-            )
+            let enumCase: EnumCase = .caseOne(1, 2, 3, 4)
             if case let .caseOne(_, _, _, _) = enumCase {
                 _ = foo(a: x, b: y, ↓c: z)
             }
@@ -456,12 +414,7 @@ struct MultilineCallArgumentsRuleExamples {
         """
             func foo(a: Int, b: Int, c: Int) -> Bool { a + b == c }
             enum EnumCase { case caseOne(Int, Int, Int, Int) }
-            let enumCase: EnumCase = .caseOne(
-                1,
-                2,
-                3,
-                4
-            )
+            let enumCase: EnumCase = .caseOne(1, 2, 3, 4)
             switch enumCase {
             case .caseOne where foo(a: x, b: y, ↓c: z):
                 break
@@ -475,12 +428,7 @@ struct MultilineCallArgumentsRuleExamples {
             func foo(a: Int, b: Int, c: Int) -> Int { a + b + c }
             enum EnumCase { case caseOne(Int, Int, Int, Int) }
             let array: [EnumCase] = [
-                .caseOne(
-                    1,
-                    2,
-                    3,
-                    4
-                )
+                .caseOne(1, 2, 3, 4)
             ]
             for case let .caseOne(_, _, _, _) in array {
                 _ = foo(a: x, b: y, ↓c: z)
@@ -504,7 +452,7 @@ struct MultilineCallArgumentsRuleExamples {
                 ↓a: x,
                 b: y
             )
-            """.asExample(configuration: ["max_number_of_single_line_parameters": 2, "requires_single_line": true]),
+            """.asExample(configuration: ["max_number_of_single_line_parameters": 2]),
     ])
 
     static let corrections: [Example: Example] = #corrections([
@@ -517,7 +465,7 @@ struct MultilineCallArgumentsRuleExamples {
             width: 24,
             height: 24
         )
-        """.asExample(configuration: ["max_number_of_single_line_parameters": 2, "requires_single_line": true]): """
+        """.asExample(configuration: ["max_number_of_single_line_parameters": 2]): """
             CGRect(x: 0, y: 0, width: 24, height: 24)
             """,
 
@@ -530,7 +478,7 @@ struct MultilineCallArgumentsRuleExamples {
                 height: 1
             )
         )
-        """.asExample(configuration: ["max_number_of_single_line_parameters": 2, "requires_single_line": true]): """
+        """.asExample(configuration: ["max_number_of_single_line_parameters": 2]): """
             fill(CGRect(x: 0, y: 0, width: 1, height: 1))
             """,
 
@@ -606,7 +554,7 @@ struct MultilineCallArgumentsRuleExamples {
             a: x,
             b: y
         )
-        """.asExample(configuration: ["max_number_of_single_line_parameters": 2, "requires_single_line": true]): """
+        """.asExample(configuration: ["max_number_of_single_line_parameters": 2]): """
             foo(a: x, b: y)
             """,
 
@@ -616,7 +564,7 @@ struct MultilineCallArgumentsRuleExamples {
             a: x,
             b: y,
         )
-        """.asExample(configuration: ["max_number_of_single_line_parameters": 2, "requires_single_line": true]): """
+        """.asExample(configuration: ["max_number_of_single_line_parameters": 2]): """
             foo(a: x, b: y)
             """,
 
@@ -627,7 +575,7 @@ struct MultilineCallArgumentsRuleExamples {
             a: x,
             b: y
         )
-        """.asExample(configuration: ["max_number_of_single_line_parameters": 2, "requires_single_line": true]): """
+        """.asExample(configuration: ["max_number_of_single_line_parameters": 2]): """
             foo(
                 // why
                 a: x,
@@ -642,7 +590,7 @@ struct MultilineCallArgumentsRuleExamples {
                 bar()
             }
         )
-        """.asExample(configuration: ["max_number_of_single_line_parameters": 2, "requires_single_line": true]): """
+        """.asExample(configuration: ["max_number_of_single_line_parameters": 2]): """
             foo(
                 a: x,
                 action: {
@@ -658,7 +606,7 @@ struct MultilineCallArgumentsRuleExamples {
             a: inner(x: x, y: y, z: z),
             b: y
         )
-        """.asExample(configuration: ["max_number_of_single_line_parameters": 2, "requires_single_line": true]): """
+        """.asExample(configuration: ["max_number_of_single_line_parameters": 2]): """
             outer(
                 a: inner(
                     x: x,
@@ -674,7 +622,7 @@ struct MultilineCallArgumentsRuleExamples {
         """
         foo(
             a: x, b: y, c: z)
-        """.asExample(configuration: ["max_number_of_single_line_parameters": 2, "requires_single_line": true]): """
+        """.asExample(configuration: ["max_number_of_single_line_parameters": 2]): """
             foo(
                 a: x,
                 b: y,
@@ -687,7 +635,7 @@ struct MultilineCallArgumentsRuleExamples {
             a: x, b: y,
             c: z
         )
-        """.asExample(configuration: ["max_number_of_single_line_parameters": 2, "requires_single_line": true]): """
+        """.asExample(configuration: ["max_number_of_single_line_parameters": 2]): """
             foo(
                 a: x,
                 b: y,

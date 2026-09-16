@@ -48,7 +48,11 @@ private extension MultilineConditionsRule {
             report(node.conditions, opener: "while", closer: " {}")
         }
 
-        private func report(_ conditions: ConditionElementListSyntax, opener: String, closer: String) {
+        private func report(
+            _ conditions: ConditionElementListSyntax,
+            opener: String,
+            closer: String
+        ) {
             guard let first = conditions.first,
                   let reason = reason(for: conditions, opener: opener, closer: closer)
             else {
@@ -62,7 +66,11 @@ private extension MultilineConditionsRule {
             )
         }
 
-        private func reason(for conditions: ConditionElementListSyntax, opener: String, closer: String) -> String? {
+        private func reason(
+            for conditions: ConditionElementListSyntax,
+            opener: String,
+            closer: String
+        ) -> String? {
             if conditions.isOnOneLine {
                 guard conditions.count > 1 else {
                     return nil
@@ -171,7 +179,10 @@ private extension MultilineConditionsRule {
             return conditions.joinedOnOneLine(startingWith: [])
         }
 
-        private func reshaped(_ node: IfExprSyntax, with conditions: ConditionElementListSyntax) -> IfExprSyntax {
+        private func reshaped(
+            _ node: IfExprSyntax,
+            with conditions: ConditionElementListSyntax
+        ) -> IfExprSyntax {
             node
                 .with(\.ifKeyword, node.ifKeyword.with(\.trailingTrivia, .space))
                 .with(\.conditions, conditions)

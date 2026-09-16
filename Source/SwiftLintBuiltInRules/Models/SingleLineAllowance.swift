@@ -11,11 +11,15 @@ import SwiftSyntax
 protocol SingleLineAllowance {
     var allowsSingleLine: Bool { get }
     var maxNumberOfSingleLineParameters: Int? { get }
+}
 
-    /// Whether a list within the allowance must be on one line, which is the shape's other direction:
-    /// adding an element splits the list and removing one joins it again, so the shape follows from the
-    /// element count rather than from the list's history.
-    var requiresSingleLine: Bool { get }
+extension SingleLineAllowance {
+    /// Whether a list within the allowance must come back to one line, which is the shape's other
+    /// direction: adding an element splits the list and removing one joins it again. It follows from the
+    /// count rather than from a switch of its own, since a count is what asks for the shape at all.
+    var requiresSingleLine: Bool {
+        maxNumberOfSingleLineParameters != nil || !allowsSingleLine
+    }
 }
 
 extension SyntaxCollection where Element: WithTrailingCommaSyntax {

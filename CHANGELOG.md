@@ -4,6 +4,15 @@
 
 ### Breaking
 
+* `requires_single_line` is gone from `multiline_call_arguments`, `multiline_parameters` and
+  `multiline_conditions`. Both directions of the count are not a switch: setting
+  `max_number_of_single_line_parameters` is what asks for the shape, and the shape has always been that
+  adding an element splits the list and removing one joins it again. A repository that sets the count now
+  gets both directions, one that does not gets neither, and there is no way left to ask for half of it.
+
+  Delete the key from `.oida.yml`; until then it reports as an invalid key and nothing else changes.  
+  [Elvis Nunez](https://github.com/3lvis)
+
 * The width machinery is gone. oida read `lineLength` out of the `.swift-format` covering a file and let the
   shape rules yield to it; it now reads nothing about width and has no code that reasons about one. Width is
   the formatter's alone, and a linter that holds an opinion about it is a linter with a second opinion to

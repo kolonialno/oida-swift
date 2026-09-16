@@ -128,20 +128,26 @@ private extension MultilineParametersRule {
             guard !parameters.isEmpty, !parameters.containsComment else {
                 return nil
             }
+            let onOneLineTooWide =
+                configuration.requiresSingleLine
+                    && !declaration.headerKeptByFormatter(
+                        parametersJoined: false,
+                        positionsFrom: declaration,
+                        in: file,
+                        locationConverter: locationConverter)
             let needsSplitting =
                 (parameters.count > 1
                     && parameters.isOnOneLine
-                    && (parameters.exceedsSingleLineAllowance(configuration)
-                        || (configuration.requiresSingleLine
-                            && !declaration.headerKeptByFormatter(
-                                parametersJoined: false,
-                                positionsFrom: declaration,
-                                in: file,
-                                locationConverter: locationConverter))))
+                    && (parameters.exceedsSingleLineAllowance(configuration) || onOneLineTooWide))
                 // Neither one line nor one per line, which is the shape this rule is named for. A list that
                 // could simply come back to one line does that instead, since splitting it further would be
                 // the opposite of what the allowance asks for — and the visitor reports the join, not a split.
                 || (parameters.isSplitUnevenly && !clause.canRejoinOneLine(within: configuration))
+                // Where the join is what would take it and the join declines — a header the formatter would
+                // break — this is the only way out left.
+                || (parameters.isSplitUnevenly
+                    && configuration.requiresSingleLine
+                    && !joins(signature, of: declaration, positionsFrom: declaration))
             guard needsSplitting else {
                 return nil
             }
@@ -153,19 +159,28 @@ private extension MultilineParametersRule {
         ///
         /// Decided after descending: a default value coming back to one line is what can make the whole
         /// list joinable, and deciding first would leave that for a second run over the file.
+        /// Whether the parameters are coming back to one line: few enough for the allowance, and on a
+        /// header the formatter keeps there. Asked by the split too, so the two cannot both decline.
+        private func joins(
+            _ signature: FunctionSignatureSyntax,
+            of declaration: some SyntaxProtocol,
+            positionsFrom original: some SyntaxProtocol
+        ) -> Bool {
+            configuration.requiresSingleLine
+                && signature.parameterClause.canRejoinOneLine(within: configuration)
+                && declaration.headerKeptByFormatter(
+                    parametersJoined: true, positionsFrom: original, in: file, locationConverter: locationConverter)
+        }
+
         private func joining(
             _ signature: FunctionSignatureSyntax,
             of declaration: some SyntaxProtocol,
             positionsFrom original: some SyntaxProtocol
         ) -> FunctionSignatureSyntax? {
-            let clause = signature.parameterClause
-            guard configuration.requiresSingleLine,
-                  clause.canRejoinOneLine(within: configuration),
-                  declaration.headerKeptByFormatter(
-                      parametersJoined: true, positionsFrom: original, in: file, locationConverter: locationConverter)
-            else {
+            guard joins(signature, of: declaration, positionsFrom: original) else {
                 return nil
             }
+            let clause = signature.parameterClause
             numberOfCorrections += 1
             return signature.with(\.parameterClause, clause.joinedOnOneLine)
         }
