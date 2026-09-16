@@ -4,6 +4,16 @@
 
 ### Breaking
 
+* Twenty-three rules that cannot fire in a Swift codebase are gone — 271 becomes 248. Quick and Nimble's
+  rules, Interface Builder's, the Objective-C and old-Swift legacy set, and `NSLocalizedString`'s:
+
+  `block_based_kvo`, `discouraged_object_literal`, `dynamic_inline`, `ibinspectable_in_extension`, `legacy_cggeometry_functions`, `legacy_constant`, `legacy_constructor`, `legacy_hashing`, `legacy_nsgeometry_functions`, `legacy_random`, `legacy_swiftui_aspect_ratio`, `legacy_uigraphics_function`, `ns_number_init_as_function_reference`, `nslocalizedstring_key`, `nslocalizedstring_require_bundle`, `nsobject_prefer_isequal`, `private_unit_test`, `prohibited_super_call`, `quick_discouraged_call`, `quick_discouraged_focused_test`, `quick_discouraged_pending_test`, `redundant_objc_attribute`, `valid_ibinspectable`.
+
+  None of them reported anything across 1,868 files of `tienda-ios` with every rule in the tool switched on,
+  and no repository names one. They are the parts of SwiftLint written for frameworks and language versions
+  this fork's repositories do not use, and a rule that cannot fire is a rule to read past when choosing what
+  to enable. `tienda-ios` and `3lvis/Networking` both report exactly what they reported before.
+
 * `trailing_comma` is gone. A comma at the end of a collection literal is layout, and layout is
   swift-format's — the same reasoning that took the width machinery out in 0.15.0.
 

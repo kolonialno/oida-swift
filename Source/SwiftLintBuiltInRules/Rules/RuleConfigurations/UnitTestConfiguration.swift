@@ -4,7 +4,6 @@ typealias BalancedXCTestLifecycleConfiguration = UnitTestConfiguration<BalancedX
 typealias EmptyXCTestMethodConfiguration = UnitTestConfiguration<EmptyXCTestMethodRule>
 typealias FinalTestCaseConfiguration = UnitTestConfiguration<FinalTestCaseRule>
 typealias SingleTestClassConfiguration = UnitTestConfiguration<SingleTestClassRule>
-typealias PrivateUnitTestConfiguration = UnitTestConfiguration<PrivateUnitTestRule>
 
 @AutoConfigParser
 struct UnitTestConfiguration<Parent: Rule>: SeverityBasedRuleConfiguration {
