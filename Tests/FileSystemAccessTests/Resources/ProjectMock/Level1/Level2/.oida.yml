@@ -4,5 +4,5 @@ included:
   - "everything"
 excluded:
   - "the place where i committed many coding sins"
-colon: warning
+force_cast: warning
 reporter: "json"

@@ -28,11 +28,6 @@ async_without_await:
   meta:
     opt-in: true
     correctable: true
-attribute_name_spacing:
-  severity: error
-  meta:
-    opt-in: false
-    correctable: true
 attributes:
   severity: warning
   attributes_with_arguments_always_on_line_above: true
@@ -64,11 +59,6 @@ class_delegate_protocol:
   meta:
     opt-in: false
     correctable: false
-closing_brace:
-  severity: warning
-  meta:
-    opt-in: false
-    correctable: true
 closure_end_indentation:
   severity: warning
   meta:
@@ -90,18 +80,6 @@ collection_alignment:
   meta:
     opt-in: true
     correctable: false
-colon:
-  severity: warning
-  flexible_right_spacing: false
-  apply_to_dictionaries: true
-  meta:
-    opt-in: false
-    correctable: true
-comma:
-  severity: warning
-  meta:
-    opt-in: false
-    correctable: true
 comma_inheritance:
   severity: warning
   meta:
@@ -566,11 +544,6 @@ last_where:
   meta:
     opt-in: true
     correctable: false
-leading_whitespace:
-  severity: warning
-  meta:
-    opt-in: false
-    correctable: true
 legacy_multiple:
   severity: warning
   meta:
@@ -767,11 +740,6 @@ no_single_use_void_functions:
   meta:
     opt-in: true
     correctable: false
-no_space_in_method_call:
-  severity: warning
-  meta:
-    opt-in: false
-    correctable: true
 no_timing_guess:
   severity: warning
   meta:
@@ -830,14 +798,6 @@ opening_brace:
   ignore_multiline_function_signatures: false
   meta:
     opt-in: false
-    correctable: true
-operator_usage_whitespace:
-  severity: warning
-  lines_look_around: 2
-  skip_aligned_constants: true
-  allowed_no_space_operators: ["...", "..<"]
-  meta:
-    opt-in: true
     correctable: true
 optional_data_string_conversion:
   severity: warning
@@ -1043,11 +1003,6 @@ required_enum_case:
   meta:
     opt-in: true
     correctable: false
-return_arrow_whitespace:
-  severity: warning
-  meta:
-    opt-in: false
-    correctable: true
 return_value_from_void_function:
   severity: warning
   meta:
@@ -1103,12 +1058,6 @@ sorted_imports:
   grouping: names
   meta:
     opt-in: true
-    correctable: true
-statement_position:
-  severity: warning
-  statement_mode: default
-  meta:
-    opt-in: false
     correctable: true
 static_operator:
   severity: warning
@@ -1193,14 +1142,6 @@ trailing_newline:
     correctable: true
 trailing_semicolon:
   severity: warning
-  meta:
-    opt-in: false
-    correctable: true
-trailing_whitespace:
-  severity: warning
-  ignores_empty_lines: false
-  ignores_comments: true
-  ignores_literals: false
   meta:
     opt-in: false
     correctable: true
@@ -1356,12 +1297,6 @@ vertical_parameter_alignment_on_call:
   meta:
     opt-in: true
     correctable: false
-vertical_whitespace:
-  severity: warning
-  max_empty_lines: 1
-  meta:
-    opt-in: false
-    correctable: true
 vertical_whitespace_between_cases:
   severity: warning
   separation: always

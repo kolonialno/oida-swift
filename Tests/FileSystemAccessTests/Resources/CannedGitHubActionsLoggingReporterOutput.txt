@@ -1,4 +1,4 @@
 ::warning file=filename,line=1,col=1::Violation Reason 1 (force_cast)
 ::error file=filename,line=1,col=1::Violation Reason 2 (force_cast)
 ::error file=path/file.swift,line=1,col=2::Shorthand syntactic sugar should be used, i.e. [Int] instead of Array<Int> (syntactic_sugar)
-::error file=,line=1,col=1::Colons should be next to the identifier when specifying a type and next to the key in dictionary literals (colon)
+::error file=,line=1,col=1::Returning Void in a function declaration is redundant (redundant_void_return)

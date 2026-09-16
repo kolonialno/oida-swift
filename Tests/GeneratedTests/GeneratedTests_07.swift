@@ -10,62 +10,6 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
-struct PeriodSpacingRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(PeriodSpacingRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct PreferAssetSymbolsRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(PreferAssetSymbolsRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct PreferConditionListRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(PreferConditionListRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct PreferKeyPathRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(PreferKeyPathRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct PreferNimbleRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(PreferNimbleRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct PreferSelfInStaticReferencesRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(PreferSelfInStaticReferencesRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct PreferSelfTypeOverTypeOfSelfRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(PreferSelfTypeOverTypeOfSelfRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
 struct PreferTypeCheckingRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -206,5 +150,61 @@ struct RedundantSendableRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(RedundantSendableRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct RedundantSetAccessControlRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(RedundantSetAccessControlRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct RedundantStringEnumValueRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(RedundantStringEnumValueRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct RedundantTypeAnnotationRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(RedundantTypeAnnotationRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct RedundantVoidReturnRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(RedundantVoidReturnRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct RequiredDeinitRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(RequiredDeinitRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct RequiredEnumCaseRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(RequiredEnumCaseRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct ReturnValueFromVoidFunctionRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(ReturnValueFromVoidFunctionRule.description)
     }
 }

@@ -6,4 +6,4 @@ excluded:
   - Test/Test1/Test
   - Test/Test2/Test
 
-colon: error
+force_cast: error

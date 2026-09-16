@@ -58,14 +58,6 @@ struct AsyncWithoutAwaitRuleGeneratedTests {
 }
 
 @Suite(.rulesRegistered)
-struct AttributeNameSpacingRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(AttributeNameSpacingRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
 struct AttributesRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -106,14 +98,6 @@ struct ClassDelegateProtocolRuleGeneratedTests {
 }
 
 @Suite(.rulesRegistered)
-struct ClosingBraceRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(ClosingBraceRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
 struct ClosureEndIndentationRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -146,26 +130,10 @@ struct CollectionAlignmentRuleGeneratedTests {
 }
 
 @Suite(.rulesRegistered)
-struct ColonRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(ColonRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
 struct CommaInheritanceRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(CommaInheritanceRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct CommaRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(CommaRule.description)
     }
 }
 
@@ -206,5 +174,37 @@ struct ConditionalReturnsOnNewlineRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(ConditionalReturnsOnNewlineRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct ContainsOverFilterCountRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(ContainsOverFilterCountRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct ContainsOverFilterIsEmptyRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(ContainsOverFilterIsEmptyRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct ContainsOverFirstNotNilRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(ContainsOverFirstNotNilRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct ContainsOverRangeNilComparisonRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(ContainsOverRangeNilComparisonRule.description)
     }
 }

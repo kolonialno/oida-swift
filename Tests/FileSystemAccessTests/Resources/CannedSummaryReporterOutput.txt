@@ -2,7 +2,7 @@
 | rule identifier                    | opt-in | correctable | custom | warnings | errors | total violations | number of files |
 +------------------------------------+--------+-------------+--------+----------+--------+------------------+-----------------+
 | force_cast                         | no     | no          | no     |        1 |      1 |                2 |               1 |
-| colon                              | no     | yes         | no     |        0 |      1 |                1 |               1 |
+| redundant_void_return              | no     | yes         | no     |        0 |      1 |                1 |               1 |
 | syntactic_sugar                    | no     | yes         | no     |        0 |      1 |                1 |               1 |
 | vertical_whitespace_opening_braces | yes    | yes         | no     |        1 |      0 |                1 |               1 |
 +------------------------------------+--------+-------------+--------+----------+--------+------------------+-----------------+

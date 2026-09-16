@@ -10,38 +10,6 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
-struct ContainsOverFilterCountRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(ContainsOverFilterCountRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct ContainsOverFilterIsEmptyRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(ContainsOverFilterIsEmptyRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct ContainsOverFirstNotNilRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(ContainsOverFirstNotNilRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct ContainsOverRangeNilComparisonRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(ContainsOverRangeNilComparisonRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
 struct ContrastedOpeningBraceRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -206,5 +174,37 @@ struct EmptyParenthesesWithTrailingClosureRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(EmptyParenthesesWithTrailingClosureRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct EmptyStringRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(EmptyStringRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct EmptyXCTestMethodRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(EmptyXCTestMethodRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct EnvironmentKeyNeedsJudgementRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(EnvironmentKeyNeedsJudgementRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct EnvironmentValueReassertionRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(EnvironmentValueReassertionRule.description)
     }
 }

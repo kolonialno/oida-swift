@@ -30,9 +30,9 @@
     "character" : null,
     "file" : null,
     "line" : null,
-    "reason" : "Colons should be next to the identifier when specifying a type and next to the key in dictionary literals",
-    "rule_id" : "colon",
+    "reason" : "Returning Void in a function declaration is redundant",
+    "rule_id" : "redundant_void_return",
     "severity" : "Error",
-    "type" : "Colon Spacing"
+    "type" : "Redundant Void Return"
   }
 ]

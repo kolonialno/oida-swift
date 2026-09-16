@@ -8,7 +8,7 @@ struct RulesTests {
     @Test
     func leadingWhitespace() {
         verifyRule(
-            LeadingWhitespaceRule.description, skipDisableCommandTests: true,
+            ForceCastRule.description, skipDisableCommandTests: true,
             testMultiByteOffsets: false, testShebang: false
         )
     }

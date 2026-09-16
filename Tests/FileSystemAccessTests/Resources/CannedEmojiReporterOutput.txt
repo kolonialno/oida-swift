@@ -4,4 +4,4 @@ ${CURRENT_WORKING_DIRECTORY}/filename
 ${CURRENT_WORKING_DIRECTORY}/path/file.swift
 ⛔️ Line 1: Shorthand syntactic sugar should be used, i.e. [Int] instead of Array<Int> (syntactic_sugar)
 Other
-⛔️ Colons should be next to the identifier when specifying a type and next to the key in dictionary literals (colon)
+⛔️ Returning Void in a function declaration is redundant (redundant_void_return)
