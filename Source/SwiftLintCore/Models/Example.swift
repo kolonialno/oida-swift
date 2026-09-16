@@ -232,12 +232,10 @@ extension Example: Comparable {
 // `Example(code: "…")` instead. They can't be marked `@available(*, unavailable)` because that would stop them
 // from satisfying the protocol requirement and break the literal conversion the macros rely on.
 extension Example: ExpressibleByStringInterpolation {
-    // oida:disable:next unavailable_function
     public init(stringLiteral _: String) {
         preconditionFailure(Self.literalInitializerMessage)
     }
 
-    // oida:disable:next unavailable_function
     public init(stringInterpolation _: DefaultStringInterpolation) {
         preconditionFailure(Self.literalInitializerMessage)
     }

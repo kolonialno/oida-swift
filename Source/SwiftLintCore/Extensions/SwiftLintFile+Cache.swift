@@ -8,7 +8,7 @@ import SwiftParserDiagnostics
 import SwiftSyntax
 
 // oida:disable:next blanket_disable_command
-// oida:disable closure_end_indentation opening_brace
+// oida:disable opening_brace
 
 package typealias AssertHandler = () -> Void
 

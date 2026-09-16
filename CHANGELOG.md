@@ -4,6 +4,25 @@
 
 ### Breaking
 
+* SwiftLint's opt-in menu is gone — 209 rules become 89.
+
+  With every rule switched on, `tienda-ios` reports 229,807 violations and **221,757 of them come from
+  opt-in rules**, some of which contradict each other by design: `contrasted_opening_brace` is the opposite
+  of `opening_brace`. That is what the mechanism was for — SwiftLint ships rival rules and asks each
+  repository to choose. Of the 154 opt-in rules, 30 are oida's own and 124 were that menu, accounting for
+  188,067 of the noise. The menu leaves; oida's own rules stay.
+
+  `custom_rules` stays: it is where a rule gets tried before it is written. `unused_declaration` and
+  `unused_import` stay because the measurement cannot see them — they are analyzer rules and need compiler
+  arguments.
+
+  `blanket_disable_command`'s `allowed_rules` now defaults to empty. It listed four file-level rules, and a
+  blanket disable suits a rule that judges the whole file — oida no longer has one.
+
+  `unused_import` no longer sorts imports after inserting them. It called `sorted_imports`, which
+  `grouped_imports` contradicts and which every consumer already had to disable; import order is
+  `grouped_imports`' to decide.
+
 * Twenty-eight inherited rules that name a preference rather than a defect are gone — 237 becomes 209:
 
   `contains_over_filter_is_empty`, `contains_over_range_nil_comparison`, `deployment_target`, `discouraged_assert`, `empty_parameters`, `expiring_todo`, `explicit_self`, `file_name_no_space`, `flatmap_over_map_reduce`, `generic_type_name`, `inclusive_language`, `is_disjoint`, `last_where`, `multiple_closures_with_trailing_closure`, `nimble_operator`, `optional_enum_case_matching`, `prefer_self_type_over_type_of_self`, `prefer_zero_over_explicit_init`, `protocol_property_accessors_order`, `reduce_boolean`, `redundant_final`, `redundant_nil_coalescing`, `redundant_set_access_control`, `static_over_final_class`, `toggle_bool`, `typesafe_array_init`, `unneeded_synthesized_initializer`, `void_function_in_ternary`.

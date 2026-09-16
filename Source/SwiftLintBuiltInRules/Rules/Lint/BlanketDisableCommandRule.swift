@@ -17,7 +17,6 @@ struct BlanketDisableCommandRule: Rule, SourceKitFreeRule {
         The intent of this rule is to prevent code like
 
         ```
-        // oida:disable force_unwrapping
         let foo = bar!
         ```
 
@@ -31,7 +30,6 @@ struct BlanketDisableCommandRule: Rule, SourceKitFreeRule {
 
         ```
         // oida:disable:next blanket_disable_command
-        // oida:disable force_unwrapping
         ```
         """,
         kind: .lint,

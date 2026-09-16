@@ -231,7 +231,7 @@ struct ReporterTests {
         let expectedOutput = stringFromFile("CannedSummaryReporterOutput.txt")
             .trimmingTrailingCharacters(in: .whitespacesAndNewlines)
         let correctableViolation = StyleViolation(
-            ruleDescription: VerticalWhitespaceOpeningBracesRule.description,
+            ruleDescription: ForceTryRule.description,
             location: Location(file: URL.cwd.appending(path: "filename"), line: 1, character: 2),
             reason: "Violation Reason"
         )

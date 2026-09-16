@@ -73,8 +73,6 @@ struct UnusedImportRule: CorrectableRule, AnalyzerRule {
         file.write(newContents)
         numberOfCorrections += missingImports.count
 
-        // Attempt to sort imports
-        numberOfCorrections += SortedImportsRule().correct(file: file)
         return numberOfCorrections
     }
 

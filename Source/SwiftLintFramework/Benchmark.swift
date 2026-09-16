@@ -29,7 +29,6 @@ struct Benchmark {
         }
         let entriesKeyValues: [(String, Double)] = entriesDict.sorted { $0.1 < $1.1 }
         let lines: [String] = entriesKeyValues.map { id, time -> String in
-            // oida:disable:next legacy_objc_type
             "\(numberFormatter.string(from: NSNumber(value: time))!): \(id)"
         }
         let string: String = lines.joined(separator: "\n") + "\n"

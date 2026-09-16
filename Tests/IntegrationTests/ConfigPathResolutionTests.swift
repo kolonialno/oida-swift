@@ -150,13 +150,13 @@ struct ConfigPathResolutionTests {
             #expect(
                 config.configuration(for: moduleAFile).rules
                     .map { type(of: $0).identifier }
-                    .contains("explicit_type_interface")
+                    .contains("no_doc_comments")
             )
 
             #expect(
                 !config.configuration(for: moduleBFile).rules
                     .map { type(of: $0).identifier }
-                    .contains("explicit_type_interface")
+                    .contains("no_doc_comments")
             )
         }
     }
@@ -174,7 +174,7 @@ struct ConfigPathResolutionTests {
                 .configuration(for: moduleAFile)
                 .rules
                 .map { type(of: $0).identifier }
-                .contains("explicit_type_interface")
+                .contains("no_doc_comments")
         )
     }
 

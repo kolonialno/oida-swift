@@ -354,7 +354,7 @@ struct MultipleConfigurationsTests {
             TestCase(optedInInParent: true, disabledInParent: true, optedInInChild: true, disabledInChild: true, isEnabled: false),
         ]
         #expect(testCases.unique.count == 4 * 4)
-        let ruleType = ImplicitReturnRule.self
+        let ruleType = NoDocCommentsRule.self
         #expect((ruleType as Any) is any OptInRule.Type)
         let ruleIdentifier = ruleType.identifier
         for testCase in testCases {
@@ -422,7 +422,7 @@ struct MultipleConfigurationsTests {
             TestCase(optedInInChild: true, disabledInChild: true, isEnabled: false),
         ]
         #expect(testCases.unique.count == 2 * 2)
-        let ruleType = ImplicitReturnRule.self
+        let ruleType = NoDocCommentsRule.self
         #expect((ruleType as Any) is any OptInRule.Type)
         let ruleIdentifier = ruleType.identifier
         let parentConfiguration = Configuration(rulesMode: .onlyConfiguration([ruleIdentifier]))
@@ -440,7 +440,7 @@ struct MultipleConfigurationsTests {
     // MARK: Warnings about configurations for disabled rules
     @Test
     func defaultConfigurationDisabledRuleWarnings() {
-        let optInRuleType = ImplicitReturnRule.self
+        let optInRuleType = NoDocCommentsRule.self
         #expect((optInRuleType as Any) is any OptInRule.Type)
         testDefaultConfigurationDisabledRuleWarnings(for: optInRuleType)
 
@@ -523,7 +523,7 @@ struct MultipleConfigurationsTests {
 
     @Test
     func onlyConfigurationDisabledRulesWarnings() {
-        let optInRuleType = ImplicitReturnRule.self
+        let optInRuleType = NoDocCommentsRule.self
         #expect((optInRuleType as Any) is any OptInRule.Type)
         testOnlyConfigurationDisabledRulesWarnings(ruleType: optInRuleType)
 

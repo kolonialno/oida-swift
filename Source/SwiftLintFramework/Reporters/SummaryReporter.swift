@@ -120,7 +120,6 @@ private extension Int {
         return numberFormatter
     }()
     var formattedString: String {
-        // oida:disable:next legacy_objc_type
         Self.numberFormatter.string(from: NSNumber(value: self)) ?? ""
     }
 }

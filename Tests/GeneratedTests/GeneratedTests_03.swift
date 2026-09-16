@@ -1,7 +1,7 @@
 // GENERATED FILE. DO NOT EDIT!
 
 // oida:disable:next blanket_disable_command superfluous_disable_command
-// oida:disable single_test_class type_name
+// oida:disable type_name
 
 import TestHelpers
 import Testing
@@ -10,201 +10,201 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
-struct ExtensionAccessModifierRuleGeneratedTests {
+struct NonOptionalStringDataConversionRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(ExtensionAccessModifierRule.description)
+        verifyRule(NonOptionalStringDataConversionRule.description)
     }
 }
 
 @Suite(.rulesRegistered)
-struct FallthroughRuleGeneratedTests {
+struct NotificationCenterDetachmentRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(FallthroughRule.description)
+        verifyRule(NotificationCenterDetachmentRule.description)
     }
 }
 
 @Suite(.rulesRegistered)
-struct FatalErrorMessageRuleGeneratedTests {
+struct OpeningBraceRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(FatalErrorMessageRule.description)
+        verifyRule(OpeningBraceRule.description)
     }
 }
 
 @Suite(.rulesRegistered)
-struct FileHeaderRuleGeneratedTests {
+struct OptionalDataStringConversionRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(FileHeaderRule.description)
+        verifyRule(OptionalDataStringConversionRule.description)
     }
 }
 
 @Suite(.rulesRegistered)
-struct FileNameRuleGeneratedTests {
+struct OrphanedDocCommentRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(FileNameRule.description)
+        verifyRule(OrphanedDocCommentRule.description)
     }
 }
 
 @Suite(.rulesRegistered)
-struct FileTypesOrderRuleGeneratedTests {
+struct PreferTypeCheckingRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(FileTypesOrderRule.description)
+        verifyRule(PreferTypeCheckingRule.description)
     }
 }
 
 @Suite(.rulesRegistered)
-struct FinalTestCaseRuleGeneratedTests {
+struct PrivateOverFilePrivateRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(FinalTestCaseRule.description)
+        verifyRule(PrivateOverFilePrivateRule.description)
     }
 }
 
 @Suite(.rulesRegistered)
-struct FirstWhereRuleGeneratedTests {
+struct RedundantDiscardableLetRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(FirstWhereRule.description)
+        verifyRule(RedundantDiscardableLetRule.description)
     }
 }
 
 @Suite(.rulesRegistered)
-struct ForWhereRuleGeneratedTests {
+struct RedundantSendableRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(ForWhereRule.description)
+        verifyRule(RedundantSendableRule.description)
     }
 }
 
 @Suite(.rulesRegistered)
-struct ForceCastRuleGeneratedTests {
+struct RedundantStringEnumValueRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(ForceCastRule.description)
+        verifyRule(RedundantStringEnumValueRule.description)
     }
 }
 
 @Suite(.rulesRegistered)
-struct ForceTryRuleGeneratedTests {
+struct RedundantVoidReturnRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(ForceTryRule.description)
+        verifyRule(RedundantVoidReturnRule.description)
     }
 }
 
 @Suite(.rulesRegistered)
-struct ForceUnwrappingRuleGeneratedTests {
+struct SelfInPropertyInitializationRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(ForceUnwrappingRule.description)
+        verifyRule(SelfInPropertyInitializationRule.description)
     }
 }
 
 @Suite(.rulesRegistered)
-struct FunctionDefaultParameterAtEndRuleGeneratedTests {
+struct ShorthandOperatorRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(FunctionDefaultParameterAtEndRule.description)
+        verifyRule(ShorthandOperatorRule.description)
     }
 }
 
 @Suite(.rulesRegistered)
-struct FunctionNameWhitespaceRuleGeneratedTests {
+struct SwitchCaseAlignmentRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(FunctionNameWhitespaceRule.description)
+        verifyRule(SwitchCaseAlignmentRule.description)
     }
 }
 
 @Suite(.rulesRegistered)
-struct GroupedImportsRuleGeneratedTests {
+struct SyntacticSugarRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(GroupedImportsRule.description)
+        verifyRule(SyntacticSugarRule.description)
     }
 }
 
 @Suite(.rulesRegistered)
-struct IdenticalOperandsRuleGeneratedTests {
+struct TiendaAPIKitIsUIFreeRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(IdenticalOperandsRule.description)
+        verifyRule(TiendaAPIKitIsUIFreeRule.description)
     }
 }
 
 @Suite(.rulesRegistered)
-struct IdentifierNameRuleGeneratedTests {
+struct TodoRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(IdentifierNameRule.description)
+        verifyRule(TodoRule.description)
     }
 }
 
 @Suite(.rulesRegistered)
-struct ImplicitGetterRuleGeneratedTests {
+struct TrailingNewlineRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(ImplicitGetterRule.description)
+        verifyRule(TrailingNewlineRule.description)
     }
 }
 
 @Suite(.rulesRegistered)
-struct ImplicitOptionalInitializationRuleGeneratedTests {
+struct TrailingSemicolonRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(ImplicitOptionalInitializationRule.description)
+        verifyRule(TrailingSemicolonRule.description)
     }
 }
 
 @Suite(.rulesRegistered)
-struct ImplicitReturnRuleGeneratedTests {
+struct TypeNameRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(ImplicitReturnRule.description)
+        verifyRule(TypeNameRule.description)
     }
 }
 
 @Suite(.rulesRegistered)
-struct ImplicitlyUnwrappedOptionalRuleGeneratedTests {
+struct UnavailableConditionRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(ImplicitlyUnwrappedOptionalRule.description)
+        verifyRule(UnavailableConditionRule.description)
     }
 }
 
 @Suite(.rulesRegistered)
-struct IncompatibleConcurrencyAnnotationRuleGeneratedTests {
+struct UnneededBreakInSwitchRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(IncompatibleConcurrencyAnnotationRule.description)
+        verifyRule(UnneededBreakInSwitchRule.description)
     }
 }
 
 @Suite(.rulesRegistered)
-struct IndentationWidthRuleGeneratedTests {
+struct UnneededOverrideRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(IndentationWidthRule.description)
+        verifyRule(UnneededOverrideRule.description)
     }
 }
 
 @Suite(.rulesRegistered)
-struct InvalidOidaCommandRuleGeneratedTests {
+struct UnusedClosureParameterRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(InvalidOidaCommandRule.description)
+        verifyRule(UnusedClosureParameterRule.description)
     }
 }
 
 @Suite(.rulesRegistered)
-struct InvisibleCharacterRuleGeneratedTests {
+struct UnusedControlFlowLabelRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
-        verifyRule(InvisibleCharacterRule.description)
+        verifyRule(UnusedControlFlowLabelRule.description)
     }
 }

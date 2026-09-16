@@ -2,4 +2,4 @@ excluded:
   - Sources/Models
 
 opt_in_rules:
-  - explicit_type_interface
+  - no_doc_comments

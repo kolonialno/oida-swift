@@ -3,8 +3,8 @@ import Testing
 
 @Suite
 struct EmptyFileTests {
-    var collectedLinter: CollectedLinter!  // oida:disable:this implicitly_unwrapped_optional
-    var ruleStorage: RuleStorage!  // oida:disable:this implicitly_unwrapped_optional
+    var collectedLinter: CollectedLinter!
+    var ruleStorage: RuleStorage!
 
     init() throws {
         let ruleList = RuleList(rules: RuleMock<DontLintEmptyFiles>.self, RuleMock<LintEmptyFiles>.self)

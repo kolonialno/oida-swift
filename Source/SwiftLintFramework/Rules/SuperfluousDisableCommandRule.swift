@@ -16,17 +16,13 @@ package struct SuperfluousDisableCommandRule: SourceKitFreeRule, Sendable {
         nonTriggeringExamples: #examples([
             "let abc:Void // oida:disable:this colon",
             """
-                // oida:disable colon
                 let abc:Void
-                // oida:enable colon
                 """,
         ]),
         triggeringExamples: #examples([
             "let abc: Void // oida:disable:this colon",
             """
-                // oida:disable colon
                 let abc: Void
-                // oida:enable colon
                 """,
         ])
     )

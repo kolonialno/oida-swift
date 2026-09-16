@@ -9,7 +9,6 @@ struct MultilineParametersConfiguration: SeverityBasedRuleConfiguration {
     @ConfigurationElement(key: "max_number_of_single_line_parameters")
     private(set) var maxNumberOfSingleLineParameters: Int?
 
-    // oida:disable:next unneeded_throws_rethrows
     func validate() throws(Issue) {
         guard let maxNumberOfSingleLineParameters else {
             return
