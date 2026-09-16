@@ -16,7 +16,20 @@
 
 ### Bug Fixes
 
-* None.
+* `--format` no longer lets swift-format sort the imports `grouped_imports` just grouped.
+
+  `grouped_imports` orders imports by origin; swift-format's `OrderedImports` sorts them alphabetically,
+  and both ran under `oida --fix --format`. The formatter went second, so the correction was undone and
+  the violation stood — a `--fix` that reported success and changed nothing, on any repository whose
+  `.swift-format` leaves `OrderedImports` at its default. `tienda-ios` escaped it only by setting that key
+  to `false`, and `Networking` only by having no violations yet.
+
+  Where a rule here decides import order, oida now hands swift-format the repository's own effective
+  configuration with `OrderedImports` turned off, so the setting no longer has to be found and written by
+  each adopting repository. Everything else in that configuration is the repository's, read back from the
+  formatter rather than from the file.
+
+  [#41](https://github.com/kolonialno/oida-swift/issues/41)
 
 ## 0.16.0: Eighty-Nine Rules
 

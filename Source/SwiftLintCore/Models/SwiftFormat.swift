@@ -34,8 +34,52 @@ public enum SwiftFormat {
         return verdict
     }
 
+    /// The configuration swift-format would use for `path`, with its own import sorting turned off, as the
+    /// JSON string `--configuration` takes. `grouped_imports` orders imports by origin, and `OrderedImports`
+    /// sorts that ordering away, so the tool invoking the formatter is the one that has to settle it.
+    ///
+    /// The effective configuration is read from the formatter rather than from the file, so a repository's
+    /// own keys survive whatever this turns off.
+    public static func configurationKeepingImportOrder(for path: String) -> String? {
+        guard let binary else {
+            return nil
+        }
+        let key = configurationRoot(for: path)
+        if let cached = configurations[key] {
+            return cached
+        }
+        let dumped = output(of: binary, arguments: ["dump-configuration", "--effective"], from: key)
+        guard let data = dumped.data(using: .utf8),
+              var configuration = (try? JSONSerialization.jsonObject(with: data)) as? [String: Any] else {
+            return nil
+        }
+        var rules = configuration["rules"] as? [String: Any] ?? [:]
+        rules["OrderedImports"] = false
+        configuration["rules"] = rules
+        guard let merged = try? JSONSerialization.data(withJSONObject: configuration),
+              let json = String(data: merged, encoding: .utf8) else {
+            return nil
+        }
+        configurations[key] = json
+        return json
+    }
+
+    /// The nearest ancestor holding a `.swift-format`, which is what the formatter's own discovery finds —
+    /// so paths sharing one are dumped once rather than once apiece.
+    private static func configurationRoot(for path: String) -> String {
+        var current = URL(fileURLWithPath: path).deletingLastPathComponent()
+        while current.pathComponents.count > 1 {
+            if FileManager.default.fileExists(atPath: current.appending(path: ".swift-format").filepath) {
+                return current.filepath
+            }
+            current = current.deletingLastPathComponent()
+        }
+        return current.filepath
+    }
+
     private static let verdicts = Memo<Bool>()
     private static let units = Memo<Int>()
+    private static let configurations = Memo<String>()
 
     /// Read by formatting one block and measuring what comes back, so the formatter's setting is never
     /// read from a file this tool would then have an opinion about.
@@ -85,10 +129,13 @@ public enum SwiftFormat {
         return String(bytes: data, encoding: .utf8)
     }
 
-    private static func output(of binary: URL, arguments: [String]) -> String {
+    private static func output(of binary: URL, arguments: [String], from directory: String? = nil) -> String {
         let process = Process()
         process.executableURL = binary
         process.arguments = arguments
+        if let directory {
+            process.currentDirectoryURL = URL(fileURLWithPath: directory)
+        }
         let pipe = Pipe()
         process.standardOutput = pipe
         process.standardError = Pipe()

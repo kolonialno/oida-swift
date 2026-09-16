@@ -148,7 +148,11 @@ package struct LintOrAnalyzeCommand {
         if options.format {
             // Linting asks the formatter the same question correcting answers, so one command reports both.
             // Document files never reach swift-format — it would parse their Markdown as Swift source.
-            try FormatCommand.check(paths: swiftFiles.compactMap { $0.path?.path }, quiet: options.quiet)
+            try FormatCommand.check(
+                paths: swiftFiles.compactMap { $0.path?.path },
+                quiet: options.quiet,
+                keepingImportOrder: builder.configuration.ordersImportsItself
+            )
         }
         var files = swiftFiles
         if options.mode == .lint {
@@ -389,7 +393,11 @@ package struct LintOrAnalyzeCommand {
         }
 
         if options.format {
-            try FormatCommand.run(over: files.compactMap { $0.path?.path }, quiet: options.quiet)
+            try FormatCommand.run(
+                over: files.compactMap { $0.path?.path },
+                quiet: options.quiet,
+                keepingImportOrder: configuration.ordersImportsItself
+            )
         }
     }
 }
@@ -400,36 +408,69 @@ package struct LintOrAnalyzeCommand {
 /// binary that decides it has to be the one Xcode has: found through `xcrun`, never installed separately, or
 /// the tree and the keystroke drift apart.
 enum FormatCommand {
-    static func run(over paths: [String], quiet: Bool) throws {
-        try invoke(["format", "--in-place", "--parallel"], over: paths, quiet: quiet, verb: "Formatted")
+    static func run(over paths: [String], quiet: Bool, keepingImportOrder: Bool) throws {
+        try invoke(
+            ["format", "--in-place", "--parallel"],
+            over: paths,
+            quiet: quiet,
+            verb: "Formatted",
+            keepingImportOrder: keepingImportOrder
+        )
     }
 
     /// Reports what formatting the files are missing, without writing to them.
-    static func check(paths: [String], quiet: Bool) throws {
-        try invoke(["lint", "--strict", "--parallel"], over: paths, quiet: quiet, verb: "Checked")
+    static func check(paths: [String], quiet: Bool, keepingImportOrder: Bool) throws {
+        try invoke(
+            ["lint", "--strict", "--parallel"],
+            over: paths,
+            quiet: quiet,
+            verb: "Checked",
+            keepingImportOrder: keepingImportOrder
+        )
     }
 
     private static func invoke(
         _ arguments: [String],
         over paths: [String],
         quiet: Bool,
-        verb: String
+        verb: String,
+        keepingImportOrder: Bool
     ) throws {
         guard paths.isNotEmpty else {
             return
         }
         let binary = try formatter()
+        for (configuration, group) in batches(of: paths, keepingImportOrder: keepingImportOrder) {
+            let settings = configuration.map { ["--configuration", $0] } ?? []
+            try spawn(binary, arguments: arguments + settings + group)
+        }
+        if !quiet {
+            queuedPrintError("\(verb) \(paths.count) file(s) with \(binary.path).")
+        }
+    }
+
+    /// One batch per configuration the formatter would use, so a repository with a single `.swift-format`
+    /// still takes a single invocation.
+    private static func batches(
+        of paths: [String],
+        keepingImportOrder: Bool
+    ) -> [(configuration: String?, paths: [String])] {
+        guard keepingImportOrder else {
+            return [(nil, paths)]
+        }
+        return Dictionary(grouping: paths) { SwiftFormat.configurationKeepingImportOrder(for: $0) }
+            .map { (configuration: $0.key, paths: $0.value) }
+    }
+
+    private static func spawn(_ binary: URL, arguments: [String]) throws {
         let process = Process()
         process.executableURL = binary
-        process.arguments = arguments + paths
+        process.arguments = arguments
         try process.run()
         process.waitUntilExit()
         guard process.terminationStatus == 0 else {
             // swift-format has already said what it found, so exiting with its status is the whole report.
             exit(process.terminationStatus)
-        }
-        if !quiet {
-            queuedPrintError("\(verb) \(paths.count) file(s) with \(binary.path).")
         }
     }
 
@@ -543,4 +584,11 @@ private func memoryUsage() -> String? {
     let errorMessage = String(cString: mach_error_string(kerr), encoding: .ascii)
     return "Error with task_info(): \(errorMessage ?? "unknown")"
 #endif
+}
+
+private extension Configuration {
+    /// Whether a rule here decides import order, which swift-format's `OrderedImports` would sort away.
+    var ordersImportsItself: Bool {
+        rules.contains { type(of: $0).identifier == "grouped_imports" }
+    }
 }
