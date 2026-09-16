@@ -10,38 +10,6 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
-struct FunctionDefaultParameterAtEndRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(FunctionDefaultParameterAtEndRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct FunctionNameWhitespaceRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(FunctionNameWhitespaceRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct GenericTypeNameRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(GenericTypeNameRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct GroupedImportsRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(GroupedImportsRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
 struct IdenticalOperandsRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -170,14 +138,6 @@ struct LastWhereRuleGeneratedTests {
 }
 
 @Suite(.rulesRegistered)
-struct LeadingWhitespaceRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(LeadingWhitespaceRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
 struct LegacyMultipleRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -206,5 +166,45 @@ struct LiteralExpressionEndIndentationRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(LiteralExpressionEndIndentationRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct LocalDocCommentRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(LocalDocCommentRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct LowerACLThanParentRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(LowerACLThanParentRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct MarkRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(MarkRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct MissingDocsRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(MissingDocsRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct ModifierOrderRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(ModifierOrderRule.description)
     }
 }

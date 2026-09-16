@@ -444,7 +444,7 @@ struct MultipleConfigurationsTests {
         #expect((optInRuleType as Any) is any OptInRule.Type)
         testDefaultConfigurationDisabledRuleWarnings(for: optInRuleType)
 
-        let defaultRuleType = ColonRule.self
+        let defaultRuleType = ForceCastRule.self
         #expect(!((defaultRuleType as Any) is any OptInRule.Type))
         testDefaultConfigurationDisabledRuleWarnings(for: defaultRuleType)
     }
@@ -527,7 +527,7 @@ struct MultipleConfigurationsTests {
         #expect((optInRuleType as Any) is any OptInRule.Type)
         testOnlyConfigurationDisabledRulesWarnings(ruleType: optInRuleType)
 
-        let defaultRuleType = ColonRule.self
+        let defaultRuleType = ForceCastRule.self
         #expect(!((defaultRuleType as Any) is any OptInRule.Type))
         testOnlyConfigurationDisabledRulesWarnings(ruleType: defaultRuleType)
     }

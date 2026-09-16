@@ -7,7 +7,7 @@ disabled_rules:
   - private_outlet
   - trailing_closure
 
-colon: error
+force_cast: error
 
 identifier_name:
   excluded:

@@ -10,46 +10,6 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
-struct LocalDocCommentRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(LocalDocCommentRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct LowerACLThanParentRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(LowerACLThanParentRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct MarkRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(MarkRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct MissingDocsRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(MissingDocsRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct ModifierOrderRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(ModifierOrderRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
 struct MultilineArgumentsBracketsRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -206,5 +166,45 @@ struct NoLegacyRouterReadersRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(NoLegacyRouterReadersRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct NoLiveUIKitFrameReadsRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(NoLiveUIKitFrameReadsRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct NoMagicNumbersRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(NoMagicNumbersRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct NoMarkCommentsRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(NoMarkCommentsRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct NoPresentationStateOutsideNavigationRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(NoPresentationStateOutsideNavigationRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct NoPrintInAppCodeRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(NoPrintInAppCodeRule.description)
     }
 }

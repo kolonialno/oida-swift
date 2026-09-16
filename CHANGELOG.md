@@ -4,6 +4,17 @@
 
 ### Breaking
 
+* Eleven whitespace rules are gone — 248 becomes 237: `attribute_name_spacing`, `closing_brace`, `colon`, `comma`, `leading_whitespace`, `no_space_in_method_call`, `operator_usage_whitespace`, `return_arrow_whitespace`, `statement_position`, `trailing_whitespace`, `vertical_whitespace`.
+
+  swift-format both writes and reports every one of them. `oida lint --fix --format` hands it the file and
+  it fixes them; `oida lint --format`, which is what a check run is, calls `swift-format lint --strict`,
+  which reports them. A repository running either already had the answer twice, from the tool that owns
+  layout and from a rule repeating it.
+
+  This is the same line drawn for width in 0.15.0 and for the trailing comma after it: whitespace is
+  swift-format's, and a rule that restates it is a second opinion to keep in step. `tienda-ios` and
+  `3lvis/Networking` both report exactly what they reported before.
+
 * Twenty-three rules that cannot fire in a Swift codebase are gone — 271 becomes 248. Quick and Nimble's
   rules, Interface Builder's, the Objective-C and old-Swift legacy set, and `NSLocalizedString`'s:
 

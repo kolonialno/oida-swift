@@ -10,38 +10,6 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
-struct EmptyStringRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(EmptyStringRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct EmptyXCTestMethodRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(EmptyXCTestMethodRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct EnvironmentKeyNeedsJudgementRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(EnvironmentKeyNeedsJudgementRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct EnvironmentValueReassertionRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(EnvironmentValueReassertionRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
 struct ExpiringTodoRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -206,5 +174,37 @@ struct ForceUnwrappingRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(ForceUnwrappingRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct FunctionDefaultParameterAtEndRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(FunctionDefaultParameterAtEndRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct FunctionNameWhitespaceRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(FunctionNameWhitespaceRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct GenericTypeNameRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(GenericTypeNameRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct GroupedImportsRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(GroupedImportsRule.description)
     }
 }

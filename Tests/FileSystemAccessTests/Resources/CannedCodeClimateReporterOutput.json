@@ -45,10 +45,10 @@
     "type" : "issue"
   },
   {
-    "check_name" : "Colon Spacing",
-    "description" : "Colons should be next to the identifier when specifying a type and next to the key in dictionary literals",
+    "check_name" : "Redundant Void Return",
+    "description" : "Returning Void in a function declaration is redundant",
     "engine_name" : "SwiftLint",
-    "fingerprint" : "25477e0cb480fc03bfdcbfa0d7cf569515a6e6ac372406e4121213585404cd9c",
+    "fingerprint" : "fe32817a76424d193b9ba3d409f2c69f18c9cf750588b8e750630b70fa8acb50",
     "location" : {
       "lines" : {
         "begin" : null,

@@ -12,18 +12,18 @@ struct BlanketDisableCommandRuleTests {
 
     @Test
     func alwaysBlanketDisable() {
-        let nonTriggeringExamples = #examples(["// oida:disable colon\n// oida:enable colon"])
+        let nonTriggeringExamples = #examples(["// oida:disable force_cast\n// oida:enable force_cast"])
         verifyRule(Self.emptyDescription.with(nonTriggeringExamples: nonTriggeringExamples))
 
         let triggeringExamples = #examples([
-            "// oida:disable colon\n// oida:enable ↓colon",
-            "// oida:disable:previous ↓colon",
-            "// oida:disable:this ↓colon",
-            "// oida:disable:next ↓colon",
+            "// oida:disable force_cast\n// oida:enable ↓force_cast",
+            "// oida:disable:previous ↓force_cast",
+            "// oida:disable:this ↓force_cast",
+            "// oida:disable:next ↓force_cast",
         ])
         verifyRule(
             Self.emptyDescription.with(triggeringExamples: triggeringExamples),
-            ruleConfiguration: ["always_blanket_disable": ["colon"]],
+            ruleConfiguration: ["always_blanket_disable": ["force_cast"]],
             skipCommentTests: true, skipDisableCommandTests: true)
     }
 

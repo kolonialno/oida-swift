@@ -75,7 +75,7 @@ struct ConfigurationTests {
     func onlyRule() throws {
         let configuration = try Configuration(
             dict: [:],
-            onlyRule: ["colon"]
+            onlyRule: ["force_cast"]
         )
 
         #expect(configuration.rules.count == 1)
@@ -83,9 +83,9 @@ struct ConfigurationTests {
 
     @Test
     func onlyRuleMultiple() throws {
-        let onlyRuleIdentifiers = ["colon", "todo"].sorted()
+        let onlyRuleIdentifiers = ["force_cast", "todo"].sorted()
         let configuration = try Configuration(
-            dict: ["only_rules": "colon"],
+            dict: ["only_rules": "force_cast"],
             onlyRule: onlyRuleIdentifiers
         )
         #expect(onlyRuleIdentifiers == configuration.enabledRuleIdentifiers)
@@ -97,7 +97,7 @@ struct ConfigurationTests {
 
     @Test
     func onlyRules() throws {
-        let only = ["colon", "todo"]
+        let only = ["force_cast", "todo"]
 
         let config = try Configuration(dict: ["only_rules": only])
         let configuredIdentifiers = config.rules.map {
@@ -166,9 +166,9 @@ struct ConfigurationTests {
 
     @Test
     func otherRuleConfigurationsAlongsideOnlyRules() {
-        let only = ["colon", "todo"]
+        let only = ["force_cast", "todo"]
         let enabledRulesConfigDict = [
-            "opt_in_rules": ["colon"],
+            "opt_in_rules": ["force_cast"],
             "only_rules": only,
         ]
         let disabledRulesConfigDict = [
@@ -186,11 +186,11 @@ struct ConfigurationTests {
 
     @Test
     func disabledRules() throws {
-        let disabledConfig = try Configuration(dict: ["disabled_rules": ["colon", "todo"]])
-        #expect(disabledConfig.rulesWrapper.disabledRuleIdentifiers == ["colon", "todo"],
+        let disabledConfig = try Configuration(dict: ["disabled_rules": ["force_cast", "todo"]])
+        #expect(disabledConfig.rulesWrapper.disabledRuleIdentifiers == ["force_cast", "todo"],
                        "initializing Configuration with valid rules in Dictionary should succeed")
         let expectedIdentifiers = Set(RuleRegistry.shared.list.list.keys
-            .filter({ !(["colon", "todo"] + optInRules).contains($0) }))
+            .filter({ !(["force_cast", "todo"] + optInRules).contains($0) }))
         let configuredIdentifiers = Set(disabledConfig.rules.map {
             type(of: $0).identifier
         })
@@ -199,7 +199,7 @@ struct ConfigurationTests {
 
     @Test
     func disabledRulesWithUnknownRule() throws {
-        let validRule = "colon"
+        let validRule = "force_cast"
         let bogusRule = "no_sprites_with_elf_shoes"
 
         let configuration = try Configuration(dict: ["disabled_rules": [validRule, bogusRule]])

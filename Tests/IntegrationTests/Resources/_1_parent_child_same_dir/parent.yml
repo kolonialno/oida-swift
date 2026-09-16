@@ -4,6 +4,6 @@ included:
 excluded:
   - Sources/Generated
 
-colon: warning
+force_cast: warning
 
 child_config: child.yml

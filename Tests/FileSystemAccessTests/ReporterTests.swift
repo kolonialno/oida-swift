@@ -33,7 +33,7 @@ struct ReporterTests {
                 ),
                 reason: "Shorthand syntactic sugar should be used, i.e. [Int] instead of Array<Int>"),
             StyleViolation(
-                ruleDescription: ColonRule.description,
+                ruleDescription: RedundantVoidReturnRule.description,
                 severity: .error,
                 location: Location(file: nil),
                 reason: nil

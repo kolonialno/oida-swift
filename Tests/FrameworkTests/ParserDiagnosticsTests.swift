@@ -18,7 +18,7 @@ struct ParserDiagnosticsTests {
 			""".asExample()
         #expect(SwiftLintFile(contents: contents.code).parserDiagnostics == ["unexpected code \')\' in source file"])
 
-        let ruleDescription = ColonRule.description
+        let ruleDescription = RedundantVoidReturnRule.description
             .with(corrections: #corrections([contents: contents]))
 
         verifyCorrections(
@@ -33,12 +33,12 @@ struct ParserDiagnosticsTests {
     @Test
     func fileWithParserWarningDiagnostics() throws {
         // extraneous duplicate parameter name; 'bar' already has an argument label
-        let original = "func foo(bar bar: String) ->   Int { 0 }".asExample()
-        let corrected = "func foo(bar bar: String) -> Int { 0 }".asExample()
+        let original = "func foo(bar bar: String) -> Void { }".asExample()
+        let corrected = "func foo(bar bar: String) { }".asExample()
 
         #expect(SwiftLintFile(contents: original.code).parserDiagnostics.isEmpty)
 
-        let ruleDescription = ReturnArrowWhitespaceRule.description
+        let ruleDescription = RedundantVoidReturnRule.description
             .with(corrections: #corrections([original: corrected]))
 
         verifyCorrections(

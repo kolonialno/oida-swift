@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <checkstyle version="4.3">
 	<file name="&lt;nopath&gt;">
-		<error line="0" column="0" severity="error" message="Colons should be next to the identifier when specifying a type and next to the key in dictionary literals" source="swiftlint.rules.colon"/>
+		<error line="0" column="0" severity="error" message="Returning Void in a function declaration is redundant" source="swiftlint.rules.redundant_void_return"/>
 	</file>
 	<file name="${CURRENT_WORKING_DIRECTORY}/filename">
 		<error line="1" column="1" severity="warning" message="Violation Reason 1" source="swiftlint.rules.force_cast"/>

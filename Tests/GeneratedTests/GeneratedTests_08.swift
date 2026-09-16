@@ -10,70 +10,6 @@ import Testing
 @testable import SwiftLintCore
 
 @Suite(.rulesRegistered)
-struct RedundantSetAccessControlRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(RedundantSetAccessControlRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct RedundantStringEnumValueRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(RedundantStringEnumValueRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct RedundantTypeAnnotationRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(RedundantTypeAnnotationRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct RedundantVoidReturnRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(RedundantVoidReturnRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct RequiredDeinitRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(RequiredDeinitRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct RequiredEnumCaseRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(RequiredEnumCaseRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct ReturnArrowWhitespaceRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(ReturnArrowWhitespaceRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
-struct ReturnValueFromVoidFunctionRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(ReturnValueFromVoidFunctionRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
 struct SelfBindingRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -146,14 +82,6 @@ struct SortedImportsRuleGeneratedTests {
 }
 
 @Suite(.rulesRegistered)
-struct StatementPositionRuleGeneratedTests {
-    @Test
-    func withDefaultConfiguration() {
-        verifyRule(StatementPositionRule.description)
-    }
-}
-
-@Suite(.rulesRegistered)
 struct StaticOperatorRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
@@ -206,5 +134,77 @@ struct SwitchCaseOnNewlineRuleGeneratedTests {
     @Test
     func withDefaultConfiguration() {
         verifyRule(SwitchCaseOnNewlineRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct SyntacticSugarRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(SyntacticSugarRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct TestCaseAccessibilityRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(TestCaseAccessibilityRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct TiendaAPIKitIsUIFreeRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(TiendaAPIKitIsUIFreeRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct TodoRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(TodoRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct ToggleBoolRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(ToggleBoolRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct TrailingClosureRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(TrailingClosureRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct TrailingNewlineRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(TrailingNewlineRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct TrailingSemicolonRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(TrailingSemicolonRule.description)
+    }
+}
+
+@Suite(.rulesRegistered)
+struct TypeContentsOrderRuleGeneratedTests {
+    @Test
+    func withDefaultConfiguration() {
+        verifyRule(TypeContentsOrderRule.description)
     }
 }

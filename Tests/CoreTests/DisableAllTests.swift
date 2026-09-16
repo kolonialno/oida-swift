@@ -8,7 +8,7 @@ struct DisableAllTests {
     /// Example violations. Could be replaced with other single violations.
     private static let violatingPhrases = #examples([
         "let r = 0",  // Violates identifier_name
-        #"let myString:String = """#,  // Violates colon_whitespace
+        "let someValue = otherValue as! String",  // Violates force_cast
         "// TODO: Some todo",  // Violates todo
     ])
 

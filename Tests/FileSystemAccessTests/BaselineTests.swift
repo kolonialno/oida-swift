@@ -37,8 +37,8 @@ struct BaselineTests {
 
     private static let ruleDescriptions = [
         ArrayInitRule.description,
-        ColonRule.description,
-        ClosingBraceRule.description,
+        ForceCastRule.description,
+        ForceCastRule.description,
         DirectReturnRule.description,
     ]
 
@@ -116,23 +116,23 @@ struct BaselineTests {
         .temporaryDirectory,
         arguments: [
             ArrayInitRule.description,
-            ColonRule.description,
-            ClosingBraceRule.description,
+            ForceCastRule.description,
+            ForceCastRule.description,
             DirectReturnRule.description,
         ]
     )
     func violationDetection(_ ruleDescription: RuleDescription) throws {
         let violationRuleDescriptions = [
             ArrayInitRule.description,
-            ColonRule.description,
+            ForceCastRule.description,
             ArrayInitRule.description,
-            ClosingBraceRule.description,
-            ClosingBraceRule.description,
-            ClosingBraceRule.description,
-            ColonRule.description,
+            ForceCastRule.description,
+            ForceCastRule.description,
+            ForceCastRule.description,
+            ForceCastRule.description,
             DirectReturnRule.description,
             ArrayInitRule.description,
-            ClosingBraceRule.description,
+            ForceCastRule.description,
         ]
 
         for insertionIndex in 0..<violationRuleDescriptions.count {
