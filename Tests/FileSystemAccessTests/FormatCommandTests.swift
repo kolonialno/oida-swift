@@ -59,6 +59,26 @@ struct FormatCommandTests {
         #expect(try FormatCommand.check(paths: [path.filepath], quiet: true, keepingImportOrder: false) == 0)
     }
 
+    /// swift-format's `NoAccessLevelOnExtensionDeclaration` strands every other modifier when it strips the
+    /// access level off an extension that has anything above it, and the result still compiles.
+    @Test(.temporaryDirectory)
+    func theFormatterIsNotAllowedToStrandAModifier() throws {
+        try writeSwiftFormat()
+        let source = """
+            import UIKit
+
+            public nonisolated extension UIFont {
+                var a: Int { 1 }
+            }
+
+            """
+        let path = URL.cwd.appending(path: "Extension.swift")
+        try source.write(to: path, atomically: true, encoding: .utf8)
+        try FormatCommand.run(over: [path.filepath], quiet: true, keepingImportOrder: false)
+        let formatted = try String(contentsOf: path, encoding: .utf8)
+        #expect(formatted.contains("public nonisolated extension UIFont {"))
+    }
+
     private func writeSwiftFormat() throws {
         try #"{"version": 1, "indentation": {"spaces": 4}}"#
             .write(to: URL.cwd.appending(path: ".swift-format"), atomically: true, encoding: .utf8)

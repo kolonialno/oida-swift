@@ -471,11 +471,10 @@ enum FormatCommand {
         of paths: [String],
         keepingImportOrder: Bool
     ) -> [(configuration: String?, paths: [String])] {
-        guard keepingImportOrder else {
-            return [(nil, paths)]
+        Dictionary(grouping: paths) {
+            SwiftFormat.configuration(for: $0, keepingImportOrder: keepingImportOrder)
         }
-        return Dictionary(grouping: paths) { SwiftFormat.configurationKeepingImportOrder(for: $0) }
-            .map { (configuration: $0.key, paths: $0.value) }
+        .map { (configuration: $0.key, paths: $0.value) }
     }
 
     /// swift-format has already printed what it found, so its status is the whole of what this adds.
