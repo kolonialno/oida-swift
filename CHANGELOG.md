@@ -16,6 +16,24 @@
 
 ### Bug Fixes
 
+* None.
+
+## 0.17.2: What Adoption Found, Again
+
+### Breaking
+
+* None.
+
+### Experimental
+
+* None.
+
+### Enhancements
+
+* None.
+
+### Bug Fixes
+
 * `no_single_use_void_functions` counts a call made through a subclass instance.
 
   A method declared in an extension on a type the run never declares — `extension UIViewController` — was
