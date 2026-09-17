@@ -145,10 +145,13 @@ package struct LintOrAnalyzeCommand {
     private static func lintOrAnalyze(_ options: LintOrAnalyzeOptions) async throws {
         let builder = LintOrAnalyzeResultBuilder(options)
         let swiftFiles = try await collectViolations(builder: builder)
+        // Linting asks the formatter the same question correcting answers, so one command reports both.
+        // Document files never reach swift-format — it would parse their Markdown as Swift source. Its
+        // status is carried to the end rather than exited on, since the documents have not been read yet
+        // and a run that stops here reports none of them.
+        var formatterStatus: Int32 = 0
         if options.format {
-            // Linting asks the formatter the same question correcting answers, so one command reports both.
-            // Document files never reach swift-format — it would parse their Markdown as Swift source.
-            try FormatCommand.check(
+            formatterStatus = try FormatCommand.check(
                 paths: swiftFiles.compactMap { $0.path?.path },
                 quiet: options.quiet,
                 keepingImportOrder: builder.configuration.ordersImportsItself
@@ -169,6 +172,9 @@ package struct LintOrAnalyzeCommand {
         }
         if numberOfSeriousViolations > 0 {
             exit(2)
+        }
+        if formatterStatus != 0 {
+            exit(formatterStatus)
         }
     }
 
@@ -409,17 +415,22 @@ package struct LintOrAnalyzeCommand {
 /// the tree and the keystroke drift apart.
 enum FormatCommand {
     static func run(over paths: [String], quiet: Bool, keepingImportOrder: Bool) throws {
-        try invoke(
+        let status = try invoke(
             ["format", "--in-place", "--parallel"],
             over: paths,
             quiet: quiet,
             verb: "Formatted",
             keepingImportOrder: keepingImportOrder
         )
+        if status != 0 {
+            exit(status)
+        }
     }
 
-    /// Reports what formatting the files are missing, without writing to them.
-    static func check(paths: [String], quiet: Bool, keepingImportOrder: Bool) throws {
+    /// Reports what formatting the files are missing, without writing to them, and answers with the
+    /// formatter's status rather than exiting on it — the caller still has documents to read and report.
+    @discardableResult
+    static func check(paths: [String], quiet: Bool, keepingImportOrder: Bool) throws -> Int32 {
         try invoke(
             ["lint", "--strict", "--parallel"],
             over: paths,
@@ -435,18 +446,23 @@ enum FormatCommand {
         quiet: Bool,
         verb: String,
         keepingImportOrder: Bool
-    ) throws {
+    ) throws -> Int32 {
         guard paths.isNotEmpty else {
-            return
+            return 0
         }
         let binary = try formatter()
+        var status: Int32 = 0
         for (configuration, group) in batches(of: paths, keepingImportOrder: keepingImportOrder) {
             let settings = configuration.map { ["--configuration", $0] } ?? []
-            try spawn(binary, arguments: arguments + settings + group)
+            let result = try spawn(binary, arguments: arguments + settings + group)
+            if result != 0 {
+                status = result
+            }
         }
         if !quiet {
             queuedPrintError("\(verb) \(paths.count) file(s) with \(binary.path).")
         }
+        return status
     }
 
     /// One batch per configuration the formatter would use, so a repository with a single `.swift-format`
@@ -462,16 +478,14 @@ enum FormatCommand {
             .map { (configuration: $0.key, paths: $0.value) }
     }
 
-    private static func spawn(_ binary: URL, arguments: [String]) throws {
+    /// swift-format has already printed what it found, so its status is the whole of what this adds.
+    private static func spawn(_ binary: URL, arguments: [String]) throws -> Int32 {
         let process = Process()
         process.executableURL = binary
         process.arguments = arguments
         try process.run()
         process.waitUntilExit()
-        guard process.terminationStatus == 0 else {
-            // swift-format has already said what it found, so exiting with its status is the whole report.
-            exit(process.terminationStatus)
-        }
+        return process.terminationStatus
     }
 
     private static func formatter() throws -> URL {

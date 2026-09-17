@@ -41,6 +41,24 @@ struct FormatCommandTests {
         #expect(try String(contentsOf: path, encoding: .utf8).contains("\n        var a: Int { 1 }"))
     }
 
+    /// The check answers with the formatter's status. It used to exit on it, which ended the run before the
+    /// documents were read and left a markdown finding out of every report on an unformatted tree.
+    @Test(.temporaryDirectory)
+    func theCheckAnswersWithTheFormattersStatusInsteadOfEndingTheRun() throws {
+        try writeSwiftFormat()
+        let path = URL.cwd.appending(path: "Messy.swift")
+        try "struct Messy  {\n  let  b :  Int = 2\n}\n".write(to: path, atomically: true, encoding: .utf8)
+        #expect(try FormatCommand.check(paths: [path.filepath], quiet: true, keepingImportOrder: false) != 0)
+    }
+
+    @Test(.temporaryDirectory)
+    func theCheckAnswersZeroForAFormattedTree() throws {
+        try writeSwiftFormat()
+        let path = URL.cwd.appending(path: "Tidy.swift")
+        try "struct Tidy {\n    let b: Int = 2\n}\n".write(to: path, atomically: true, encoding: .utf8)
+        #expect(try FormatCommand.check(paths: [path.filepath], quiet: true, keepingImportOrder: false) == 0)
+    }
+
     private func writeSwiftFormat() throws {
         try #"{"version": 1, "indentation": {"spaces": 4}}"#
             .write(to: URL.cwd.appending(path: ".swift-format"), atomically: true, encoding: .utf8)
