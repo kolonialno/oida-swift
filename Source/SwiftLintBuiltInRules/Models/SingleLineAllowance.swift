@@ -115,12 +115,18 @@ extension SyntaxCollection where Element: WithTrailingCommaSyntax {
 
     /// Whether the first element shares its opener's line while every later element has one of its own,
     /// which is the split shape for a list opened by a keyword rather than by a delimiter.
+    ///
+    /// A first element that spans lines is the exception, and may sit below the opener instead. It has
+    /// nothing to align against, and the formatter writes the opener onto a line of its own above such an
+    /// element whatever shape it is handed — so both placements are the shape here.
     var isSplitAfterTheFirst: Bool {
         guard let first else {
             return true
         }
-        return !first.leadingTrivia.containsNewline
-            && dropFirst().allSatisfy(\.leadingTrivia.containsNewline)
+        guard dropFirst().allSatisfy(\.leadingTrivia.containsNewline) else {
+            return false
+        }
+        return !first.leadingTrivia.containsNewline || first.spansLines
     }
 
     /// One element per line, each a level in from the line the list's owner starts on.
@@ -146,10 +152,15 @@ extension SyntaxCollection where Element: WithTrailingCommaSyntax {
     /// Xcode 26 on 2026-08-04, with `respectsExistingLineBreaks` on. So the break goes after the first
     /// element, which is a shape it does leave alone.
     func splitAfterTheFirst(from indentation: Trivia) -> Self {
-        Self(
+        // A first element that spans lines goes below the opener, since that is where the formatter puts it.
+        let opensOnItsOwnLine = first?.spansLines == true
+        return Self(
             enumerated().map { index, element in
                 element
-                    .with(\.leadingTrivia, index == 0 ? [] : .newline + indentation + .spaces(4))
+                    .with(
+                        \.leadingTrivia,
+                        index == 0 && !opensOnItsOwnLine ? [] : .newline + indentation + .spaces(4)
+                    )
                     .with(\.trailingTrivia, [])
             }
         )
@@ -179,6 +190,12 @@ extension SyntaxProtocol {
     /// The indentation of the line this node starts on, read from the tree so it survives a rewrite.
     var indentationOfOwnLine: Trivia {
         firstToken(viewMode: .sourceAccurate)?.indentationOfLine ?? []
+    }
+
+    /// Whether the node's own text runs past the line it starts on, read from trivia so a rewrite above it
+    /// does not change the answer.
+    var spansLines: Bool {
+        trimmedDescription.newlineCount > 0
     }
 }
 

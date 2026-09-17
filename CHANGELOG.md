@@ -16,6 +16,22 @@
 
 ### Bug Fixes
 
+* `multiline_conditions` accepts a first condition that spans lines sitting below its keyword.
+
+  The rule asked for the first condition on the `guard` line; swift-format writes it back onto a line of
+  its own whenever that condition spans lines, so `--fix --format` settled on a tree `--check` rejected.
+  Neither shape was reachable, and no `.swift-format` key settles it.
+
+  Measured against swift-format from Xcode 26: a *simple* first condition is left wherever it is found,
+  in both placements, so the rule's shape still holds there. A first condition that spans lines is moved
+  below the keyword whatever shape it is handed. The rule now allows both for such a condition, and its
+  corrector writes the formatter's placement — which is the reasoning already applied to a lone condition
+  that spans lines, extended to the first of several.
+
+  Over `tienda-ios` the count is unchanged at 94; `SwiftSync` loses the eight that had no legal shape.
+
+  [#42](https://github.com/kolonialno/oida-swift/issues/42)
+
 * `no_single_use_void_functions` withholds its verdict where inlining is impossible rather than unwanted.
 
   Two shapes it flagged have no edit to make. A function whose body calls itself cannot be put where it
