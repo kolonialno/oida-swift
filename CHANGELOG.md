@@ -16,7 +16,21 @@
 
 ### Bug Fixes
 
-* None.
+* `--format` reports the document findings even when swift-format has work to do.
+
+  The formatter check exited with swift-format's status the moment it found an unformatted file. The
+  documents are read after that check, so the run ended before any of them was looked at and every
+  markdown finding was missing from the report. Swift findings survived because they were collected
+  before it.
+
+  It is the adoption case that suffers: a repository takes up oida with an unformatted tree, which is
+  exactly the state that reported zero document violations. Pinwheel's baseline was taken that way and
+  recorded none over a tree holding 424.
+
+  The status is carried to the end of the run now and exited on there, so a formatting failure still
+  fails — `rc=1` for formatting alone, `rc=2` where a rule is violated, unchanged either way.
+
+  [#44](https://github.com/kolonialno/oida-swift/issues/44)
 
 ## 0.17.1: Through The Link As Well
 
