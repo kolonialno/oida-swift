@@ -48,14 +48,35 @@ struct KeyPathOnlyWhereTheAPITakesOneRule: Rule {
                 "if products.allSatisfy({ $0.isAvailable }) { pay() }",
             "guard products.allSatisfy(\\.isAvailable) else { return }":
                 "guard products.allSatisfy({ $0.isAvailable }) else { return }",
+            "for name in products.map(\\.name) { print(name) }":
+                "for name in products.map({ $0.name }) { print(name) }",
         ])
     )
 }
 
 private extension SyntaxProtocol {
-    /// Whether this sits in an `if`/`guard`/`while` condition, where Swift rejects a trailing closure.
-    var isInACondition: Bool {
+    /// Whether a trailing closure here would run into the brace that follows.
+    ///
+    /// In an `if`/`guard`/`while` condition Swift rejects it outright. In the sequence of a `for-in` it
+    /// parses and warns — "trailing closure in this context is confusable with the body of the statement"
+    /// — which a repository gating on warnings reads as a broken build.
+    var precedesABrace: Bool {
+        isInACondition || isTheSequenceOfAForInLoop
+    }
+
+    private var isInACondition: Bool {
         ancestorOrSelf { $0.as(ConditionElementSyntax.self) } != nil
+    }
+
+    private var isTheSequenceOfAForInLoop: Bool {
+        var current = Syntax(self)
+        while let parent = current.parent {
+            if let loop = parent.as(ForStmtSyntax.self) {
+                return loop.sequence.id == current.id
+            }
+            current = parent
+        }
+        return false
     }
 }
 
@@ -78,11 +99,12 @@ private extension KeyPathOnlyWhereTheAPITakesOneRule {
             }
             let body = ExprSyntax("{ $0\(raw: keyPath.components.trimmedDescription) }")
             numberOfCorrections += 1
-            // A trailing closure is the house form, but it cannot sit in a condition — `if xs.allSatisfy { … } {`
-            // does not parse — and a labelled argument reads better keeping its label, which is what the
-            // repository's own `first(where:)` and `contains(where:)` call sites do.
+            // A trailing closure is the house form, but it cannot sit anywhere a brace follows the call —
+            // `if xs.allSatisfy { … } {` does not parse and `for x in xs.map { … } {` warns — and a
+            // labelled argument reads better keeping its label, which is what the repository's own
+            // `first(where:)` and `contains(where:)` call sites do.
             guard argument.label == nil,
-                !node.isInACondition,
+                !node.precedesABrace,
                 let closure = body.as(ClosureExprSyntax.self)
             else {
                 let parenthesised = node.with(

@@ -16,6 +16,19 @@
 
 ### Bug Fixes
 
+* `key_path_only_where_the_api_takes_one --fix` keeps its closure out of a `for-in` header.
+
+  The rule rewrites `.map(\.value)` to a trailing closure, which is the house form everywhere except
+  directly before a brace. In the sequence of a `for-in` the compiler warns that the closure is confusable
+  with the loop body, so `--fix` on a clean tree wrote warnings that a repository gating on them reads as
+  a broken build — Pinwheel took two.
+
+  The corrector already emitted the parenthesised form inside an `if`/`guard`/`while` condition, where a
+  trailing closure does not parse at all. A `for-in` sequence is the same collision and is treated the
+  same way now. Everywhere else the trailing closure is unchanged.
+
+  [#46](https://github.com/kolonialno/oida-swift/issues/46)
+
 * `--format` no longer lets swift-format strand a modifier on an extension.
 
   swift-format's `NoAccessLevelOnExtensionDeclaration` moves an extension's access level onto its members.
