@@ -34,27 +34,47 @@ public enum SwiftFormat {
         return verdict
     }
 
-    /// The configuration swift-format would use for `path`, with its own import sorting turned off, as the
-    /// JSON string `--configuration` takes. `grouped_imports` orders imports by origin, and `OrderedImports`
-    /// sorts that ordering away, so the tool invoking the formatter is the one that has to settle it.
+    /// swift-format rules oida turns off for every run.
+    ///
+    /// `NoAccessLevelOnExtensionDeclaration` strands every other modifier when it strips the access level
+    /// off an extension that has anything above it — an import, a declaration, a comment — leaving the
+    /// modifier on a line of its own, the declaration indented and its brace orphaned. The result parses,
+    /// so a build stays green and only a reader finds it. Reported against swift-format from Xcode 26.
+    private static let unsafeRules = ["NoAccessLevelOnExtensionDeclaration"]
+
+    /// The configuration swift-format would use for `path`, with the rules oida turns off applied, as the
+    /// JSON string `--configuration` takes.
+    ///
+    /// `keepingImportOrder` additionally turns off `OrderedImports`: `grouped_imports` orders imports by
+    /// origin and `OrderedImports` sorts that ordering away, so the tool invoking the formatter is the one
+    /// that has to settle it.
     ///
     /// The effective configuration is read from the formatter rather than from the file, so a repository's
     /// own keys survive whatever this turns off.
-    public static func configurationKeepingImportOrder(for path: String) -> String? {
+    public static func configuration(for path: String, keepingImportOrder: Bool) -> String? {
         guard let binary else {
             return nil
         }
-        let key = configurationRoot(for: path)
+        let key = "\(configurationRoot(for: path))\u{0}\(keepingImportOrder)"
         if let cached = configurations[key] {
             return cached
         }
-        let dumped = output(of: binary, arguments: ["dump-configuration", "--effective"], from: key)
+        let dumped = output(
+            of: binary,
+            arguments: ["dump-configuration", "--effective"],
+            from: configurationRoot(for: path)
+        )
         guard let data = dumped.data(using: .utf8),
               var configuration = (try? JSONSerialization.jsonObject(with: data)) as? [String: Any] else {
             return nil
         }
         var rules = configuration["rules"] as? [String: Any] ?? [:]
-        rules["OrderedImports"] = false
+        for rule in unsafeRules {
+            rules[rule] = false
+        }
+        if keepingImportOrder {
+            rules["OrderedImports"] = false
+        }
         configuration["rules"] = rules
         guard let merged = try? JSONSerialization.data(withJSONObject: configuration),
               let json = String(data: merged, encoding: .utf8) else {

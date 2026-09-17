@@ -16,6 +16,30 @@
 
 ### Bug Fixes
 
+* `--format` no longer lets swift-format strand a modifier on an extension.
+
+  swift-format's `NoAccessLevelOnExtensionDeclaration` moves an extension's access level onto its members.
+  Where the extension carries another modifier and has *anything* above it — an import, a declaration, a
+  comment — it strands that modifier on a line of its own, indents the declaration and orphans its brace:
+
+  ```swift
+  nonisolated
+
+      extension UIFont
+  {
+      public class var title: UIFont { themed { $0.title } }
+  }
+  ```
+
+  The result parses, so a build stays green and only a reader finds it. Pinwheel took three of these in one
+  adoption, and what named them was oida's own `opening_brace` rule firing on the orphaned brace.
+
+  The bug is swift-format's — it reproduces with no oida involved — so this is a guard rather than a fix:
+  oida turns the rule off in the configuration it hands the formatter, for every run. `tienda-ios` had
+  already reached the same setting by hand.
+
+  [#52](https://github.com/kolonialno/oida-swift/issues/52)
+
 * `--format` reports the document findings even when swift-format has work to do.
 
   The formatter check exited with swift-format's status the moment it found an unformatted file. The
