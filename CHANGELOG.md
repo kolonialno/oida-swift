@@ -16,6 +16,24 @@
 
 ### Bug Fixes
 
+* `no_single_use_void_functions` counts a call made through a subclass instance.
+
+  A method declared in an extension on a type the run never declares — `extension UIViewController` — was
+  counted only where it was called unqualified. A call through an instance of a subclass resolved to a
+  type outside the run and was dropped, so three callers read as one and the rule fired on a function
+  that is genuinely shared. Taking its advice would have re-duplicated UIKit's unparenting sequence,
+  whose order is a contract, across three sites.
+
+  A receiver whose type is not declared here can still be served by an extension written here, so those
+  extensions are now searched for it. Only extensions on undeclared types are candidates, since a method
+  on a type the run declares cannot be reached that way, and several matching names is ambiguous rather
+  than attributed.
+
+  Measured: `tienda-ios` is unchanged at 648 violations, and Pinwheel's `detachFromParent` stops being
+  reported with its `oida:disable` removed.
+
+  [#56](https://github.com/kolonialno/oida-swift/issues/56)
+
 * `key_path_only_where_the_api_takes_one --fix` keeps its closure out of a `for-in` header.
 
   The rule rewrites `.map(\.value)` to a trailing closure, which is the house form everywhere except
