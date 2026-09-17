@@ -31,11 +31,14 @@ public extension URL {
     }
 
     /// The file's path from `base` down, or its whole path when it lies outside `base`.
+    ///
+    /// Both sides are resolved first, since `/tmp` is a link to `/private/tmp` and a checkout reached
+    /// through any such link gives a working directory spelled differently from the files underneath it.
     func filepath(relativeTo base: URL) -> String {
-        let root = base.filepath
+        let root = base.resolvingSymlinksInPath().filepath
         let prefix = root.hasSuffix("/") ? root : root + "/"
-        let path = filepath
-        return path.hasPrefix(prefix) ? String(path.dropFirst(prefix.count)) : path
+        let path = resolvingSymlinksInPath().filepath
+        return path.hasPrefix(prefix) ? String(path.dropFirst(prefix.count)) : filepath
     }
 
     var isSwiftFile: Bool {
