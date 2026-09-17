@@ -18,6 +18,49 @@
 
 * None.
 
+## 0.17.1: Through The Link As Well
+
+### Breaking
+
+* None.
+
+### Experimental
+
+* None.
+
+### Enhancements
+
+* None.
+
+### Bug Fixes
+
+* A rule's scope matches from a checkout reached through a symbolic link.
+
+  0.17.0 measured a file's path from the working directory down by stripping that directory's own path
+  off the front. `/tmp` is a link to `/private/tmp`, so a checkout reached through one gives a working
+  directory spelled differently from the files underneath it, the strip found nothing to remove, and the
+  scope was matched against the absolute path again — silently, which is the failure 0.17.0 set out to
+  remove. Both sides are resolved before the comparison now.
+
+  No repository under `~` was affected, which is why 0.17.0's own tests and `tienda-ios`'s planted canary
+  both passed.
+
+### Breaking
+
+* None.
+
+### Experimental
+
+* None.
+
+### Enhancements
+
+* None.
+
+### Bug Fixes
+
+* None.
+
 ## 0.17.0: A Scope Reads As Written
 
 ### Breaking
