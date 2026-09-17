@@ -198,6 +198,25 @@ final class CallGraph {
         }
     }
 
+    /// A receiver whose type is not declared here can still be served by an extension written here — on
+    /// `UIViewController`, say, reached through a `UIHostingController`. Only extensions on types the run
+    /// never declares are candidates, since a method on a type declared here cannot be reached this way.
+    private func locateOnExternalReceiver(_ call: CallFacts) -> Attribution {
+        var matches: [(owner: String, method: MethodFacts)] = []
+        for (owner, byName) in methodsByName where !declaredTypes.contains(owner) && owner != globalScope {
+            for method in byName[call.baseName] ?? []
+            where !method.isRequirement && labelsCompatible(call: call.labels, declared: method.labels) {
+                matches.append((owner, method))
+            }
+        }
+        let distinct = Set(matches.map { "\($0.owner).\($0.method.signature)" })
+        guard let only = matches.first else { return .outside }
+        guard distinct.count == 1 else {
+            return .ambiguous("\(distinct.count) extensions on undeclared types match \(call.baseName)")
+        }
+        return .target(owner: only.owner, signature: only.method.signature)
+    }
+
     /// A type written as a simple name inside a nested type may mean a sibling nested type first.
     private func qualify(_ written: String, from context: String) -> String? {
         if types[written] != nil, written.contains(".") { return written }
@@ -307,7 +326,7 @@ final class CallGraph {
     }
 
     private func locate(_ call: CallFacts, on typeName: String) -> Attribution {
-        if typeName == externalType { return .outside }
+        if typeName == externalType { return locateOnExternalReceiver(call) }
         // A bare name that is a stored property is a value being read, not a function being passed on.
         if call.labels == nil, property(call.baseName, on: typeName) != nil { return .outside }
         var matches: [(owner: String, method: MethodFacts)] = []

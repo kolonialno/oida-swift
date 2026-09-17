@@ -112,6 +112,18 @@ struct NoSingleUseVoidFunctionsRule: CollectingRule, OptInRule, SourceKitFreeRul
             }
             """,
             """
+            extension UIViewController {
+                func detachFromParent() { removeFromParent() }
+            }
+            final class Chassis: UIViewController {
+                func close() { detachFromParent() }
+            }
+            struct Leaf {
+                let hosting: UIHostingController<AnyView>
+                func drop() { hosting.detachFromParent() }
+            }
+            """,
+            """
             actor Networking {
                 private var streamContinuations: [UUID: Continuation] = [:]
                 nonisolated func finish(_ id: UUID) { Task { await removeContinuation(id) } }
