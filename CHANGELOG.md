@@ -16,6 +16,24 @@
 
 ### Bug Fixes
 
+* None.
+
+## 0.16.1: What Adoption Found
+
+### Breaking
+
+* None.
+
+### Experimental
+
+* None.
+
+### Enhancements
+
+* None.
+
+### Bug Fixes
+
 * `multiline_conditions` accepts a first condition that spans lines sitting below its keyword.
 
   The rule asked for the first condition on the `guard` line; swift-format writes it back onto a line of
