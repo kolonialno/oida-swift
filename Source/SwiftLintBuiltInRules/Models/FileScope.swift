@@ -18,8 +18,12 @@ struct FileScope: Equatable, Sendable {
     ///
     /// A file with no path — a snippet linted from stdin, or an example in a rule's own test suite — is in
     /// scope, since excluding it would make every scoped rule untestable.
+    ///
+    /// The path is taken from the working directory down. An absolute one carries the name the checkout
+    /// happens to have, so anchoring to the repository root would mean writing that name into the pattern
+    /// and a clone under any other name would silently match nothing.
     func contains(_ file: SwiftLintFile) -> Bool {
-        guard let path = file.path?.relativePath else {
+        guard let path = file.path?.filepath(relativeTo: .cwd) else {
             return true
         }
         if let included, !matches(included, path) {
