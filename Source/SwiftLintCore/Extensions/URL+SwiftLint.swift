@@ -30,6 +30,14 @@ public extension URL {
         withUnsafeFileSystemRepresentation { String(cString: $0!) }
     }
 
+    /// The file's path from `base` down, or its whole path when it lies outside `base`.
+    func filepath(relativeTo base: URL) -> String {
+        let root = base.filepath
+        let prefix = root.hasSuffix("/") ? root : root + "/"
+        let path = filepath
+        return path.hasPrefix(prefix) ? String(path.dropFirst(prefix.count)) : path
+    }
+
     var isSwiftFile: Bool {
         isFile(withExtension: "swift")
     }

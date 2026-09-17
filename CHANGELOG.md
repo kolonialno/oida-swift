@@ -4,7 +4,17 @@
 
 ### Breaking
 
-* None.
+* A rule's `included`/`excluded` scope matches the path from the working directory down, rather than the
+  absolute one.
+
+  The absolute path carries the name the checkout happens to have, so anchoring a scope to the repository
+  root meant writing that name into the pattern — `tienda-ios[^/]*/([^/]+\.md|…)` — and a clone under any
+  other name matched nothing, silently, while still reporting a clean run.
+
+  A scope now reads the way it is written: `^([^/]+\.md|LEARNINGS/[^/]+\.md)$` is the repository's own
+  root documents, from a checkout called anything. An unanchored pattern such as `SharedApp/.*\.swift` is
+  unaffected, since it never named the checkout. A pattern that *does* name it has to drop that prefix —
+  `tienda-ios` is the one repository affected, in three rules.
 
 ### Experimental
 
