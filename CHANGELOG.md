@@ -4,6 +4,24 @@
 
 ### Breaking
 
+* None.
+
+### Experimental
+
+* None.
+
+### Enhancements
+
+* None.
+
+### Bug Fixes
+
+* None.
+
+## 0.17.0: A Scope Reads As Written
+
+### Breaking
+
 * A rule's `included`/`excluded` scope matches the path from the working directory down, rather than the
   absolute one.
 
